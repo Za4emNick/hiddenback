@@ -798,13 +798,24 @@ function isMobileView() {
   return window.innerWidth < 1024;
 }
 
+function setMobileHandleVisibility() {
+  if (!mobileDrawerHandle) return;
+
+  const shouldShow =
+    isMobileView() &&
+    activeCategory === "hiddenback" &&
+    !mobileDrawer?.classList.contains("open");
+
+  mobileDrawerHandle.classList.toggle("hide", !shouldShow);
+}
+
 function closeMobileDrawer() {
   if (!mobileDrawer || !mobileOverlay) return;
 
   mobileDrawer.classList.remove("open");
   mobileOverlay.classList.remove("visible");
   document.body.style.overflow = "";
-  mobileDrawerHandle?.classList.remove("hide");
+  setMobileHandleVisibility();
 }
 
 function openMobileDrawer() {
@@ -828,6 +839,7 @@ function toggleSections(category) {
   }
 
   updateLayout(category);
+  setMobileHandleVisibility();
 }
 
 function syncFilterButtons(key, isActive) {
@@ -1046,6 +1058,42 @@ window.addEventListener("keydown", (event) => {
 window.addEventListener("resize", () => {
   if (!isMobileView()) {
     closeMobileDrawer();
+  }
+
+  setMobileHandleVisibility();
+});
+
+window.addEventListener("touchstart", (event) => {
+  touchStartX = event.touches[0]?.clientX || 0;
+});
+
+window.addEventListener("touchend", (event) => {
+  const endX = event.changedTouches[0]?.clientX || 0;
+  const delta = endX - touchStartX;
+
+  if (!isMobileView()) return;
+
+  if (delta > 80 && touchStartX < 40) {
+    openMobileDrawer();
+  } else if (delta < -80 && mobileDrawer?.classList.contains("open")) {
+    closeMobileDrawer();
+  }
+});
+
+mobileMenuOpen?.addEventListener("click", openMobileDrawer);
+mobileMenuClose?.addEventListener("click", closeMobileDrawer);
+mobileOverlay?.addEventListener("click", closeMobileDrawer);
+mobileDrawerHandle?.addEventListener("click", openMobileDrawer);
+
+window.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && mobileDrawer?.classList.contains("open")) {
+    closeMobileDrawer();
+  }
+});
+
+window.addEventListener("resize", () => {
+  if (!isMobileView()) {
+    closeMobileDrawer();
     mobileDrawerHandle?.classList.remove("hide");
   }
 });
@@ -1075,3 +1123,4 @@ modalOverlay?.addEventListener("click", (event) => {
 // Initial render
 toggleSections(activeCategory);
 renderItems();
+setMobileHandleVisibility();
