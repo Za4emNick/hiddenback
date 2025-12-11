@@ -763,6 +763,10 @@ const groupNavButtons = document.getElementById("group-nav-buttons");
 const catButtons = document.querySelectorAll(".cat-btn");
 const filterChips = document.querySelectorAll(".filter-chip");
 const searchDesktop = document.getElementById("search-desktop");
+const mobileDrawer = document.getElementById("mobile-cat-drawer");
+const mobileOverlay = document.getElementById("mobile-drawer-overlay");
+const mobileMenuOpen = document.getElementById("mobile-menu-open");
+const mobileMenuClose = document.getElementById("mobile-menu-close");
 
 const activeFilters = {
   veg: false,
@@ -773,6 +777,7 @@ const activeFilters = {
 
 let activeCategory = "hiddenback";
 let searchTerm = "";
+let touchStartX = 0;
 
 const TAG_LABELS = {
   veg: { label: "Vejetaryen", color: "text-emerald-600" },
@@ -788,6 +793,26 @@ function updateLayout(category) {
   layoutRoot?.classList.toggle("home-layout", isHome);
 }
 
+function isMobileView() {
+  return window.innerWidth < 1024;
+}
+
+function closeMobileDrawer() {
+  if (!mobileDrawer || !mobileOverlay) return;
+
+  mobileDrawer.classList.remove("open");
+  mobileOverlay.classList.remove("visible");
+  document.body.style.overflow = "";
+}
+
+function openMobileDrawer() {
+  if (!mobileDrawer || !mobileOverlay) return;
+
+  mobileDrawer.classList.add("open");
+  mobileOverlay.classList.add("visible");
+  document.body.style.overflow = "hidden";
+}
+
 function toggleSections(category) {
   const showMenu = category !== "hiddenback";
 
@@ -796,6 +821,7 @@ function toggleSections(category) {
   menuSection?.classList.toggle("hidden", !showMenu);
   if (!showMenu) {
     renderGroupNav([]);
+    closeMobileDrawer();
   }
 
   updateLayout(category);
@@ -975,9 +1001,13 @@ catButtons.forEach((btn) => {
     if (!cat) return;
 
     activeCategory = cat;
-    catButtons.forEach((b) => b.classList.toggle("active", b === btn));
+    catButtons.forEach((b) => b.classList.toggle("active", b.dataset.cat === cat));
     toggleSections(cat);
     renderItems();
+
+    if (isMobileView()) {
+      closeMobileDrawer();
+    }
   });
 });
 
@@ -998,6 +1028,39 @@ if (searchDesktop) {
     renderItems();
   });
 }
+
+mobileMenuOpen?.addEventListener("click", openMobileDrawer);
+mobileMenuClose?.addEventListener("click", closeMobileDrawer);
+mobileOverlay?.addEventListener("click", closeMobileDrawer);
+
+window.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && mobileDrawer?.classList.contains("open")) {
+    closeMobileDrawer();
+  }
+});
+
+window.addEventListener("resize", () => {
+  if (!isMobileView()) {
+    closeMobileDrawer();
+  }
+});
+
+window.addEventListener("touchstart", (event) => {
+  touchStartX = event.touches[0]?.clientX || 0;
+});
+
+window.addEventListener("touchend", (event) => {
+  const endX = event.changedTouches[0]?.clientX || 0;
+  const delta = endX - touchStartX;
+
+  if (!isMobileView()) return;
+
+  if (delta > 80 && touchStartX < 40) {
+    openMobileDrawer();
+  } else if (delta < -80 && mobileDrawer?.classList.contains("open")) {
+    closeMobileDrawer();
+  }
+});
 
 modalClose?.addEventListener("click", closeModal);
 modalOverlay?.addEventListener("click", (event) => {
