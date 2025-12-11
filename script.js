@@ -1094,6 +1094,42 @@ window.addEventListener("keydown", (event) => {
 window.addEventListener("resize", () => {
   if (!isMobileView()) {
     closeMobileDrawer();
+  }
+
+  setMobileHandleVisibility();
+});
+
+window.addEventListener("touchstart", (event) => {
+  touchStartX = event.touches[0]?.clientX || 0;
+});
+
+window.addEventListener("touchend", (event) => {
+  const endX = event.changedTouches[0]?.clientX || 0;
+  const delta = endX - touchStartX;
+
+  if (!isMobileView()) return;
+
+  if (delta > 80 && touchStartX < 40) {
+    openMobileDrawer();
+  } else if (delta < -80 && mobileDrawer?.classList.contains("open")) {
+    closeMobileDrawer();
+  }
+});
+
+mobileMenuOpen?.addEventListener("click", openMobileDrawer);
+mobileMenuClose?.addEventListener("click", closeMobileDrawer);
+mobileOverlay?.addEventListener("click", closeMobileDrawer);
+mobileDrawerHandle?.addEventListener("click", openMobileDrawer);
+
+window.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && mobileDrawer?.classList.contains("open")) {
+    closeMobileDrawer();
+  }
+});
+
+window.addEventListener("resize", () => {
+  if (!isMobileView()) {
+    closeMobileDrawer();
     mobileDrawerHandle?.classList.remove("hide");
   }
 });
