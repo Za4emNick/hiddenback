@@ -6,31 +6,29 @@
   <title>HiddenBack — Menü</title>
   <meta name="description" content="HiddenBack Cafe — Yalova. Modern, temiz ve kullanışlı online menü.">
 
-  <!-- Tailwind config + CDN -->
+  <!-- Tailwind CDN + config -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    tailwind = {
-      config: {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ["Inter", "system-ui", "sans-serif"],
-            },
-            colors: {
-              hb: {
-                bg: "#f7f7f7",
-                card: "#ffffff",
-                border: "#e5e5e5",
-                text: "#111827",
-                muted: "#6b7280",
-                accent: "#111827"
-              }
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Inter", "system-ui", "sans-serif"],
+          },
+          colors: {
+            hb: {
+              bg: "#f7f7f7",
+              card: "#ffffff",
+              border: "#e5e5e5",
+              text: "#111827",
+              muted: "#6b7280",
+              accent: "#111827"
             }
           }
         }
       }
-    }
+    };
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
     body {
@@ -43,7 +41,7 @@
       padding: 0.6rem 0.9rem;
       border-radius: 999px;
       border: 1px solid #e5e5e5;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       text-align: left;
       background: #ffffff;
       transition: background 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
@@ -59,7 +57,6 @@
       border-color: #111827;
     }
 
-    /* анимация появления карточек */
     .card-fade {
       animation: cardFade 0.25s ease-out;
     }
@@ -99,11 +96,11 @@
 
   <!-- HEADER -->
   <header class="bg-white border-b border-hb-border sticky top-0 z-20">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
       <div class="flex items-center gap-2">
-        <img src="images/logo-x-x.webp" alt="HiddenBack Logo" class="w-9 h-9">
+        <img src="images/logo-x-x.jpg" alt="HiddenBack Logo" class="w-9 h-9">
         <div class="flex flex-col leading-tight">
-          <span class="font-semibold tracking-wide text-sm uppercase">HiddenBack</span>
+          <span class="font-semibold tracking-wide text-sm">h i d d e n b a c k</span>
           <span class="text-xs text-hb-muted">Yalova • Cafe & Dessert</span>
         </div>
       </div>
@@ -114,123 +111,227 @@
     </div>
   </header>
 
-  <main class="max-w-6xl mx-auto px-4 pt-4 pb-10 flex flex-col md:flex-row gap-4 md:gap-6">
+  <!-- MAIN -->
+  <main class="max-w-7xl mx-auto px-4 pt-4 pb-10 flex gap-4 md:gap-6">
 
-    <!-- MOBILE CATEGORIES -->
-    <section class="md:hidden mb-2">
-      <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
-        <button class="cat-btn active" data-cat="kahvalti">Kahvaltı</button>
-        <button class="cat-btn" data-cat="anayemek">Ana yemekler</button>
+    <!-- SIDEBAR КАТЕГОРИЙ -->
+    <aside class="w-28 sm:w-40 md:w-60 shrink-0">
+      <div class="bg-white border border-hb-border rounded-2xl p-3 flex flex-col gap-2 sticky top-20">
+        <p class="text-[11px] font-medium text-hb-muted uppercase tracking-[0.18em] pl-1 mb-1">
+          Menü
+        </p>
+        <button class="cat-btn active" data-cat="hiddenback">h i d d e n b a c k</button>
+        <button class="cat-btn" data-cat="kahvalti">Kahvaltı</button>
+        <button class="cat-btn" data-cat="anayemek">Ana Yemekler</button>
         <button class="cat-btn" data-cat="burger">Burger</button>
         <button class="cat-btn" data-cat="pizza">Pizza</button>
         <button class="cat-btn" data-cat="tatli">Tatlılar</button>
         <button class="cat-btn" data-cat="kahve">Kahveler</button>
         <button class="cat-btn" data-cat="icecek">İçecekler</button>
       </div>
-    </section>
-
-    <!-- DESKTOP SIDEBAR -->
-    <aside class="hidden md:block md:w-60 lg:w-64 shrink-0">
-      <div class="bg-white border border-hb-border rounded-2xl p-3 flex flex-col gap-2 sticky top-24">
-        <p class="text-xs font-medium text-hb-muted uppercase tracking-[0.15em] pl-1 mb-1">Kategoriler</p>
-        <button class="cat-btn active" data-cat="kahvalti">KAHVALTI</button>
-        <button class="cat-btn" data-cat="anayemek">ANA YEMEKLER</button>
-        <button class="cat-btn" data-cat="burger">BURGER</button>
-        <button class="cat-btn" data-cat="pizza">PİZZA</button>
-        <button class="cat-btn" data-cat="tatli">TATLILAR</button>
-        <button class="cat-btn" data-cat="kahve">KAHVELER</button>
-        <button class="cat-btn" data-cat="icecek">İÇECEKLER</button>
-      </div>
     </aside>
 
-    <!-- CENTER: SEARCH + FILTERS + GRID -->
-    <section class="flex-1 flex flex-col gap-3">
+    <!-- ПРАВАЯ ЧАСТЬ -->
+    <section class="flex-1 flex flex-col gap-4 md:gap-5">
 
-      <!-- DESKTOP SEARCH + FILTERS -->
-      <section class="hidden md:flex flex-col gap-2 mb-1">
-        <div class="flex items-center justify-between gap-3">
-          <div class="relative flex-1 max-w-sm">
-            <input id="search-desktop" type="text" placeholder="Menüde ara..."
-                   class="w-full text-sm border border-hb-border rounded-full px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-gray-300">
+      <!-- HIDDENBACK / ГЛАВНАЯ -->
+      <section id="hiddenback-section" class="flex flex-col gap-5">
+
+        <!-- История + главный блок -->
+        <div class="bg-white border border-hb-border rounded-2xl p-4 sm:p-6 md:max-h-[420px] md:overflow-hidden">
+          <div class="grid md:grid-cols-2 gap-4 md:gap-6 items-start md:items-center">
+            <div class="order-2 md:order-1 flex flex-col justify-center max-w-xl">
+              <p class="text-[11px] font-semibold tracking-[0.2em] text-hb-muted mb-2">
+                h i d d e n b a c k • YALOVA
+              </p>
+              <h1 class="text-2xl sm:text-3xl font-semibold mb-3">
+                Şehrin tam merkezinde, gözlerden uzakta saklanan eski bir kafe.
+              </h1>
+              <p class="text-sm text-hb-muted leading-relaxed mb-3">
+                hiddenback, Yalova’nın kalbinde, keşfedilmeyi bekleyen gizli bir nokta.
+                Amacımız; iyi kahveyi, ev yapımı tatlıları ve sıcak bir atmosferi tek bir yerde buluşturmak.
+                Sabah kahvaltısından akşam kahvesine kadar, her saat burada kendi ritmine sahip.
+              </p>
+              <p class="text-sm text-hb-muted leading-relaxed">
+                Burada menü, sadece bir yemek listesi değil — misafirlerimizin anılarının bir parçası.
+                Aşağıda hiddenback’in atmosferini, hikâyesini ve detaylarını daha yakından keşfedebilirsin.
+              </p>
+            </div>
+            <div class="order-1 md:order-2">
+              <div class="rounded-2xl overflow-hidden bg-neutral-200 aspect-[4/3] md:max-h-[380px]">
+                <img src="images/gallery/interior-hero.png" alt="HiddenBack interior"
+                     class="w-full h-full object-cover">
+              </div>
+            </div>
           </div>
         </div>
-        <div class="flex flex-wrap gap-6 items-center text-xs">
-          <div class="flex flex-wrap gap-2">
-            <button class="filter-chip" data-filter="veg">🥑 Vejetaryen</button>
-            <button class="filter-chip" data-filter="spicy">🌶 Acılı</button>
-            <button class="filter-chip" data-filter="cheese">🧀 Peynirli</button>
-            <button class="filter-chip" data-filter="breakfast">🍳 Kahvaltı</button>
-            <button class="filter-chip" data-filter="dessert">🍰 Tatlı</button>
-          </div>
+
+        <!-- Журнальный блоки -->
+        <div class="grid gap-4 md:gap-5">
+
+          <!-- 1 -->
+          <article class="bg-white border border-hb-border rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row gap-4 md:gap-6 md:max-h-[420px] md:overflow-hidden">
+            <div class="md:w-1/2 rounded-2xl overflow-hidden bg-neutral-200 aspect-[4/3]">
+              <img src="images/gallery/coffee-1.png" alt="HiddenBack Coffee"
+                   class="w-full h-full object-cover">
+            </div>
+            <div class="md:w-1/2 flex flex-col justify-center">
+              <h2 class="text-lg font-semibold mb-2">
+                Publika • Yalova’da modern bir buluşma noktası
+              </h2>
+              <p class="text-sm text-hb-muted leading-relaxed">
+                Zamanla hiddenback, Yalova’nın kalbinde modern ve samimi bir buluşma noktası haline geliyor.
+                Aynı masada öğrenciler, yazılımcılar, bankacılar, avukatlar ve yaratıcı insanlar bir araya geliyor;
+                hem çalışmak hem de arkadaşlarla sakin bir akşam geçirmek isteyen herkes burada buluşuyor.
+                hiddenback’te her misafir kendi ritmini bulur: yolda hızlı bir espresso, dizüstü bilgisayar eşliğinde sakin bir filtre kahve molası
+                ya da akşam buluşmasına eşlik eden bir tatlı.
+                Tüm kahvelerin detaylı açıklamalarını ve kafein seviyelerini online menümüzde bulabilirsin.
+              </p>
+            </div>
+          </article>
+
+          <!-- 2 -->
+          <article class="bg-white border border-hb-border rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row gap-4 md:gap-6 md:max-h-[420px] md:overflow-hidden">
+            <div class="md:w-1/2 md:order-2 rounded-2xl overflow-hidden bg-neutral-200 aspect-[4/3]">
+              <img src="images/gallery/dessert-1.png" alt="HiddenBack Desserts"
+                   class="w-full h-full object-cover">
+            </div>
+            <div class="md:w-1/2 md:order-1 flex flex-col justify-center">
+              <h2 class="text-lg font-semibold mb-2">Tatlı Vitrini • Günlük hazırlanan tatlılar</h2>
+              <p class="text-sm text-hb-muted leading-relaxed">
+                Cheesecake, brownie, tart ve waffle çeşitlerimiz her gün taze hazırlanıyor.
+                Tatlılar, kahveyle uyumlu olacak şekilde tasarlandı — online menüde hem içerikleri
+                hem de fiyatları rahatça inceleyebilirsin.
+              </p>
+            </div>
+          </article>
+
+          <!-- 3 -->
+          <article class="bg-white border border-hb-border rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row gap-4 md:gap-6 md:max-h-[420px] md:overflow-hidden">
+            <div class="md:w-1/2 rounded-2xl overflow-hidden bg-neutral-200 aspect-[4/3]">
+              <img src="images/gallery/interior-2.png" alt="HiddenBack Atmosphere"
+                   class="w-full h-full object-cover">
+            </div>
+            <div class="md:w-1/2 flex flex-col justify-center">
+              <h2 class="text-lg font-semibold mb-2">Atmosfer • Sessiz köşeler ve sıcak ışıklar</h2>
+              <p class="text-sm text-hb-muted leading-relaxed">
+                hiddenback, hem bilgisayarla çalışanlar hem de arkadaşlarla sohbet edenler için tasarlandı.
+                Loş ışık, rahat oturma alanları ve sakin müzik — tüm bunlar menüyle beraber deneyimin doğal bir parçası.
+              </p>
+            </div>
+          </article>
+
         </div>
       </section>
 
-      <!-- CARDS GRID -->
-      <section id="items-container"
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-        <!-- cards from script.js -->
-      </section>
-
-      <!-- GALLERY / ATMOSPHERE BLOCK -->
-      <section class="mt-8">
-        <h2 class="text-sm font-semibold uppercase tracking-[0.18em] text-hb-muted mb-3">
-          HiddenBack • Atmosfer
-        </h2>
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
-          <div class="rounded-xl overflow-hidden bg-neutral-200 aspect-[4/3]">
-            <img src="images/gallery/interior-1.webp" alt="HiddenBack Interior"
-                 class="w-full h-full object-cover">
+      <!-- Instagram блок (только для HiddenBack, будем прятать/показывать из JS) -->
+      <div id="instagram-block"
+           class="bg-white border border-hb-border rounded-2xl p-4 sm:p-5">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-hb-muted mb-1">
+              Instagram • @hiddenbackk
+            </p>
+            <h2 class="text-lg font-semibold">Canlıdan kareler</h2>
           </div>
-          <div class="rounded-xl overflow-hidden bg-neutral-200 aspect-[4/3]">
-            <img src="images/gallery/coffee-1.webp" alt="HiddenBack Coffee"
-                 class="w-full h-full object-cover">
-          </div>
-          <div class="rounded-xl overflow-hidden bg-neutral-200 aspect-[4/3]">
-            <img src="images/gallery/dessert-1.webp" alt="HiddenBack Desserts"
-                 class="w-full h-full object-cover">
-          </div>
-          <div class="rounded-xl overflow-hidden bg-neutral-200 aspect-[4/3] hidden sm:block">
-            <img src="images/gallery/interior-2.webp" alt="HiddenBack Interior"
-                 class="w-full h-full object-cover">
-          </div>
-          <div class="rounded-xl overflow-hidden bg-neutral-200 aspect-[4/3] hidden sm:block">
-            <img src="images/gallery/coffee-2.webp" alt="HiddenBack Bar"
-                 class="w-full h-full object-cover">
-          </div>
-          <div class="rounded-xl overflow-hidden bg-neutral-200 aspect-[4/3] hidden sm:block">
-            <img src="images/gallery/dessert-2.webp" alt="HiddenBack Dessert"
-                 class="w-full h-full object-cover">
-          </div>
+          <a href="https://www.instagram.com/hiddenbackk/" target="_blank"
+             class="hidden sm:inline-flex text-xs px-3 py-1.5 rounded-full border border-hb-border">
+            Instagram'a git
+          </a>
         </div>
-      </section>
 
+        <div class="rounded-2xl overflow-hidden mb-3">
+          <script src="https://elfsightcdn.com/platform.js" async></script>
+          <div class="elfsight-app-9337cc09-4df4-4ad9-840f-434c25afc047" data-elfsight-app-lazy></div>
+        </div>
+
+        <a href="https://www.instagram.com/hiddenbackk/" target="_blank"
+           class="sm:hidden inline-flex text-xs px-3 py-1.5 rounded-full border border-hb-border">
+          Instagram'a git
+        </a>
+      </div>
+
+      <!-- MENU SECTION (по умолчанию скрыт, откроем через JS при выборе категорий) -->
+      <section id="menu-section" class="flex flex-col gap-3 hidden">
+
+        <!-- SEARCH + FILTERS (desktop) -->
+        <section id="controls-wrapper" class="flex flex-col gap-2 mb-1">
+          <div class="flex items-center justify-between gap-3">
+            <div class="relative flex-1 max-w-sm">
+              <input id="search-desktop" type="text" placeholder="Menüde ara..."
+                     class="w-full text-sm border border-hb-border rounded-full px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-gray-300">
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-2 items-center text-xs">
+            <span class="text-[11px] text-hb-muted uppercase tracking-[0.18em] mr-1">
+              Filtreler
+            </span>
+
+            <button class="filter-chip" data-filter="veg">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              <span>Vejetaryen</span>
+            </button>
+
+            <button class="filter-chip" data-filter="spicy">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-red-500"></span>
+              <span>Acılı</span>
+            </button>
+
+            <button class="filter-chip" data-filter="cheese">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+              <span>Peynirli</span>
+            </button>
+
+            <button class="filter-chip" data-filter="breakfast">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-sky-400"></span>
+              <span>Kahvaltı</span>
+            </button>
+
+            <button class="filter-chip" data-filter="dessert">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-pink-400"></span>
+              <span>Tatlı</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- GRID -->
+        <section id="items-container"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+          <!-- Cards from script.js -->
+        </section>
+
+      </section>
     </section>
   </main>
 
-  <!-- MOBILE BOTTOM BAR: SEARCH + FILTERS + ↑ -->
-  <div class="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-hb-border z-30">
-    <div class="max-w-6xl mx-auto px-3 py-2 flex items-center gap-2">
-      <div class="flex-1">
-        <input id="search-mobile" type="text" placeholder="Поиск по меню..."
-               class="w-full text-sm border border-hb-border rounded-full px-3 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-gray-300">
-      </div>
-      <button id="filter-toggle"
-              class="text-xs px-3 py-1.5 rounded-full border border-hb-border bg-white">
-        Фильтры
+  <!-- MOBILE FILTERS PANEL (появляется по кнопке, позже подключим) -->
+  <div id="mobile-filters-panel" class="hidden border-t border-hb-border bg-white px-3 pb-2 md:hidden">
+    <div class="flex flex-wrap gap-2 py-2 text-xs">
+      <button class="filter-chip" data-filter="veg">
+        <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+        <span>Vejetaryen</span>
       </button>
-      <button id="scroll-top-btn"
-              class="text-xs px-2.5 py-1.5 rounded-full border border-hb-border bg-white">
-        ↑
+
+      <button class="filter-chip" data-filter="spicy">
+        <span class="inline-block w-1.5 h-1.5 rounded-full bg-red-500"></span>
+        <span>Acılı</span>
       </button>
-    </div>
-    <div id="mobile-filters-panel" class="hidden border-t border-hb-border bg-white px-3 pb-2">
-      <div class="flex flex-wrap gap-2 py-2 text-xs">
-        <button class="filter-chip" data-filter="veg">🥑 Vejetaryen</button>
-        <button class="filter-chip" data-filter="spicy">🌶 Acılı</button>
-        <button class="filter-chip" data-filter="cheese">🧀 Peynirli</button>
-        <button class="filter-chip" data-filter="breakfast">🍳 Kahvaltı</button>
-        <button class="filter-chip" data-filter="dessert">🍰 Tatlı</button>
-      </div>
+
+      <button class="filter-chip" data-filter="cheese">
+        <span class="inline-block w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+        <span>Peynirli</span>
+      </button>
+
+      <button class="filter-chip" data-filter="breakfast">
+        <span class="inline-block w-1.5 h-1.5 rounded-full bg-sky-400"></span>
+        <span>Kahvaltı</span>
+      </button>
+
+      <button class="filter-chip" data-filter="dessert">
+        <span class="inline-block w-1.5 h-1.5 rounded-full bg-pink-400"></span>
+        <span>Tatlı</span>
+      </button>
     </div>
   </div>
 
@@ -246,7 +347,10 @@
 
       <img id="modal-img" src="" alt="" class="rounded-xl w-full mb-4 max-h-56 object-cover">
       <h2 id="modal-title" class="text-xl font-semibold mb-1"></h2>
-      <p id="modal-desc" class="text-sm text-hb-muted mb-3"></p>
+      <p id="modal-desc" class="text-sm text-hb-muted mb-2"></p>
+
+      <p id="modal-extra" class="text-xs text-hb-muted mb-2 hidden"></p>
+
       <div class="flex items-center justify-between mt-1">
         <p id="modal-price" class="text-lg font-semibold"></p>
       </div>
