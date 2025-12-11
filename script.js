@@ -747,6 +747,7 @@ const hiddenbackSection = document.getElementById("hiddenback-section");
 const menuSection = document.getElementById("menu-section");
 const container = document.getElementById("items-container");
 const instagramBlock = document.getElementById("instagram-block");
+const layoutRoot = document.getElementById("layout-root");
 
 const modalOverlay = document.getElementById("modal-overlay");
 const modalImg = document.getElementById("modal-img");
@@ -777,11 +778,15 @@ const TAG_LABELS = {
   veg: { label: "Vejetaryen", color: "text-emerald-600" },
   spicy: { label: "Acılı", color: "text-red-600" },
   cheese: { label: "Peynirli", color: "text-amber-600" },
-  breakfast: { label: "Kahvaltı", color: "text-sky-600" },
   dessert: { label: "Tatlı", color: "text-pink-600" },
 };
 
 const formatPrice = (price) => (typeof price === "number" ? `${price}₺` : "" );
+
+function updateLayout(category) {
+  const isHome = category === "hiddenback";
+  layoutRoot?.classList.toggle("home-layout", isHome);
+}
 
 function toggleSections(category) {
   const showMenu = category !== "hiddenback";
@@ -792,6 +797,8 @@ function toggleSections(category) {
   if (!showMenu) {
     renderGroupNav([]);
   }
+
+  updateLayout(category);
 }
 
 function syncFilterButtons(key, isActive) {
