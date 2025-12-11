@@ -6,7 +6,7 @@
   <title>HiddenBack — Menü</title>
   <meta name="description" content="HiddenBack Cafe — Yalova. Modern, temiz ve kullanışlı online menü.">
 
-  <!-- Tailwind -->
+  <!-- Tailwind config + CDN -->
   <script>
     tailwind = {
       config: {
@@ -32,7 +32,6 @@
   </script>
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Дополнительные мелкие стили -->
   <style>
     body {
       -webkit-font-smoothing: antialiased;
@@ -50,40 +49,53 @@
       transition: background 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
       white-space: nowrap;
     }
-
     .cat-btn:hover {
       background: #f3f4f6;
       transform: translateY(-1px);
     }
-
     .cat-btn.active {
       background: #111827;
       color: #ffffff;
       border-color: #111827;
     }
 
-    /* Анимация карточек */
+    /* анимация появления карточек */
     .card-fade {
       animation: cardFade 0.25s ease-out;
     }
-
     @keyframes cardFade {
-      from { opacity: 0; transform: translateY(4px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(6px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    /* Скрываем скроллбар в горизонтальном меню на мобилке */
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
+    .filter-chip {
+      padding: 0.3rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid #e5e5e5;
+      background: #ffffff;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
     }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
+    .filter-chip:hover {
+      background: #f3f4f6;
+      transform: translateY(-1px);
     }
+    .filter-chip.active {
+      background: #111827;
+      color: #ffffff;
+      border-color: #111827;
+    }
+
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 
-<body class="bg-hb-bg text-hb-text font-sans">
+<body class="bg-hb-bg text-hb-text font-sans pb-16 md:pb-6">
 
   <!-- HEADER -->
   <header class="bg-white border-b border-hb-border sticky top-0 z-20">
@@ -96,17 +108,15 @@
         </div>
       </div>
 
-      <!-- тут можно потом добавить поиск, язык и т.д. -->
       <div class="hidden sm:flex items-center gap-3 text-sm text-hb-muted">
         <span>Menü</span>
       </div>
     </div>
   </header>
 
-  <!-- MAIN LAYOUT -->
-  <main class="max-w-6xl mx-auto px-4 pb-6 pt-4 flex flex-col md:flex-row gap-4 md:gap-6">
+  <main class="max-w-6xl mx-auto px-4 pt-4 pb-10 flex flex-col md:flex-row gap-4 md:gap-6">
 
-    <!-- MOBILE CATEGORY BAR -->
+    <!-- MOBILE CATEGORIES -->
     <section class="md:hidden mb-2">
       <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
         <button class="cat-btn active" data-cat="kahvalti">Kahvaltı</button>
@@ -121,7 +131,7 @@
 
     <!-- DESKTOP SIDEBAR -->
     <aside class="hidden md:block md:w-60 lg:w-64 shrink-0">
-      <div class="bg-white border border-hb-border rounded-2xl p-3 flex flex-col gap-2 sticky top-20">
+      <div class="bg-white border border-hb-border rounded-2xl p-3 flex flex-col gap-2 sticky top-24">
         <p class="text-xs font-medium text-hb-muted uppercase tracking-[0.15em] pl-1 mb-1">Kategoriler</p>
         <button class="cat-btn active" data-cat="kahvalti">KAHVALTI</button>
         <button class="cat-btn" data-cat="anayemek">ANA YEMEKLER</button>
@@ -133,18 +143,100 @@
       </div>
     </aside>
 
-    <!-- CARDS GRID -->
-    <section
-      id="items-container"
-      class="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-      <!-- Карточки заполняет script.js -->
+    <!-- CENTER: SEARCH + FILTERS + GRID -->
+    <section class="flex-1 flex flex-col gap-3">
+
+      <!-- DESKTOP SEARCH + FILTERS -->
+      <section class="hidden md:flex flex-col gap-2 mb-1">
+        <div class="flex items-center justify-between gap-3">
+          <div class="relative flex-1 max-w-sm">
+            <input id="search-desktop" type="text" placeholder="Menüde ara..."
+                   class="w-full text-sm border border-hb-border rounded-full px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-gray-300">
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-6 items-center text-xs">
+          <div class="flex flex-wrap gap-2">
+            <button class="filter-chip" data-filter="veg">🥑 Vejetaryen</button>
+            <button class="filter-chip" data-filter="spicy">🌶 Acılı</button>
+            <button class="filter-chip" data-filter="cheese">🧀 Peynirli</button>
+            <button class="filter-chip" data-filter="breakfast">🍳 Kahvaltı</button>
+            <button class="filter-chip" data-filter="dessert">🍰 Tatlı</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- CARDS GRID -->
+      <section id="items-container"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+        <!-- cards from script.js -->
+      </section>
+
+      <!-- GALLERY / ATMOSPHERE BLOCK -->
+      <section class="mt-8">
+        <h2 class="text-sm font-semibold uppercase tracking-[0.18em] text-hb-muted mb-3">
+          HiddenBack • Atmosfer
+        </h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
+          <div class="rounded-xl overflow-hidden bg-neutral-200 aspect-[4/3]">
+            <img src="images/gallery/interior-1.webp" alt="HiddenBack Interior"
+                 class="w-full h-full object-cover">
+          </div>
+          <div class="rounded-xl overflow-hidden bg-neutral-200 aspect-[4/3]">
+            <img src="images/gallery/coffee-1.webp" alt="HiddenBack Coffee"
+                 class="w-full h-full object-cover">
+          </div>
+          <div class="rounded-xl overflow-hidden bg-neutral-200 aspect-[4/3]">
+            <img src="images/gallery/dessert-1.webp" alt="HiddenBack Desserts"
+                 class="w-full h-full object-cover">
+          </div>
+          <div class="rounded-xl overflow-hidden bg-neutral-200 aspect-[4/3] hidden sm:block">
+            <img src="images/gallery/interior-2.webp" alt="HiddenBack Interior"
+                 class="w-full h-full object-cover">
+          </div>
+          <div class="rounded-xl overflow-hidden bg-neutral-200 aspect-[4/3] hidden sm:block">
+            <img src="images/gallery/coffee-2.webp" alt="HiddenBack Bar"
+                 class="w-full h-full object-cover">
+          </div>
+          <div class="rounded-xl overflow-hidden bg-neutral-200 aspect-[4/3] hidden sm:block">
+            <img src="images/gallery/dessert-2.webp" alt="HiddenBack Dessert"
+                 class="w-full h-full object-cover">
+          </div>
+        </div>
+      </section>
+
     </section>
   </main>
 
+  <!-- MOBILE BOTTOM BAR: SEARCH + FILTERS + ↑ -->
+  <div class="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-hb-border z-30">
+    <div class="max-w-6xl mx-auto px-3 py-2 flex items-center gap-2">
+      <div class="flex-1">
+        <input id="search-mobile" type="text" placeholder="Поиск по меню..."
+               class="w-full text-sm border border-hb-border rounded-full px-3 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-gray-300">
+      </div>
+      <button id="filter-toggle"
+              class="text-xs px-3 py-1.5 rounded-full border border-hb-border bg-white">
+        Фильтры
+      </button>
+      <button id="scroll-top-btn"
+              class="text-xs px-2.5 py-1.5 rounded-full border border-hb-border bg-white">
+        ↑
+      </button>
+    </div>
+    <div id="mobile-filters-panel" class="hidden border-t border-hb-border bg-white px-3 pb-2">
+      <div class="flex flex-wrap gap-2 py-2 text-xs">
+        <button class="filter-chip" data-filter="veg">🥑 Vejetaryen</button>
+        <button class="filter-chip" data-filter="spicy">🌶 Acılı</button>
+        <button class="filter-chip" data-filter="cheese">🧀 Peynirli</button>
+        <button class="filter-chip" data-filter="breakfast">🍳 Kahvaltı</button>
+        <button class="filter-chip" data-filter="dessert">🍰 Tatlı</button>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL -->
   <div id="modal-overlay"
-       class="hidden fixed inset-0 bg-black/30 backdrop-blur-sm z-30 flex items-center justify-center px-4">
-
+       class="hidden fixed inset-0 bg-black/30 backdrop-blur-sm z-40 flex items-center justify-center px-4">
     <div id="modal"
          class="bg-white rounded-2xl max-w-md w-full shadow-xl relative p-4 sm:p-5 card-fade">
       
@@ -153,46 +245,15 @@
               type="button">✕</button>
 
       <img id="modal-img" src="" alt="" class="rounded-xl w-full mb-4 max-h-56 object-cover">
-
       <h2 id="modal-title" class="text-xl font-semibold mb-1"></h2>
       <p id="modal-desc" class="text-sm text-hb-muted mb-3"></p>
-
       <div class="flex items-center justify-between mt-1">
         <p id="modal-price" class="text-lg font-semibold"></p>
-        <!-- если потом добавим вес, калории и т.д., можно вывести здесь -->
       </div>
     </div>
   </div>
 
-  <!-- ТВОЙ JS С МЕНЮ -->
+  <!-- JS -->
   <script src="script.js"></script>
-
-  <!-- Небольшой JS для переключения категорий и модалки (если нужно) -->
-  <script>
-    // Активное состояние кнопок категорий
-    const catButtons = document.querySelectorAll(".cat-btn");
-    catButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        const cat = btn.dataset.cat;
-        // подсветка активной
-        catButtons.forEach(b => b.classList.remove("active"));
-        document.querySelectorAll(`.cat-btn[data-cat="${cat}"]`).forEach(b => b.classList.add("active"));
-        // загрузка категории — функция есть в script.js
-        if (typeof loadCategory === "function") {
-          loadCategory(cat);
-        }
-        // лёгкий скролл наверх списка на мобилке
-        if (window.innerWidth < 768) {
-          const container = document.getElementById("items-container");
-          container.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-      });
-    });
-
-    // Если в script.js есть loadCategory — загрузим завтрак по умолчанию
-    if (typeof loadCategory === "function") {
-      loadCategory("kahvalti");
-    }
-  </script>
 </body>
 </html>
