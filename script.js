@@ -38,6 +38,17 @@ const CATEGORY_TITLES = {
   icecek: "İçecekler",
 };
 
+const CATEGORY_TITLES = {
+  hiddenback: "Hakkımızda",
+  kahvalti: "Kahvaltı",
+  anayemek: "Ana Yemekler",
+  burger: "Burger",
+  pizza: "Pizza",
+  tatli: "Tatlılar",
+  kahve: "Kahveler",
+  icecek: "İçecekler",
+};
+
 // ─────────────────────────────
 //  MENU ITEMS — KAHVALTI + TOST
 // ─────────────────────────────
@@ -840,6 +851,92 @@ function renderGroupNav(groups) {
   groupNavButtons.innerHTML = "";
 
   if (!visibleGroups.length) {
+    groupNav.classList.add("hidden");
+    return;
+  }
+
+  visibleGroups.forEach((group) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "filter-chip";
+    btn.textContent = titles[group];
+    btn.addEventListener("click", () => scrollToGroup(group));
+    groupNavButtons.appendChild(btn);
+  });
+
+  groupNav.classList.remove("hidden");
+}
+
+function scrollToGroup(group) {
+  const heading = container?.querySelector(`[data-group="${group}"]`);
+  if (!heading) return;
+
+  const offset = 90;
+  const top = heading.getBoundingClientRect().top + window.scrollY - offset;
+  window.scrollTo({ top, behavior: "smooth" });
+}
+
+function scrollToCategory(category) {
+  if (category === "hiddenback") {
+    const target = hiddenbackSection;
+    if (target) {
+      const top = target.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top, behavior: "smooth" });
+    }
+    return;
+  }
+
+  const heading = container?.querySelector(`#cat-${category}`);
+  if (!heading) return;
+
+  const offset = 90;
+  const top = heading.getBoundingClientRect().top + window.scrollY - offset;
+  window.scrollTo({ top, behavior: "smooth" });
+}
+
+function renderGroupNav(groups) {
+  if (!groupNav || !groupNavButtons) return;
+
+  const titles = GROUP_TITLES[activeCategory] || {};
+  const visibleGroups = groups.filter((group) => titles[group]);
+
+  groupNavButtons.innerHTML = "";
+
+  if (!visibleGroups.length || activeCategory === "hiddenback") {
+    groupNav.classList.add("hidden");
+    return;
+  }
+
+  visibleGroups.forEach((group) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "filter-chip";
+    btn.textContent = titles[group];
+    btn.addEventListener("click", () => scrollToGroup(group));
+    groupNavButtons.appendChild(btn);
+  });
+
+  groupNav.classList.remove("hidden");
+}
+
+function scrollToGroup(group) {
+  const heading = container?.querySelector(`[data-group="${group}"]`);
+  if (!heading) return;
+
+  const offset = 90;
+  const top = heading.getBoundingClientRect().top + window.scrollY - offset;
+  window.scrollTo({ top, behavior: "smooth" });
+}
+
+function renderGroupNav(groups) {
+  if (!groupNav || !groupNavButtons) return;
+
+  const titles = GROUP_TITLES[activeCategory] || {};
+  const visibleGroups = groups.filter((group) => titles[group]);
+
+  groupNavButtons.innerHTML = "";
+
+  if (!visibleGroups.length || activeCategory === "hiddenback") {
     groupNav.classList.add("hidden");
     return;
   }
