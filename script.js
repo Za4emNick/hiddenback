@@ -1,47 +1,4 @@
 // ─────────────────────────────
-//  GLOBAL STATE
-// ─────────────────────────────
-
-let activeCategory = "hiddenback";
-let searchTerm = "";
-const activeFilters = {
-  veg: false,
-  spicy: false,
-  cheese: false,
-  breakfast: false,
-  dessert: false
-};
-
-// ─────────────────────────────
-//  DOM ELEMENTS
-// ─────────────────────────────
-
-const hiddenbackSection  = document.getElementById("hiddenback-section");
-const menuSection        = document.getElementById("menu-section");
-const container          = document.getElementById("items-container");
-const instagramBlock     = document.getElementById("instagram-block");
-
-const modalOverlay       = document.getElementById("modal-overlay");
-const modalImg           = document.getElementById("modal-img");
-const modalTitle         = document.getElementById("modal-title");
-const modalDesc          = document.getElementById("modal-desc");
-const modalPrice         = document.getElementById("modal-price");
-const modalExtra         = document.getElementById("modal-extra");
-const modalClose         = document.getElementById("modal-close");
-
-const catButtons         = document.querySelectorAll(".cat-btn");
-const filterChips        = document.querySelectorAll(".filter-chip");
-const searchDesktop      = document.getElementById("search-desktop");
-const searchMobile       = document.getElementById("search-mobile");
-
-const filterToggleBtn    = document.getElementById("filter-toggle");
-const mobileFiltersBox   = document.getElementById("mobile-filters-panel");
-const scrollTopBtn       = document.getElementById("scroll-top-btn");
-const mobileMenuBar      = document.getElementById("mobile-menu-bar");
-const controlsWrapper    = document.getElementById("controls-wrapper");
-
-
-// ─────────────────────────────
 //  GROUP TITLES (вывод подзаголовков внутри категорий)
 // ─────────────────────────────
 
@@ -780,3 +737,201 @@ ITEMS.push(
 
 );
 
+// ─────────────────────────────
+//  RENDERING & INTERACTION LOGIC
+// ─────────────────────────────
+
+const hiddenbackSection = document.getElementById("hiddenback-section");
+const menuSection = document.getElementById("menu-section");
+const container = document.getElementById("items-container");
+const instagramBlock = document.getElementById("instagram-block");
+
+const modalOverlay = document.getElementById("modal-overlay");
+const modalImg = document.getElementById("modal-img");
+const modalTitle = document.getElementById("modal-title");
+const modalDesc = document.getElementById("modal-desc");
+const modalPrice = document.getElementById("modal-price");
+const modalExtra = document.getElementById("modal-extra");
+const modalClose = document.getElementById("modal-close");
+
+const catButtons = document.querySelectorAll(".cat-btn");
+const filterChips = document.querySelectorAll(".filter-chip");
+const searchDesktop = document.getElementById("search-desktop");
+
+const activeFilters = {
+  veg: false,
+  spicy: false,
+  cheese: false,
+  breakfast: false,
+  dessert: false,
+};
+
+let activeCategory = "hiddenback";
+let searchTerm = "";
+
+const TAG_LABELS = {
+  veg: { label: "Vejetaryen", color: "text-emerald-600" },
+  spicy: { label: "Acılı", color: "text-red-600" },
+  cheese: { label: "Peynirli", color: "text-amber-600" },
+  breakfast: { label: "Kahvaltı", color: "text-sky-600" },
+  dessert: { label: "Tatlı", color: "text-pink-600" },
+};
+
+const formatPrice = (price) => `${price}₺`;
+
+function toggleSections(category) {
+  const showMenu = category !== "hiddenback";
+
+  hiddenbackSection?.classList.toggle("hidden", showMenu);
+  instagramBlock?.classList.toggle("hidden", showMenu);
+  menuSection?.classList.toggle("hidden", !showMenu);
+}
+
+function syncFilterButtons(key, isActive) {
+  document.querySelectorAll(`[data-filter="${key}"]`).forEach((btn) => {
+    btn.classList.toggle("active", isActive);
+  });
+}
+
+function applyFilters(item) {
+  const term = searchTerm.trim().toLowerCase();
+  const matchesSearch = term
+    ? item.title.toLowerCase().includes(term) || item.desc.toLowerCase().includes(term)
+    : true;
+
+  const activeKeys = Object.entries(activeFilters)
+    .filter(([, value]) => value)
+    .map(([key]) => key);
+
+  const matchesTags = activeKeys.length
+    ? activeKeys.every((tag) => item.tags?.includes(tag))
+    : true;
+
+  return matchesSearch && matchesTags;
+}
+
+function createCard(item) {
+  const card = document.createElement("article");
+  card.className = "bg-white border border-hb-border rounded-2xl p-4 sm:p-5 flex flex-col gap-3 shadow-[0_6px_18px_rgba(0,0,0,0.04)] card-fade";
+
+  card.innerHTML = `
+    <div class="rounded-xl overflow-hidden bg-neutral-200 aspect-[4/3]">
+      <img src="${item.img}" alt="${item.title}" class="w-full h-full object-cover">
+    </div>
+    <div class="flex flex-col gap-2">
+      <div class="flex items-start justify-between gap-2">
+        <h3 class="text-base font-semibold leading-tight">${item.title}</h3>
+        <span class="text-sm font-semibold">${formatPrice(item.price)}</span>
+      </div>
+      <p class="text-sm text-hb-muted leading-relaxed">${item.desc}</p>
+      <div class="flex flex-wrap gap-2 text-[11px] text-hb-muted">
+        ${(item.tags || [])
+          .map((tag) => {
+            const meta = TAG_LABELS[tag];
+            return meta ? `<span class="px-2 py-0.5 rounded-full bg-gray-100 ${meta.color}">${meta.label}</span>` : "";
+          })
+          .join("")}
+      </div>
+    </div>
+  `;
+
+  card.addEventListener("click", () => openModal(item));
+  return card;
+}
+
+function renderItems() {
+  if (!container) return;
+
+  container.innerHTML = "";
+  const groupTitles = GROUP_TITLES[activeCategory] || {};
+  const addedGroup = new Set();
+
+  ITEMS.filter((item) => item.cat === activeCategory)
+    .filter(applyFilters)
+    .forEach((item) => {
+      const groupTitle = groupTitles[item.group];
+      if (groupTitle && !addedGroup.has(item.group)) {
+        const heading = document.createElement("h3");
+        heading.className = "text-[11px] font-semibold uppercase tracking-[0.18em] text-hb-muted pl-1";
+        heading.textContent = groupTitle;
+        container.appendChild(heading);
+        addedGroup.add(item.group);
+      }
+
+      container.appendChild(createCard(item));
+    });
+
+  if (!container.childElementCount) {
+    const empty = document.createElement("p");
+    empty.className = "text-center text-sm text-hb-muted col-span-full py-4";
+    empty.textContent = "Sonuç bulunamadı.";
+    container.appendChild(empty);
+  }
+}
+
+function openModal(item) {
+  if (!modalOverlay) return;
+
+  modalImg.src = item.img;
+  modalImg.alt = item.title;
+  modalTitle.textContent = item.title;
+  modalDesc.textContent = item.desc;
+  modalPrice.textContent = formatPrice(item.price);
+
+  const activeKeys = Object.entries(activeFilters)
+    .filter(([, value]) => value)
+    .map(([key]) => TAG_LABELS[key]?.label)
+    .filter(Boolean);
+
+  if (activeKeys.length) {
+    modalExtra.textContent = `Filtreler: ${activeKeys.join(", ")}`;
+    modalExtra.classList.remove("hidden");
+  } else {
+    modalExtra.classList.add("hidden");
+  }
+
+  modalOverlay.classList.remove("hidden");
+}
+
+function closeModal() {
+  modalOverlay?.classList.add("hidden");
+}
+
+catButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const { cat } = btn.dataset;
+    if (!cat) return;
+
+    activeCategory = cat;
+    catButtons.forEach((b) => b.classList.toggle("active", b === btn));
+    toggleSections(cat);
+    renderItems();
+  });
+});
+
+filterChips.forEach((chip) => {
+  chip.addEventListener("click", () => {
+    const key = chip.dataset.filter;
+    if (!key || !(key in activeFilters)) return;
+
+    activeFilters[key] = !activeFilters[key];
+    syncFilterButtons(key, activeFilters[key]);
+    renderItems();
+  });
+});
+
+if (searchDesktop) {
+  searchDesktop.addEventListener("input", (e) => {
+    searchTerm = e.target.value;
+    renderItems();
+  });
+}
+
+modalClose?.addEventListener("click", closeModal);
+modalOverlay?.addEventListener("click", (event) => {
+  if (event.target === modalOverlay) closeModal();
+});
+
+// Initial render
+toggleSections(activeCategory);
+renderItems();
