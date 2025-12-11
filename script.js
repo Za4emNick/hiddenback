@@ -862,7 +862,7 @@ function renderItems() {
       if (groupTitle && !addedGroup.has(item.group)) {
         const heading = document.createElement("h3");
         heading.className =
-          "col-span-full mt-5 mb-2 text-xs sm:text-sm font-semibold uppercase tracking-[0.18em] text-hb-muted pl-1";
+          "col-span-full mt-6 mb-3 text-sm sm:text-base font-semibold uppercase tracking-[0.18em] text-hb-muted pl-1";
         heading.textContent = groupTitle;
         container.appendChild(heading);
         addedGroup.add(item.group);

@@ -38,16 +38,16 @@
     .cat-btn {
       display: block;
       width: 100%;
-      padding: 0.75rem 1rem;
+      padding: 0.85rem 1rem;
       border-radius: 999px;
       border: 1px solid #e5e5e5;
       font-size: 1rem;
-      text-align: center;
+      text-align: left;
       background: #ffffff;
       transition: background 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
       white-space: normal;
-      line-height: 1.35;
-      min-height: 3rem;
+      line-height: 1.4;
+      min-height: 3.2rem;
     }
     .cat-btn:hover {
       background: #f3f4f6;
@@ -58,10 +58,6 @@
       color: #ffffff;
       border-color: #111827;
     }
-    @media (min-width: 768px) {
-      .cat-btn { text-align: left; }
-    }
-
     .card-fade {
       animation: cardFade 0.25s ease-out;
     }
@@ -117,15 +113,15 @@
   </header>
 
   <!-- MAIN -->
-  <main class="max-w-7xl mx-auto px-4 pt-4 pb-10 flex flex-col md:flex-row gap-4 md:gap-6">
+  <main class="max-w-7xl mx-auto px-4 pt-4 pb-10 grid grid-cols-[160px_1fr] sm:grid-cols-[180px_1fr] md:grid-cols-[220px_1fr] gap-4 md:gap-6 items-start">
 
     <!-- SIDEBAR КАТЕГОРИЙ -->
-    <aside class="w-full md:w-60 shrink-0">
-      <div class="bg-white border border-hb-border rounded-2xl p-3 sm:p-4 flex flex-col gap-3 md:gap-2 md:sticky top-20">
+    <aside class="w-full">
+      <div class="bg-white border border-hb-border rounded-2xl p-3 sm:p-4 flex flex-col gap-3 md:gap-2 sticky top-20">
         <p class="text-[11px] sm:text-xs font-medium text-hb-muted uppercase tracking-[0.18em] pl-1 mb-1">
           Menü
         </p>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-1 gap-2">
+        <div class="flex flex-col gap-2">
           <button class="cat-btn active" data-cat="hiddenback">h i d d e n b a c k</button>
           <button class="cat-btn" data-cat="kahvalti">Kahvaltı</button>
           <button class="cat-btn" data-cat="anayemek">Ana Yemekler</button>
