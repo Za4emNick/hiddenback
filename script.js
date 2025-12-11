@@ -1,447 +1,4 @@
 // ─────────────────────────────
-//  MENU DATA (с тегами/ценой)
-// ─────────────────────────────
-
-const items = {
-  kahvalti: [
-    {
-      title: "Serpme Kahvaltı (2 kişi)",
-      desc: "Ezine beyaz peynir, çeçil peyniri, reçeller, bal & kaymak, nutella, acuka, zeytinler, domates, salatalık, jambon, sahanda yumurta, pancake, sosis, sigara böreği, patates tava, yeşillik, mevsim meyvesi, sınırsız çay.",
-      price: "960₺",
-      priceValue: 960,
-      img: "images/kahvalti/serpme.webp",
-      tags: ["breakfast", "cheese"]
-    },
-    {
-      title: "Mini Kahvaltı",
-      desc: "Ezine peynir, çeçil peynir, siyah zeytin, domates, salatalık, patates kızartması, yumurta ve çay.",
-      price: "320₺",
-      priceValue: 320,
-      img: "images/kahvalti/mini.webp",
-      tags: ["breakfast"]
-    },
-    {
-      title: "Sahanda Yumurta",
-      desc: "Tavada taze yumurta.",
-      price: "170₺",
-      priceValue: 170,
-      img: "images/kahvalti/yumurta.webp",
-      tags: ["breakfast"]
-    },
-    {
-      title: "Menemen",
-      desc: "Domates, biber ve yumurta ile klasik Türk menemen.",
-      price: "180₺",
-      priceValue: 180,
-      img: "images/kahvalti/menemen.webp",
-      tags: ["breakfast", "veg"]
-    },
-    {
-      title: "Omlet",
-      desc: "Taze yumurta ile omlet (sade veya malzemeli).",
-      price: "170₺",
-      priceValue: 170,
-      img: "images/kahvalti/omlet.webp",
-      tags: ["breakfast"]
-    },
-    {
-      title: "Fit Kahvaltı",
-      desc: "Müsli, süt ve mevsim meyveleri ile hafif kahvaltı.",
-      price: "180₺",
-      priceValue: 180,
-      img: "images/kahvalti/fit.webp",
-      tags: ["breakfast", "veg"]
-    },
-    {
-      title: "Pancake Tabağı",
-      desc: "Pancake, meyveler ve çikolatalı sos ile servis.",
-      price: "230₺",
-      priceValue: 230,
-      img: "images/kahvalti/pancake.webp",
-      tags: ["breakfast", "dessert"]
-    }
-  ],
-
-  anayemek: [
-    {
-      title: "Eggs Benedict",
-      desc: "Poşe yumurta, hollandez sos ve ekşi mayalı ekmek ile brunch klasiği.",
-      price: "250₺",
-      priceValue: 250,
-      img: "images/anayemek/benedict.webp",
-      tags: ["breakfast"]
-    },
-    {
-      title: "Avokado Ekmek Üstü",
-      desc: "Avokado püresi, limon, zeytinyağı ve baharatlarla hafif seçenek.",
-      price: "250₺",
-      priceValue: 250,
-      img: "images/anayemek/avokado.webp",
-      tags: ["veg"]
-    },
-    {
-      title: "Vegeterian Ekmek Üstü",
-      desc: "Sebzeler ve peynirle hazırlanmış vejetaryen tost.",
-      price: "250₺",
-      priceValue: 250,
-      img: "images/anayemek/vege-toast.webp",
-      tags: ["veg", "cheese"]
-    },
-    {
-      title: "Tavuklu Bowl",
-      desc: "Izgara tavuk, sebzeler ve tahıllarla dengeli bowl.",
-      price: "280₺",
-      priceValue: 280,
-      img: "images/anayemek/chicken-bowl.webp",
-      tags: []
-    },
-    {
-      title: "Turkish Bowl",
-      desc: "Yerel tatlar ve baharatlarla hazırlanan bowl.",
-      price: "260₺",
-      priceValue: 260,
-      img: "images/anayemek/turkish-bowl.webp",
-      tags: ["spicy"]
-    },
-    {
-      title: "Cheddar Soslu Patates",
-      desc: "Kızarmış patates üzerinde sıcak cheddar sos.",
-      price: "190₺",
-      priceValue: 190,
-      img: "images/anayemek/cheddar-fries.webp",
-      tags: ["cheese"]
-    },
-    {
-      title: "Patates Tava",
-      desc: "Klasik kızarmış patates.",
-      price: "180₺",
-      priceValue: 180,
-      img: "images/anayemek/fries.webp",
-      tags: ["veg"]
-    },
-    {
-      title: "Çıtır Tavuk",
-      desc: "Crispy kaplamalı tavuk parçaları.",
-      price: "320₺",
-      priceValue: 320,
-      img: "images/anayemek/crispy-chicken.webp",
-      tags: []
-    },
-    {
-      title: "Tavuklu Sezar Salata",
-      desc: "Romaine marul, kruton, parmesan ve ızgara tavuk.",
-      price: "270₺",
-      priceValue: 270,
-      img: "images/anayemek/caesar.webp",
-      tags: ["cheese"]
-    },
-    {
-      title: "Ton Balıklı Salata",
-      desc: "Taze ton balığı ve yeşillikler.",
-      price: "270₺",
-      priceValue: 270,
-      img: "images/anayemek/tuna-salad.webp",
-      tags: []
-    },
-    {
-      title: "Avokadolu Kinoalı Salata",
-      desc: "Avokado ve kinoanın uyumu.",
-      price: "270₺",
-      priceValue: 270,
-      img: "images/anayemek/quinoa-salad.webp",
-      tags: ["veg"]
-    },
-    {
-      title: "Çıtır Tavuk Salata",
-      desc: "Yeşillikler ve çıtır tavuk parçaları.",
-      price: "270₺",
-      priceValue: 270,
-      img: "images/anayemek/crispy-salad.webp",
-      tags: []
-    },
-    {
-      title: "Beef Salata",
-      desc: "Izgara dana eti ile zengin salata.",
-      price: "360₺",
-      priceValue: 360,
-      img: "images/anayemek/beef-salad.webp",
-      tags: []
-    },
-    {
-      title: "Burritos Tavuk",
-      desc: "Tavuklu burrito, sebzeler ve soslarla.",
-      price: "330₺",
-      priceValue: 330,
-      img: "images/anayemek/burrito-chicken.webp",
-      tags: ["spicy"]
-    },
-    {
-      title: "Burritos Et",
-      desc: "Etli burrito, baharatlı ve doyurucu.",
-      price: "370₺",
-      priceValue: 370,
-      img: "images/anayemek/burrito-beef.webp",
-      tags: ["spicy"]
-    },
-    {
-      title: "Sebzeli Noodle",
-      desc: "Taze sebzeler ile wok noodle.",
-      price: "310₺",
-      priceValue: 310,
-      img: "images/anayemek/noodle-veggie.webp",
-      tags: ["veg"]
-    },
-    {
-      title: "Tavuklu Noodle",
-      desc: "Tavuklu noodle, hafif sos ile.",
-      price: "320₺",
-      priceValue: 320,
-      img: "images/anayemek/noodle-chicken.webp",
-      tags: []
-    },
-    {
-      title: "Fettuccine Alfredo",
-      desc: "Kremalı Alfredo soslu fettuccine.",
-      price: "320₺",
-      priceValue: 320,
-      img: "images/anayemek/alfredo.webp",
-      tags: ["cheese"]
-    },
-    {
-      title: "Penne Arrabiata",
-      desc: "Baharatlı domates soslu penne.",
-      price: "310₺",
-      priceValue: 310,
-      img: "images/anayemek/arrabiata.webp",
-      tags: ["spicy", "veg"]
-    },
-    {
-      title: "Izgara Tavuk (200 gr)",
-      desc: "Izgara tavuk göğsü, garnitür ile.",
-      price: "340₺",
-      priceValue: 340,
-      img: "images/anayemek/grilled-chicken.webp",
-      tags: []
-    },
-    {
-      title: "Köri Soslu Tavuk",
-      desc: "Kremalı köri soslu tavuk.",
-      price: "340₺",
-      priceValue: 340,
-      img: "images/anayemek/curry-chicken.webp",
-      tags: ["spicy"]
-    },
-    {
-      title: "Kremalı Mantar Tavuk",
-      desc: "Kremalı mantar sos ile tavuk.",
-      price: "340₺",
-      priceValue: 340,
-      img: "images/anayemek/mushroom-chicken.webp",
-      tags: []
-    },
-    {
-      title: "Acı Tatlı Soslu Tavuk",
-      desc: "Tatlı-acı sos ile tavuk.",
-      price: "340₺",
-      priceValue: 340,
-      img: "images/anayemek/sweet-sour-chicken.webp",
-      tags: ["spicy"]
-    }
-  ],
-
-  burger: [
-    {
-      title: "Klasik Burger",
-      desc: "Dana köfte, domates, marul, turşu ve özel sos.",
-      price: "340₺",
-      priceValue: 340,
-      img: "images/burger/classic.webp",
-      tags: ["cheese"]
-    },
-    {
-      title: "Tavuk Burger",
-      desc: "Izgara tavuklu burger.",
-      price: "320₺",
-      priceValue: 320,
-      img: "images/burger/chicken.webp",
-      tags: []
-    },
-    {
-      title: "Üç Peynir Burger",
-      desc: "Üç çeşit peynirle zenginleştirilmiş burger.",
-      price: "350₺",
-      priceValue: 350,
-      img: "images/burger/cheese.webp",
-      tags: ["cheese"]
-    }
-  ],
-
-  pizza: [
-    {
-      title: "Pizza Margherita",
-      desc: "Domates sosu, mozzarella, fesleğen.",
-      price: "320₺",
-      priceValue: 320,
-      img: "images/pizza/margherita.webp",
-      tags: ["veg", "cheese"]
-    },
-    {
-      title: "Pizza Karışık",
-      desc: "Sebze ve et karışımı malzemeler.",
-      price: "340₺",
-      priceValue: 340,
-      img: "images/pizza/mix.webp",
-      tags: ["cheese"]
-    },
-    {
-      title: "Pizza Dört Peynir",
-      desc: "Dört peynirli pizza.",
-      price: "340₺",
-      priceValue: 340,
-      img: "images/pizza/four-cheese.webp",
-      tags: ["cheese", "veg"]
-    },
-    {
-      title: "Pizza BBQ Tavuk",
-      desc: "BBQ soslu tavuklu pizza.",
-      price: "340₺",
-      priceValue: 340,
-      img: "images/pizza/bbq-chicken.webp",
-      tags: ["cheese"]
-    },
-    {
-      title: "Pizza Vejeteryan",
-      desc: "Bol sebzeli vejetaryen pizza.",
-      price: "340₺",
-      priceValue: 340,
-      img: "images/pizza/veggie.webp",
-      tags: ["veg", "cheese"]
-    }
-  ],
-
-  tatli: [
-    {
-      title: "Çikolata Dolgulu Tart",
-      desc: "Akışkan çikolata dolgulu tart.",
-      price: "190₺",
-      priceValue: 190,
-      img: "images/tatli/tart.webp",
-      tags: ["dessert", "veg"]
-    },
-    {
-      title: "Cevizli Brownie",
-      desc: "Ceviz parçacıklı brownie.",
-      price: "230₺",
-      priceValue: 230,
-      img: "images/tatli/brownie.webp",
-      tags: ["dessert", "veg"]
-    },
-    {
-      title: "Cheesecake",
-      desc: "Klasik cheesecake.",
-      price: "230₺",
-      priceValue: 230,
-      img: "images/tatli/cheesecake.webp",
-      tags: ["dessert", "cheese", "veg"]
-    },
-    {
-      title: "Tiramisu",
-      desc: "Kahveli İtalyan tatlısı.",
-      price: "230₺",
-      priceValue: 230,
-      img: "images/tatli/tiramisu.webp",
-      tags: ["dessert", "veg"]
-    },
-    {
-      title: "Waffle",
-      desc: "Meyve ve soslarla waffle.",
-      price: "240₺",
-      priceValue: 240,
-      img: "images/tatli/waffle.webp",
-      tags: ["dessert", "veg"]
-    },
-    {
-      title: "Çikolatalı Sufle",
-      desc: "İçi akışkan çikolatalı sufle.",
-      price: "240₺",
-      priceValue: 240,
-      img: "images/tatli/souffle.webp",
-      tags: ["dessert", "veg"]
-    }
-  ],
-
-  kahve: [
-    { title: "Latte", desc: "Espresso ve süt karışımı.", price: "190₺", priceValue: 190, img: "images/kahve/latte.webp", tags: [] },
-    { title: "Cappuccino", desc: "Espresso üzerine süt köpüğü.", price: "190₺", priceValue: 190, img: "images/kahve/cappuccino.webp", tags: [] },
-    { title: "Flat White", desc: "Yoğun espresso ve süt.", price: "190₺", priceValue: 190, img: "images/kahve/flatwhite.webp", tags: [] },
-    { title: "Americano", desc: "Sıcak filtre kahve tarzı.", price: "190₺", priceValue: 190, img: "images/kahve/americano.webp", tags: [] },
-    { title: "Ice White Mocha", desc: "Buzlu mocha kahve.", price: "210₺", priceValue: 210, img: "images/kahve/ice-white-mocha.webp", tags: [] },
-    { title: "Ice Americano", desc: "Buzlu Americano.", price: "170₺", priceValue: 170, img: "images/kahve/ice-americano.webp", tags: [] },
-    { title: "Matcha Latte", desc: "Japon matcha ile latte.", price: "210₺", priceValue: 210, img: "images/kahve/matcha-latte.webp", tags: [] },
-    { title: "Ice Matcha Latte", desc: "Buzlu matcha latte.", price: "210₺", priceValue: 210, img: "images/kahve/ice-matcha.webp", tags: [] },
-    { title: "Strawberry Matcha", desc: "Çilekli matcha karışımı.", price: "220₺", priceValue: 220, img: "images/kahve/strawberry-matcha.webp", tags: [] },
-    { title: "Orange Mango Matcha", desc: "Portakal & mango ile matcha.", price: "220₺", priceValue: 220, img: "images/kahve/mango-matcha.webp", tags: [] }
-  ],
-
-  icecek: [
-    { title: "Mojito (Alkolsüz)", desc: "Nane, lime ve gazlı su ile ferah kokteyl.", price: "210₺", priceValue: 210, img: "images/icecek/mojito.webp", tags: [] },
-    { title: "Milkshake Çilek", desc: "Çilekli milkshake.", price: "220₺", priceValue: 220, img: "images/icecek/milkshake-strawberry.webp", tags: ["dessert"] },
-    { title: "Milkshake Oreo", desc: "Oreo parçacıklı milkshake.", price: "220₺", priceValue: 220, img: "images/icecek/milkshake-oreo.webp", tags: ["dessert"] },
-    { title: "Frozen Çilek", desc: "Çilekli frozen içecek.", price: "210₺", priceValue: 210, img: "images/icecek/frozen-strawberry.webp", tags: [] },
-    { title: "Coca Cola", desc: "Klasik soğuk içecek.", price: "120₺", priceValue: 120, img: "images/icecek/cola.webp", tags: [] },
-    { title: "Fanta", desc: "Gazlı portakallı içecek.", price: "120₺", priceValue: 120, img: "images/icecek/fanta.webp", tags: [] },
-    { title: "Sprite", desc: "Limonlu gazlı içecek.", price: "120₺", priceValue: 120, img: "images/icecek/sprite.webp", tags: [] },
-    { title: "Ayran", desc: "Serinleten ayran.", price: "90₺", priceValue: 90, img: "images/icecek/ayran.webp", tags: [] }
-  ]
-};
-// ─────────────────────────────
-//  КОФЕИН ДЛЯ КОФЕ (по названию)
-// ─────────────────────────────
-
-const caffeineByDrink = {
-  "Espresso": "Yüksek (~80 mg)",
-  "Double Espresso": "Çok yüksek (~120 mg)",
-  "Americano": "Orta (~80 mg)",
-  "Latte": "Orta (~80 mg)",
-  "Cappuccino": "Orta (~80 mg)",
-  "Flat White": "Yüksek (~100 mg)",
-  "Mocha": "Orta-Yüksek",
-  "Ice Americano": "Orta (~80 mg)",
-  "Ice Latte": "Orta",
-  "Ice White Mocha": "Orta",
-  "Matcha Latte": "Orta (matcha)",
-  "Ice Matcha Latte": "Orta (matcha)",
-  "Strawberry Matcha": "Orta (matcha)",
-  "Orange Mango Matcha": "Orta (matcha)"
-  // можно дописать свои варианты по желанию
-};
-
-// ─────────────────────────────
-//  ГРУППЫ ДЛЯ ПОДРАЗДЕЛОВ В КАТЕГОРИЯХ
-// ─────────────────────────────
-
-const GROUP_TITLES = {
-  kahve: {
-    hot: "Sıcak Kahveler",
-    cold: "Soğuk Kahveler"
-  },
-  icecek: {
-    milkshake: "Milkshake",
-    frozen: "Frozen",
-    soft: "Meşrubatlar",
-    cocktail: "Kokteyller"
-  },
-  anayemek: {
-    chicken: "Tavuk Yemekleri",
-    meat: "Et Yemekleri",
-    salad: "Salatalar",
-    toast: "Tostlar & Ekmek Üstü",
-    other: "Bowl & Noodle"
-  }
-};
-
-
-// ─────────────────────────────
 //  GLOBAL STATE
 // ─────────────────────────────
 
@@ -455,7 +12,6 @@ const activeFilters = {
   dessert: false
 };
 
-
 // ─────────────────────────────
 //  DOM ELEMENTS
 // ─────────────────────────────
@@ -463,7 +19,6 @@ const activeFilters = {
 const hiddenbackSection  = document.getElementById("hiddenback-section");
 const menuSection        = document.getElementById("menu-section");
 const container          = document.getElementById("items-container");
-
 const instagramBlock     = document.getElementById("instagram-block");
 
 const modalOverlay       = document.getElementById("modal-overlay");
@@ -476,7 +31,6 @@ const modalClose         = document.getElementById("modal-close");
 
 const catButtons         = document.querySelectorAll(".cat-btn");
 const filterChips        = document.querySelectorAll(".filter-chip");
-
 const searchDesktop      = document.getElementById("search-desktop");
 const searchMobile       = document.getElementById("search-mobile");
 
@@ -486,328 +40,743 @@ const scrollTopBtn       = document.getElementById("scroll-top-btn");
 const mobileMenuBar      = document.getElementById("mobile-menu-bar");
 const controlsWrapper    = document.getElementById("controls-wrapper");
 
-// ─────────────────────────────
-//  UTILS: tag/price/search filters
-// ─────────────────────────────
-
-function passesTagFilters(item) {
-  const tags = item.tags || [];
-  if (activeFilters.veg && !tags.includes("veg")) return false;
-  if (activeFilters.spicy && !tags.includes("spicy")) return false;
-  if (activeFilters.cheese && !tags.includes("cheese")) return false;
-  if (activeFilters.breakfast && !tags.includes("breakfast")) return false;
-  if (activeFilters.dessert && !tags.includes("dessert")) return false;
-  return true;
-}
-
-function passesSearch(item) {
-  if (!searchTerm) return true;
-  const q = searchTerm.toLowerCase();
-  return (
-    (item.title || "").toLowerCase().includes(q) ||
-    (item.desc || "").toLowerCase().includes(q)
-  );
-}
-
-function filteredList(list) {
-  return list.filter(item =>
-    passesSearch(item) &&
-    passesTagFilters(item)
-  );
-}
-
 
 // ─────────────────────────────
-//  ГРУППИРОВКА ДЛЯ ПОДРАЗДЕЛОВ
+//  GROUP TITLES (вывод подзаголовков внутри категорий)
 // ─────────────────────────────
 
-function detectGroup(cat, item) {
-  const title = (item.title || "").toLowerCase();
-
-  if (cat === "kahve") {
-    // всё, что начинается с "ice" -> холодное
-    if (title.includes("ice") || title.includes("iced")) return "cold";
-    return "hot";
+const GROUP_TITLES = {
+  kahvalti: { toast: "Tostlar" },
+  anayemek: {
+    ekmekustu: "Ekmek Üstü",
+    bowl: "Bowl",
+    baslangic: "Başlangıçlar",
+    salata: "Salatalar",
+    durum: "Dürümler",
+    mex: "Meksika Yemekleri",
+    makarna: "Makarnalar",
+    tavuk: "Tavuk Yemekleri"
+  },
+  burger: {},
+  pizza: {},
+  tatli: {},
+  kahve: {
+    hot: "Sıcak Kahveler",
+    cold: "Soğuk Kahveler"
+  },
+  icecek: {
+    soda: "Soğuk İçecekler",
+    coldcoffee: "Soğuk Kahveler",
+    milkshake: "Milkshake",
+    frozen: "Frozen",
+    kokteyl: "Alkolsüz Kokteyller"
   }
+};
+// ─────────────────────────────
+//  MENU ITEMS — KAHVALTI + TOST
+// ─────────────────────────────
 
-  if (cat === "icecek") {
-    if (title.includes("milkshake")) return "milkshake";
-    if (title.includes("frozen"))   return "frozen";
-    if (title.includes("mojito") || title.includes("kokteyl") || title.includes("cocktail")) return "cocktail";
-    return "soft";
+const ITEMS = [
+
+  // ──────────── KAHVALTI ────────────
+  {
+    cat: "kahvalti",
+    group: "kahvalti",
+    title: "Serpme Kahvaltı (2 kişilik)",
+    price: 960,
+    desc: "Geniş serpme kahvaltı: peynir çeşitleri, reçeller, yumurta, pancake, sosis, sigara böreği, patates tava, mevsim meyvesi ve sınırsız çay.",
+    img: "images/items/serpme-kahvalti.webp",
+    tags: ["breakfast"]
+  },
+  {
+    cat: "kahvalti",
+    group: "kahvalti",
+    title: "Mini Kahvaltı",
+    price: 320,
+    desc: "Peynir çeşitleri, zeytin, domates, salatalık, patates kızartması, yumurta ve çay.",
+    img: "images/items/mini-kahvalti.webp",
+    tags: ["breakfast"]
+  },
+  {
+    cat: "kahvalti",
+    group: "kahvalti",
+    title: "Sahanda Yumurta",
+    price: 170,
+    desc: "Tavada iki göz yumurta.",
+    img: "images/items/sahanda-yumurta.webp",
+    tags: ["breakfast"]
+  },
+  {
+    cat: "kahvalti",
+    group: "kahvalti",
+    title: "Menemen",
+    price: 180,
+    desc: "Domatesli biberli yumurta karışımı.",
+    img: "images/items/menemen.webp",
+    tags: ["breakfast"]
+  },
+  {
+    cat: "kahvalti",
+    group: "kahvalti",
+    title: "Omlet",
+    price: 170,
+    desc: "Sade, peynirli, mantarlı veya taze otlu seçenekler.",
+    img: "images/items/omlet.webp",
+    tags: ["breakfast"]
+  },
+  {
+    cat: "kahvalti",
+    group: "kahvalti",
+    title: "Fit Kahvaltı",
+    price: 180,
+    desc: "Müsli, süt, taze meyveler ve ceviz.",
+    img: "images/items/fit-kahvalti.webp",
+    tags: ["breakfast"]
+  },
+  {
+    cat: "kahvalti",
+    group: "kahvalti",
+    title: "Pancake Burger",
+    price: 230,
+    desc: "2 adet pancake, pasta kreması, çilek, muz ve çikolata.",
+    img: "images/items/pancake-burger.webp",
+    tags: ["breakfast", "dessert"]
+  },
+
+  // ──────────── TOSTLAR ────────────
+  {
+    cat: "kahvalti",
+    group: "toast",
+    title: "Beyaz Peynirli Tost",
+    price: 240,
+    desc: "Ezine peynirli tost, domates, pesto sos, patates kızartması ve akdeniz yeşillikleri.",
+    img: "images/items/tost-beyaz.webp",
+    tags: ["cheese"]
+  },
+  {
+    cat: "kahvalti",
+    group: "toast",
+    title: "Üç Peynirli Tost",
+    price: 250,
+    desc: "Kaşar, cheddar ve beyaz peynir ile üç peynirli tost.",
+    img: "images/items/tost-uc-peynir.webp",
+    tags: ["cheese"]
+  },
+  {
+    cat: "kahvalti",
+    group: "toast",
+    title: "Tavuklu Tost",
+    price: 320,
+    desc: "Tavuk, mantar, kaşar ve cheddar ile tost; yanında patates.",
+    img: "images/items/tost-tavuklu.webp",
+    tags: []
+  },
+  {
+    cat: "kahvalti",
+    group: "toast",
+    title: "Karışık Tost",
+    price: 250,
+    desc: "Kaşar peyniri ve salam ile hazırlanan tost.",
+    img: "images/items/tost-karisik.webp",
+    tags: []
+  },
+  {
+    cat: "kahvalti",
+    group: "toast",
+    title: "Kaşarlı Tost",
+    price: 240,
+    desc: "Kaşar peyniri ile hazırlanmış klasik tost.",
+    img: "images/items/tost-kasarli.webp",
+    tags: ["cheese"]
+  },
+
+];
+// ─────────────────────────────
+//  ITEMS — ANA YEMEKLER
+// ─────────────────────────────
+
+ITEMS.push(
+  // ─────────── EKMEK ÜSTÜ ───────────
+  {
+    cat: "anayemek",
+    group: "toast",
+    title: "Eggs Benedict",
+    price: 250,
+    desc: "Labne, sote ıspanak, poşe yumurta, dana jambon ve akdeniz yeşillikleri.",
+    img: "images/items/eggs-benedict.webp",
+    tags: ["breakfast"]
+  },
+  {
+    cat: "anayemek",
+    group: "toast",
+    title: "Avokado",
+    price: 250,
+    desc: "Avokado, poşe yumurta, sote sebzeler ve akdeniz yeşillikleri.",
+    img: "images/items/avokado-toast.webp",
+    tags: ["veg"]
+  },
+  {
+    cat: "anayemek",
+    group: "toast",
+    title: "Vegeterian",
+    price: 250,
+    desc: "Kırmızı biber, çeçil peynir, mantar, kızarmış domates ve akdeniz yeşillikleri.",
+    img: "images/items/vegetarian-toast.webp",
+    tags: ["veg", "cheese"]
+  },
+
+  // ─────────── BOWL ───────────
+  {
+    cat: "anayemek",
+    group: "other",
+    title: "Tavuklu Bowl",
+    price: 280,
+    desc: "Izgara tavuk, ızgara sebzeler, kuskus makarna, akdeniz yeşilliği, nar ekşisi.",
+    img: "images/items/tavuklu-bowl.webp",
+    tags: []
+  },
+  {
+    cat: "anayemek",
+    group: "other",
+    title: "Turkish Bowl",
+    price: 260,
+    desc: "Kısır, sigara böreği, patates salatası, sarma, brownie parçacıkları.",
+    img: "images/items/turkish-bowl.webp",
+    tags: []
+  },
+
+  // ─────────── BAŞLANGIÇLAR ───────────
+  {
+    cat: "anayemek",
+    group: "other",
+    title: "Cheddar Soslu Patates",
+    price: 190,
+    desc: "Kızarmış patates tava üzerinde sıcak cheddar sos.",
+    img: "images/items/cheddar-fries.webp",
+    tags: ["cheese"]
+  },
+  {
+    cat: "anayemek",
+    group: "other",
+    title: "Patates Tava",
+    price: 180,
+    desc: "Klasik kızarmış patates.",
+    img: "images/items/patates-tava.webp",
+    tags: ["veg"]
+  },
+  {
+    cat: "anayemek",
+    group: "other",
+    title: "Çıtır Tavuk",
+    price: 320,
+    desc: "Panelenmiş jülyen tavuk, sweet chili, sezar sos, hidden sos, patates kızartması.",
+    img: "images/items/citir-tavuk.webp",
+    tags: ["spicy"]
+  },
+
+  // ─────────── SALATALAR ───────────
+  {
+    cat: "anayemek",
+    group: "salad",
+    title: "Tavuklu Sezar Salata",
+    price: 270,
+    desc: "Göbek marul, domates, kruton, sezar sos, ızgara tavuk, mısır.",
+    img: "images/items/caesar-salad.webp",
+    tags: ["cheese"]
+  },
+  {
+    cat: "anayemek",
+    group: "salad",
+    title: "Ton Balıklı Salata",
+    price: 270,
+    desc: "Akdeniz yeşillikleri, domates, salatalık, zeytin, mısır, ton balığı.",
+    img: "images/items/tuna-salad.webp",
+    tags: []
+  },
+  {
+    cat: "anayemek",
+    group: "salad",
+    title: "Avokadolu Kinoa Salata",
+    price: 270,
+    desc: "Akdeniz yeşillikleri, domates, salatalık, avokado ve kinoa.",
+    img: "images/items/quinoa-salad.webp",
+    tags: ["veg"]
+  },
+  {
+    cat: "anayemek",
+    group: "salad",
+    title: "Çıtır Tavuk Salata",
+    price: 270,
+    desc: "Akdeniz yeşillikleri, mısır, zeytin, domates, panelenmiş tavuk.",
+    img: "images/items/crispy-salad.webp",
+    tags: []
+  },
+  {
+    cat: "anayemek",
+    group: "salad",
+    title: "Tavuklu Kase",
+    price: 280,
+    desc: "Izgara tavuk, ızgara sebzeler, kuskus makarna, akdeniz yeşilliği.",
+    img: "images/items/tavuklu-kase.webp",
+    tags: []
+  },
+  {
+    cat: "anayemek",
+    group: "salad",
+    title: "Beef Salata",
+    price: 360,
+    desc: "Jülyen et, taze akdeniz yeşillikleri, domates, havuç, mısır.",
+    img: "images/items/beef-salad.webp",
+    tags: []
+  },
+
+  // ─────────── DÜRÜMLER ───────────
+  {
+    cat: "anayemek",
+    group: "meat",
+    title: "Tavuk Dürüm",
+    price: 320,
+    desc: "Jülyen tavuk, mantar, renkli biber, kaşar, patates tava ve yeşillikler.",
+    img: "images/items/tavuk-durum.webp",
+    tags: []
+  },
+  {
+    cat: "anayemek",
+    group: "meat",
+    title: "Et Dürüm",
+    price: 360,
+    desc: "Jülyen bonfile, mantar, biberler, kaşar, patates tava ve yeşillikler.",
+    img: "images/items/et-durum.webp",
+    tags: []
+  },
+
+  // ─────────── MEKSİKA YEMEKLERİ ───────────
+  {
+    cat: "anayemek",
+    group: "meat",
+    title: "Burritos Tavuk",
+    price: 330,
+    desc: "Tortilla içinde tavuk, burritos sos, sebzeler, cheddar, patates kızartması.",
+    img: "images/items/burritos-chicken.webp",
+    tags: ["spicy", "cheese"]
+  },
+  {
+    cat: "anayemek",
+    group: "meat",
+    title: "Burritos Et",
+    price: 370,
+    desc: "Bonfile dilimleri, burritos sos, sebzeler, cheddar, patates kızartması.",
+    img: "images/items/burritos-beef.webp",
+    tags: ["spicy", "cheese"]
+  },
+
+  // ─────────── MAKARNALAR ───────────
+  {
+    cat: "anayemek",
+    group: "other",
+    title: "Sebzeli Noodle",
+    price: 310,
+    desc: "Sebzeli wok noodle, kabak, havuç, biberler, susam, mantar, soya sos.",
+    img: "images/items/noodle-veggie.webp",
+    tags: ["veg"]
+  },
+  {
+    cat: "anayemek",
+    group: "other",
+    title: "Tavuklu Noodle",
+    price: 320,
+    desc: "Tavuklu noodle, sebzeler ve hafif sos.",
+    img: "images/items/noodle-chicken.webp",
+    tags: []
+  },
+  {
+    cat: "anayemek",
+    group: "other",
+    title: "Fettuccine Alfredo",
+    price: 320,
+    desc: "Tavuk, mantar, krema, parmesan ve pesto ile hazırlanan fettuccine.",
+    img: "images/items/alfredo.webp",
+    tags: ["cheese"]
+  },
+  {
+    cat: "anayemek",
+    group: "other",
+    title: "Penne Arabiata",
+    price: 310,
+    desc: "Arabiata sos, zeytin, parmesan ve acı soslu penne.",
+    img: "images/items/arrabiata.webp",
+    tags: ["spicy", "veg"]
+  },
+
+  // ─────────── TAVUK YEMEKLERİ ───────────
+  {
+    cat: "anayemek",
+    group: "chicken",
+    title: "Izgara Tavuk (200 gr)",
+    price: 340,
+    desc: "Izgara tavuk göğüs, közlenmiş sebzeler, patates salatası ve yeşillikler.",
+    img: "images/items/grilled-chicken.webp",
+    tags: []
+  },
+  {
+    cat: "anayemek",
+    group: "chicken",
+    title: "Köri Soslu Tavuk",
+    price: 340,
+    desc: "Köri soslu tavuk, mantar, renkli biberler ve patates salatası.",
+    img: "images/items/curry-chicken.webp",
+    tags: ["spicy"]
+  },
+  {
+    cat: "anayemek",
+    group: "chicken",
+    title: "Kremalı Mantar Tavuk",
+    price: 340,
+    desc: "Kremalı soslu tavuk ve patates salatası.",
+    img: "images/items/mushroom-chicken.webp",
+    tags: []
+  },
+  {
+    cat: "anayemek",
+    group: "chicken",
+    title: "Acı Tatlı Soslu Tavuk",
+    price: 340,
+    desc: "Acı tatlı soslu tavuk, renkli biber, mantar, susam ve patates salatası.",
+    img: "images/items/sweet-sour-chicken.webp",
+    tags: ["spicy"]
   }
+);
+// ─────────────────────────────
+//  ITEMS — PİZZA + BURGER + TATLILAR
+// ─────────────────────────────
 
-  if (cat === "anayemek") {
-    if (title.includes("salata") || title.includes("salad")) return "salad";
-    if (title.includes("tavuk")) return "chicken";
-    if (title.includes("beef") || title.includes("et")) return "meat";
-    if (title.includes("tost") || title.includes("toast") || title.includes("ekmek")) return "toast";
-    return "other";
+ITEMS.push(
+  // ─────────── PİZZALAR ───────────
+  {
+    cat: "pizza",
+    title: "Pizza Margherita",
+    price: 320,
+    desc: "Mozarella peyniri ve pesto sos ile klasik Margherita.",
+    img: "images/items/pizza-margherita.webp",
+    tags: ["veg", "cheese"]
+  },
+  {
+    cat: "pizza",
+    title: "Pizza Karışık",
+    price: 340,
+    desc: "Mozarella, mısır, zeytin, biber, mantar, salam, sosis, sucuk.",
+    img: "images/items/pizza-mix.webp",
+    tags: ["cheese"]
+  },
+  {
+    cat: "pizza",
+    title: "Pizza Dört Peynir",
+    price: 340,
+    desc: "Cheddar, gravyer, mozarella ve parmesan peyniri.",
+    img: "images/items/pizza-four-cheese.webp",
+    tags: ["cheese", "veg"]
+  },
+  {
+    cat: "pizza",
+    title: "Pizza BBQ Tavuk",
+    price: 340,
+    desc: "BBQ tavuk, zeytin, kapya biber ve mozarella.",
+    img: "images/items/pizza-bbq.webp",
+    tags: ["cheese"]
+  },
+  {
+    cat: "pizza",
+    title: "Pizza Vegeterian",
+    price: 340,
+    desc: "Izgara havuç, kabak, mantar, renkli biberler ve mozarella.",
+    img: "images/items/pizza-vegetarian.webp",
+    tags: ["veg", "cheese"]
+  },
+
+  // ─────────── BURGERLER ───────────
+  {
+    cat: "burger",
+    title: "Klasik Burger",
+    price: 340,
+    desc: "Dana burger, karamelize soğan, cheddar, marul ve özel sos.",
+    img: "images/items/burger-classic.webp",
+    tags: ["cheese"]
+  },
+  {
+    cat: "burger",
+    title: "Tavuk Burger",
+    price: 320,
+    desc: "Izgara tavuk, karamelize soğan, cheddar, marul ve burger sos.",
+    img: "images/items/burger-chicken.webp",
+    tags: []
+  },
+  {
+    cat: "burger",
+    title: "Üç Peynir Burger",
+    price: 350,
+    desc: "Burger köftesi, üç peynir sos, karamelize soğan ve özel sos.",
+    img: "images/items/burger-three-cheese.webp",
+    tags: ["cheese"]
+  },
+
+  // ─────────── TATLILAR ───────────
+  {
+    cat: "tatli",
+    title: "Çikolata Dolgulu Tart",
+    price: 190,
+    desc: "Akışkan çikolata dolgulu tart.",
+    img: "images/items/tart-chocolate.webp",
+    tags: ["dessert", "veg"]
+  },
+  {
+    cat: "tatli",
+    title: "Cevizli Brownie",
+    price: 230,
+    desc: "Yoğun çikolatalı brownie, ceviz parçacıklı.",
+    img: "images/items/brownie.webp",
+    tags: ["dessert", "veg"]
+  },
+  {
+    cat: "tatli",
+    title: "Cheesecake",
+    price: 230,
+    desc: "Klasik cheesecake (Frambuaz / Yaban mersini / Limon / Lotus).",
+    img: "images/items/cheesecake.webp",
+    tags: ["dessert", "cheese"]
+  },
+  {
+    cat: "tatli",
+    title: "Tiramisu",
+    price: 230,
+    desc: "Kahveli İtalyan tatlısı.",
+    img: "images/items/tiramisu.webp",
+    tags: ["dessert"]
+  },
+  {
+    cat: "tatli",
+    title: "Waffle",
+    price: 240,
+    desc: "Muz, çilek, yer fıstığı ve çikolata sos.",
+    img: "images/items/waffle.webp",
+    tags: ["dessert"]
+  },
+  {
+    cat: "tatli",
+    title: "Magnolia",
+    price: 230,
+    desc: "Çilek • Muz • Çikolata • Oreo (karışık +10₺).",
+    img: "images/items/magnolia.webp",
+    tags: ["dessert"]
+  },
+  {
+    cat: "tatli",
+    title: "Brownie Cookie (2 adet)",
+    price: 190,
+    desc: "Dışı kıtır, içi yumuşak brownie cookie.",
+    img: "images/items/brownie-cookie.webp",
+    tags: ["dessert"]
+  },
+  {
+    cat: "tatli",
+    title: "Çikolatalı Sufle",
+    price: 240,
+    desc: "Sıcak akışkan çikolatalı sufle.",
+    img: "images/items/souffle.webp",
+    tags: ["dessert"]
+  },
+  {
+    cat: "tatli",
+    title: "San Sebastian Cheesecake",
+    price: 240,
+    desc: "Karamelli yanık yüzeyli San Sebastian cheesecake.",
+    img: "images/items/san-sebastian.webp",
+    tags: ["dessert", "cheese"]
+  },
+  {
+    cat: "tatli",
+    title: "Brownie Pasta",
+    price: 260,
+    desc: "İki brownie arasında krema ve çilek.",
+    img: "images/items/brownie-pasta.webp",
+    tags: ["dessert"]
+  },
+  {
+    cat: "tatli",
+    title: "Şekersiz Hurmalı İncirli Kek",
+    price: 190,
+    desc: "Doğal hurma ve incir ile şekersiz tatlı.",
+    img: "images/items/fit-cake.webp",
+    tags: ["dessert", "veg"]
+  },
+  {
+    cat: "tatli",
+    title: "Tart",
+    price: 210,
+    desc: "Orman meyveli veya çikolata dolgulu tart.",
+    img: "images/items/tart.webp",
+    tags: ["dessert"]
+  },
+  {
+    cat: "tatli",
+    title: "Pancake Burger",
+    price: 230,
+    desc: "2 pancake, krema, çilek, muz ve çikolata.",
+    img: "images/items/pancake-burger.webp",
+    tags: ["dessert"]
+  },
+  {
+    cat: "tatli",
+    title: "Damla Çikolatalı Cevizli Kurabiye",
+    price: 180,
+    desc: "3 adet kurabiye ile servis edilir.",
+    img: "images/items/cookie.webp",
+    tags: ["dessert"]
+  },
+  {
+    cat: "tatli",
+    title: "Limonlu Cheesecake",
+    price: 230,
+    desc: "Serinletici limonlu cheesecake.",
+    img: "images/items/cheesecake-lemon.webp",
+    tags: ["dessert", "cheese"]
+  },
+  {
+    cat: "tatli",
+    title: "Lotus Cheesecake",
+    price: 230,
+    desc: "Lotus bisküvisi ve kreması ile cheesecake.",
+    img: "images/items/cheesecake-lotus.webp",
+    tags: ["dessert", "cheese"]
+  },
+  {
+    cat: "tatli",
+    title: "Hidden Dream",
+    price: 230,
+    desc: "Oreo tabanı, hidden krema, akışkan çikolata, fındık.",
+    img: "images/items/hidden-dream.webp",
+    tags: ["dessert"]
+  },
+  {
+    cat: "tatli",
+    title: "Süt Reçelli Cheesecake",
+    price: 230,
+    desc: "Süt reçeli, krokan ve çilek ile.",
+    img: "images/items/cheesecake-milk.webp",
+    tags: ["dessert", "cheese"]
+  },
+  {
+    cat: "tatli",
+    title: "Meyveli Çikolatalı Brownie",
+    price: 240,
+    desc: "Brownie parçaları, lotus, çilek, muz ve çikolata sosu.",
+    img: "images/items/brownie-fruit.webp",
+    tags: ["dessert"]
+  },
+  {
+    cat: "tatli",
+    title: "Hidden Bowl",
+    price: 240,
+    desc: "Pastacı kreması, lotus kırığı, çilek, muz, çikolata sosu.",
+    img: "images/items/hidden-bowl.webp",
+    tags: ["dessert"]
+  },
+  {
+    cat: "tatli",
+    title: "Profiterol",
+    price: 220,
+    desc: "Pastacı kreması, çikolata sosu, Antep fıstığı.",
+    img: "images/items/profiterol.webp",
+    tags: ["dessert"]
   }
-
-  return null;
-}
-
+);
 // ─────────────────────────────
-//  РЕНДЕР КАТЕГОРИИ
+//  ITEMS — İÇECEKLER
 // ─────────────────────────────
 
-function renderCategory(cat) {
-  const list = items[cat] || [];
-  const visible = filteredList(list);
+ITEMS.push(
 
-  container.innerHTML = "";
+  // ─────────── SOĞUK İÇECEKLER ───────────
+  { cat: "icecek", title: "Coca Cola", price: 120, desc: "Zero ve şekersiz seçenekleri ile.", img: "images/items/cola.webp", tags: [] },
+  { cat: "icecek", title: "Fanta", price: 120, desc: "Gazlı portakallı içecek.", img: "images/items/fanta.webp", tags: [] },
+  { cat: "icecek", title: "Sprite", price: 120, desc: "Limon aromalı gazlı içecek.", img: "images/items/sprite.webp", tags: [] },
+  { cat: "icecek", title: "Fuse Tea", price: 120, desc: "Şeftali, limon, mango, ananas seçenekleri.", img: "images/items/fusetea.webp", tags: [] },
+  { cat: "icecek", title: "Cappy", price: 120, desc: "Vişne, şeftali, karışık.", img: "images/items/cappy.webp", tags: [] },
+  { cat: "icecek", title: "Burn", price: 160, desc: "Enerji içeceği.", img: "images/items/burn.webp", tags: [] },
+  { cat: "icecek", title: "Cam Şişe Su", price: 50, desc: "Doğal kaynak suyu.", img: "images/items/water.webp", tags: [] },
+  { cat: "icecek", title: "Minera Maden Suyu", price: 100, desc: "Doğal maden suyu.", img: "images/items/minera.webp", tags: [] },
+  { cat: "icecek", title: "Minera Limon Aromalı", price: 100, desc: "Limon aromalı maden suyu.", img: "images/items/minera-lemon.webp", tags: [] },
+  { cat: "icecek", title: "Minera Elma Aromalı", price: 100, desc: "Elma aromalı maden suyu.", img: "images/items/minera-apple.webp", tags: [] },
+  { cat: "icecek", title: "Minera Karpuz Çilek", price: 100, desc: "Aromalı maden suyu.", img: "images/items/minera-fruit.webp", tags: [] },
+  { cat: "icecek", title: "Churchill", price: 120, desc: "Limon, tuz ve soda karışımı.", img: "images/items/churchill.webp", tags: [] },
+  { cat: "icecek", title: "Ayran", price: 90, desc: "Geleneksel ayran.", img: "images/items/ayran.webp", tags: [] },
+  { cat: "icecek", title: "Taze Portakal Suyu", price: 210, desc: "Taze sıkılmış.", img: "images/items/orange-juice.webp", tags: [] },
+  { cat: "icecek", title: "RedBull", price: 190, desc: "Enerji içeceği.", img: "images/items/redbull.webp", tags: [] },
 
-  // если нет групп — обычный грид
-  if (!GROUP_TITLES[cat]) {
-    if (!visible.length) {
-      const empty = document.createElement("div");
-      empty.className = "text-sm text-hb-muted col-span-full py-8 text-center";
-      empty.textContent = "Bu filtrelerle sonuç bulunamadı.";
-      container.appendChild(empty);
-      return;
-    }
+  // ─────────── SOĞUK KAHVELER ───────────
+  { cat: "kahve", title: "Ice White Mocha", price: 210, desc: "Buzlu beyaz çikolatalı mocha.", img: "images/items/ice-white-mocha.webp", tags: [] },
+  { cat: "kahve", title: "Ice Americano", price: 170, desc: "Serinletici buzlu Americano.", img: "images/items/ice-americano.webp", tags: [] },
+  { cat: "kahve", title: "Ice Latte", price: 210, desc: "Buzlu latte.", img: "images/items/ice-latte.webp", tags: [] },
+  { cat: "kahve", title: "Ice Mocha", price: 210, desc: "Buzlu mocha.", img: "images/items/ice-mocha.webp", tags: [] },
+  { cat: "kahve", title: "Chocolate Frappe", price: 210, desc: "Çikolatalı frappe.", img: "images/items/choco-frappe.webp", tags: [] },
+  { cat: "kahve", title: "Caramel Frappe", price: 210, desc: "Karamelli frappe.", img: "images/items/caramel-frappe.webp", tags: [] },
+  { cat: "kahve", title: "Ice Latte Karamel", price: 210, desc: "Karamelli buzlu latte.", img: "images/items/ice-latte-caramel.webp", tags: [] },
+  { cat: "kahve", title: "Ice Latte Vanilya", price: 210, desc: "Vanilyalı buzlu latte.", img: "images/items/ice-latte-vanilla.webp", tags: [] },
+  { cat: "kahve", title: "Ice Spanish Latte", price: 210, desc: "Tatlı soğuk Spanish latte.", img: "images/items/ice-spanish.webp", tags: [] },
+  { cat: "kahve", title: "Ice Caramel Machiato", price: 210, desc: "Buzlu karamelli macchiato.", img: "images/items/ice-macchiato.webp", tags: [] },
+  { cat: "kahve", title: "Ice Latte Fındık", price: 210, desc: "Fındıklı buzlu latte.", img: "images/items/ice-latte-hazelnut.webp", tags: [] },
+  { cat: "kahve", title: "Affogato", price: 230, desc: "Dondurma + espresso.", img: "images/items/affogato.webp", tags: [] },
+  { cat: "kahve", title: "Ice Flat White", price: 220, desc: "Buzlu flat white.", img: "images/items/ice-flatwhite.webp", tags: [] },
+  { cat: "kahve", title: "Ice Cortado", price: 220, desc: "Buzlu cortado.", img: "images/items/ice-cortado.webp", tags: [] },
+  { cat: "kahve", title: "Ice Pumpkin Latte (Yeni)", price: 210, desc: "Buzlu pumpkin latte.", img: "images/items/ice-pumpkin.webp", tags: [] },
 
-    visible.forEach((item) => {
-      const card = createCard(item);
-      container.appendChild(card);
-    });
-    return;
-  }
+  // ─────────── MİLKSHAKE ───────────
+  { cat: "icecek", title: "Milkshake Çilek", price: 220, desc: "Çilekli milkshake.", img: "images/items/milkshake-strawberry.webp", tags: ["dessert"] },
+  { cat: "icecek", title: "Milkshake Çikolata", price: 220, desc: "Çikolatalı milkshake.", img: "images/items/milkshake-choco.webp", tags: ["dessert"] },
+  { cat: "icecek", title: "Milkshake Oreo", price: 220, desc: "Oreo parçacıklı milkshake.", img: "images/items/milkshake-oreo.webp", tags: ["dessert"] },
+  { cat: "icecek", title: "Milkshake Muz", price: 220, desc: "Muzlu milkshake.", img: "images/items/milkshake-banana.webp", tags: ["dessert"] },
 
-  // с группами
-  const groups = GROUP_TITLES[cat];
-  const keys   = Object.keys(groups);
+  // ─────────── FROZEN ───────────
+  { cat: "icecek", title: "Frozen Karpuz", price: 210, desc: "Karpuzlu frozen.", img: "images/items/frozen-watermelon.webp", tags: [] },
+  { cat: "icecek", title: "Frozen Böğürtlen", price: 210, desc: "Böğürtlen frozen.", img: "images/items/frozen-blackberry.webp", tags: [] },
+  { cat: "icecek", title: "Frozen Çilek", price: 210, desc: "Çilek frozen.", img: "images/items/frozen-strawberry.webp", tags: [] },
+  { cat: "icecek", title: "Cool Lime Frozen", price: 210, desc: "Cool lime aromalı frozen.", img: "images/items/frozen-lime.webp", tags: [] },
 
-  keys.forEach((gKey, index) => {
-    const groupItems = visible.filter(item => detectGroup(cat, item) === gKey);
-    if (!groupItems.length) return;
+  // ─────────── ALKOLSÜZ KOKTEYLLER ───────────
+  { cat: "icecek", title: "Mojito", price: 210, desc: "Esmer şeker, limon, nane, soda, sprite.", img: "images/items/mojito.webp", tags: [] },
+  { cat: "icecek", title: "Sex on The Beach", price: 210, desc: "Şeftali şurubu, ananas suyu, portakal suyu, grenadin.", img: "images/items/sex-on-the-beach.webp", tags: [] },
+  { cat: "icecek", title: "Purple Rain", price: 210, desc: "Böğürtlen, passion fruit, turunç aroması.", img: "images/items/purple-rain.webp", tags: [] },
+  { cat: "icecek", title: "Cool Lime (Yeni)", price: 210, desc: "Ferahlık veren cool lime.", img: "images/items/cool-lime.webp", tags: [] },
 
-    // заголовок раздела
-    const h = document.createElement("div");
-    h.className = "col-span-full mt-3 mb-1";
-    h.innerHTML = `<h3 class="text-sm font-semibold uppercase tracking-[0.18em] text-hb-muted ${
-      index === 0 ? "mt-1" : "mt-4"
-    }">${groups[gKey]}</h3>`;
-    container.appendChild(h);
+  // ─────────── SICAK İÇECEKLER ───────────
+  { cat: "sicak", title: "Demleme Çay", price: 50, desc: "Taze demlenmiş çay.", img: "images/items/tea.webp", tags: [] },
+  { cat: "sicak", title: "Demleme Çay (Fincan)", price: 70, desc: "Fincanda demleme çay.", img: "images/items/tea-cup.webp", tags: [] },
+  { cat: "kahve", title: "Filtre Kahve", price: 160, desc: "Klasik filtre kahve.", img: "images/items/filter-coffee.webp", tags: [] },
+  { cat: "kahve", title: "Espresso", price: 100, desc: "Yoğun espresso shot.", img: "images/items/espresso.webp", tags: [] },
+  { cat: "kahve", title: "Double Espresso", price: 120, desc: "Çift shot espresso.", img: "images/items/double-espresso.webp", tags: [] },
+  { cat: "kahve", title: "Latte Macchiato", price: 180, desc: "Süt ve espresso katmanları.", img: "images/items/latte-macchiato.webp", tags: [] },
+  { cat: "kahve", title: "Caramel Machiato", price: 180, desc: "Karamelli macchiato.", img: "images/items/caramel-macchiato.webp", tags: [] },
+  { cat: "kahve", title: "Americano", price: 160, desc: "Espresso + sıcak su.", img: "images/items/americano.webp", tags: [] },
+  { cat: "kahve", title: "Cappuccino", price: 180, desc: "Espresso + süt köpüğü.", img: "images/items/cappuccino.webp", tags: [] },
+  { cat: "kahve", title: "Cafe Latte", price: 180, desc: "Klasik latte.", img: "images/items/latte.webp", tags: [] },
+  { cat: "kahve", title: "Mocha", price: 190, desc: "Çikolatalı mocha.", img: "images/items/mocha.webp", tags: [] },
+  { cat: "kahve", title: "White Chocolate Mocha", price: 190, desc: "Beyaz çikolatalı mocha.", img: "images/items/white-mocha.webp", tags: [] },
+  { cat: "kahve", title: "Flat White", price: 180, desc: "Yoğun kahveli flat white.", img: "images/items/flatwhite.webp", tags: [] },
+  { cat: "kahve", title: "Cortado", price: 180, desc: "Espresso + az süt.", img: "images/items/cortado.webp", tags: [] },
+  { cat: "kahve", title: "Türk Kahvesi", price: 130, desc: "Klasik Türk kahvesi.", img: "images/items/turkish-coffee.webp", tags: [] },
+  { cat: "kahve", title: "Türk Kahvesi Double", price: 170, desc: "Çift porsiyon.", img: "images/items/turkish-double.webp", tags: [] },
+  { cat: "sicak", title: "Sıcak Çikolata", price: 180, desc: "Yoğun sıcak çikolata.", img: "images/items/hot-chocolate.webp", tags: [] },
+  { cat: "sicak", title: "Sahlep", price: 180, desc: "Kışın vazgeçilmezi.", img: "images/items/sahlep.webp", tags: [] },
+  { cat: "kahve", title: "Espresso Shot", price: 50, desc: "Tek shot espresso.", img: "images/items/espresso-shot.webp", tags: [] },
+  { cat: "sicak", title: "Fincan Süt", price: 120, desc: "Sıcak süt.", img: "images/items/milk.webp", tags: [] },
+  { cat: "kahve", title: "Sütlü Filtre Kahve", price: 190, desc: "Süt eklenmiş filtre kahve.", img: "images/items/filter-coffee-milk.webp", tags: [] },
+  { cat: "sicak", title: "Ballı Fincan Süt", price: 160, desc: "Bal ile sıcak süt.", img: "images/items/milk-honey.webp", tags: [] },
+  { cat: "kahve", title: "Pumpkin Latte (Yeni)", price: 190, desc: "Balkabaklı latte.", img: "images/items/pumpkin-latte.webp", tags: [] },
 
-    // карточки
-    groupItems.forEach((item) => {
-      const card = createCard(item);
-      container.appendChild(card);
-    });
-  });
+  // ─────────── DÜNYA ÇAYLARI ───────────
+  { cat: "sicak", title: "Red Forest", price: 190, desc: "Kırmızı orman meyvelerinin aroması.", img: "images/items/red-forest.webp", tags: [] },
+  { cat: "sicak", title: "Jasmine", price: 190, desc: "Yasemin çiçeği aromalı çay.", img: "images/items/jasmine.webp", tags: [] },
+  { cat: "sicak", title: "Ihlamur & Melisa", price: 190, desc: "Rahatlatıcı bitki çayı.", img: "images/items/melisa.webp", tags: [] },
+  { cat: "sicak", title: "Yeşil Çay", price: 190, desc: "Yumuşak ve hafif aromalı yeşil çay.", img: "images/items/green-tea.webp", tags: [] }
 
-  // если вообще ничего не отобразилось (фильтры убили всё)
-  if (!container.children.length) {
-    const empty = document.createElement("div");
-    empty.className = "text-sm text-hb-muted col-span-full py-8 text-center";
-    empty.textContent = "Bu filtrelerle sonuç bulunamadı.";
-    container.appendChild(empty);
-  }
-}
+);
 
-// создание карточки
-function createCard(item) {
-  const card = document.createElement("button");
-  card.type = "button";
-  card.className =
-    "text-left rounded-2xl bg-white border border-hb-border hover:border-gray-400 " +
-    "shadow-sm hover:shadow-md transition p-3 sm:p-4 flex flex-col " +
-    "card-fade hover:scale-[1.01]";
-
-  const imgSrc = item.img || "images/placeholder.webp";
-
-  card.innerHTML = `
-    <div class="w-full mb-3 overflow-hidden rounded-xl bg-neutral-100 aspect-[4/3]">
-      <img src="${imgSrc}" alt="${item.title}"
-           class="w-full h-full object-cover transition-transform duration-200 hover:scale-[1.03]"
-           onerror="this.style.display='none'; this.parentElement.classList.add('bg-neutral-200');">
-    </div>
-    <h3 class="text-base font-semibold mb-1">${item.title || ""}</h3>
-    <p class="text-sm text-hb-muted mb-2 min-h-[2.5rem] line-clamp-3">${item.desc || ""}</p>
-    <p class="text-sm font-semibold mt-auto">${item.price || ""}</p>
-  `;
-
-  card.addEventListener("click", () => openModal(item));
-  return card;
-}
-
-// ─────────────────────────────
-//  ПЕРЕКЛЮЧЕНИЕ КАТЕГОРИЙ
-// ─────────────────────────────
-
-function switchCategory(cat) {
-  activeCategory = cat;
-
-  // подсветка кнопок
-  catButtons.forEach((b) => b.classList.remove("active"));
-  document
-    .querySelectorAll(`.cat-btn[data-cat="${cat}"]`)
-    .forEach((b) => b.classList.add("active"));
-
-  if (cat === "hiddenback") {
-    // показываем Главную / HiddenBack
-    hiddenbackSection.classList.remove("hidden");
-    menuSection.classList.add("hidden");
-
-    if (instagramBlock) instagramBlock.classList.remove("hidden");
-
-    // сверху/справа ничего лишнего — без поиска и фильтров
-    if (controlsWrapper) controlsWrapper.classList.add("hidden");
-    if (mobileMenuBar)   mobileMenuBar.classList.add("hidden");
-    if (mobileFiltersBox) mobileFiltersBox.classList.add("hidden");
-  } else {
-    // показываем обычное меню
-    hiddenbackSection.classList.add("hidden");
-    menuSection.classList.remove("hidden");
-
-    if (instagramBlock) instagramBlock.classList.add("hidden");
-
-    if (controlsWrapper) controlsWrapper.classList.remove("hidden");
-    if (mobileMenuBar)   mobileMenuBar.classList.remove("hidden");
-
-    renderCategory(cat);
-
-    if (window.innerWidth < 768) {
-      container.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }
-}
-
-
-
-// ─────────────────────────────
-//  MODAL (с кофеином для кофе)
-// ─────────────────────────────
-
-function openModal(item) {
-  const imgSrc = item.img || "images/placeholder.webp";
-  modalImg.src = imgSrc;
-  modalImg.alt = item.title || "";
-  modalTitle.textContent = item.title || "";
-  modalDesc.textContent = item.desc || "";
-  modalPrice.textContent = item.price || "";
-
-  // кофеин только для kahve
-  if (activeCategory === "kahve") {
-    const c = caffeineByDrink[item.title] || null;
-    if (c) {
-      modalExtra.textContent = `Kafein seviyesi: ${c}`;
-      modalExtra.classList.remove("hidden");
-    } else {
-      modalExtra.textContent = "";
-      modalExtra.classList.add("hidden");
-    }
-  } else {
-    modalExtra.textContent = "";
-    modalExtra.classList.add("hidden");
-  }
-
-  modalOverlay.classList.remove("hidden");
-}
-
-function closeModal() {
-  modalOverlay.classList.add("hidden");
-}
-
-if (modalClose) {
-  modalClose.addEventListener("click", closeModal);
-}
-if (modalOverlay) {
-  modalOverlay.addEventListener("click", (e) => {
-    if (e.target === modalOverlay) closeModal();
-  });
-}
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") closeModal();
-});
-
-// ─────────────────────────────
-//  CATEGORY CLICK HANDLERS
-// ─────────────────────────────
-
-catButtons.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const cat = btn.dataset.cat;
-    switchCategory(cat);
-  });
-});
-
-// ─────────────────────────────
-//  FILTERS
-// ─────────────────────────────
-
-filterChips.forEach((chip) => {
-  const tagFilter = chip.dataset.filter;
-
-  chip.addEventListener("click", () => {
-    if (activeCategory === "hiddenback" || !tagFilter) return;
-
-    activeFilters[tagFilter] = !activeFilters[tagFilter];
-
-    // обновляем активные классы только по тегам
-    filterChips.forEach((c) => {
-      const tf = c.dataset.filter;
-      c.classList.toggle("active", !!tf && activeFilters[tf]);
-    });
-
-    renderCategory(activeCategory);
-  });
-});
-
-
-// ─────────────────────────────
-//  SEARCH (desktop + mobile)
-// ─────────────────────────────
-
-function updateSearch(value) {
-  if (activeCategory === "hiddenback") return; // на главной поиск не работает
-
-  searchTerm = value.trim();
-
-  if (searchDesktop && document.activeElement !== searchDesktop) {
-    searchDesktop.value = value;
-  }
-  if (searchMobile && document.activeElement !== searchMobile) {
-    searchMobile.value = value;
-  }
-
-  renderCategory(activeCategory);
-}
-
-if (searchDesktop) {
-  searchDesktop.addEventListener("input", (e) => {
-    updateSearch(e.target.value);
-  });
-}
-if (searchMobile) {
-  searchMobile.addEventListener("input", (e) => {
-    updateSearch(e.target.value);
-  });
-}
-
-// ─────────────────────────────
-//  MOBILE CONTROLS
-// ─────────────────────────────
-
-if (filterToggleBtn && mobileFiltersBox) {
-  filterToggleBtn.addEventListener("click", () => {
-    mobileFiltersBox.classList.toggle("hidden");
-  });
-}
-
-if (scrollTopBtn) {
-  scrollTopBtn.addEventListener("click", () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  });
-}
-
-// ─────────────────────────────
-//  INITIAL LOAD
-// ─────────────────────────────
-
-document.addEventListener("DOMContentLoaded", () => {
-  // стартуем с HiddenBack / Главная
-  switchCategory("hiddenback");
-});
