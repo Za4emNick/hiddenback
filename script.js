@@ -28,6 +28,16 @@ const GROUP_TITLES = {
   }
 };
 
+const CATEGORY_TITLES = {
+  kahvalti: "Kahvaltı",
+  anayemek: "Ana Yemekler",
+  burger: "Burger",
+  pizza: "Pizza",
+  tatli: "Tatlılar",
+  kahve: "Kahveler",
+  icecek: "İçecekler",
+};
+
 // ─────────────────────────────
 //  MENU ITEMS — KAHVALTI + TOST
 // ─────────────────────────────
@@ -743,11 +753,7 @@ ITEMS.push(
 //  RENDERING & INTERACTION LOGIC
 // ─────────────────────────────
 
-const hiddenbackSection = document.getElementById("hiddenback-section");
-const menuSection = document.getElementById("menu-section");
 const container = document.getElementById("items-container");
-const instagramBlock = document.getElementById("instagram-block");
-
 const modalOverlay = document.getElementById("modal-overlay");
 const modalImg = document.getElementById("modal-img");
 const modalTitle = document.getElementById("modal-title");
@@ -755,6 +761,9 @@ const modalDesc = document.getElementById("modal-desc");
 const modalPrice = document.getElementById("modal-price");
 const modalExtra = document.getElementById("modal-extra");
 const modalClose = document.getElementById("modal-close");
+
+const groupNav = document.getElementById("group-nav");
+const groupNavButtons = document.getElementById("group-nav-buttons");
 
 const catButtons = document.querySelectorAll(".cat-btn");
 const filterChips = document.querySelectorAll(".filter-chip");
@@ -764,30 +773,21 @@ const activeFilters = {
   veg: false,
   spicy: false,
   cheese: false,
-  breakfast: false,
   dessert: false,
 };
 
-let activeCategory = "hiddenback";
+const defaultCategory = document.querySelector(".cat-btn")?.dataset.cat || "";
+let activeCategory = defaultCategory;
 let searchTerm = "";
 
 const TAG_LABELS = {
   veg: { label: "Vejetaryen", color: "text-emerald-600" },
   spicy: { label: "Acılı", color: "text-red-600" },
   cheese: { label: "Peynirli", color: "text-amber-600" },
-  breakfast: { label: "Kahvaltı", color: "text-sky-600" },
   dessert: { label: "Tatlı", color: "text-pink-600" },
 };
 
 const formatPrice = (price) => (typeof price === "number" ? `${price}₺` : "" );
-
-function toggleSections(category) {
-  const showMenu = category !== "hiddenback";
-
-  hiddenbackSection?.classList.toggle("hidden", showMenu);
-  instagramBlock?.classList.toggle("hidden", showMenu);
-  menuSection?.classList.toggle("hidden", !showMenu);
-}
 
 function syncFilterButtons(key, isActive) {
   document.querySelectorAll(`[data-filter="${key}"]`).forEach((btn) => {
@@ -811,6 +811,49 @@ function applyFilters(item) {
     : true;
 
   return matchesSearch && matchesTags;
+}
+
+function scrollToGroup(group) {
+  const heading = container?.querySelector(`[data-group="${group}"]`);
+  if (!heading) return;
+
+  const offset = 90;
+  const top = heading.getBoundingClientRect().top + window.scrollY - offset;
+  window.scrollTo({ top, behavior: "smooth" });
+}
+
+function scrollToCategory(category) {
+  const heading = container?.querySelector(`#cat-${category}`);
+  if (!heading) return;
+
+  const offset = 90;
+  const top = heading.getBoundingClientRect().top + window.scrollY - offset;
+  window.scrollTo({ top, behavior: "smooth" });
+}
+
+function renderGroupNav(groups) {
+  if (!groupNav || !groupNavButtons) return;
+
+  const titles = GROUP_TITLES[activeCategory] || {};
+  const visibleGroups = groups.filter((group) => titles[group]);
+
+  groupNavButtons.innerHTML = "";
+
+  if (!visibleGroups.length) {
+    groupNav.classList.add("hidden");
+    return;
+  }
+
+  visibleGroups.forEach((group) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "filter-chip";
+    btn.textContent = titles[group];
+    btn.addEventListener("click", () => scrollToGroup(group));
+    groupNavButtons.appendChild(btn);
+  });
+
+  groupNav.classList.remove("hidden");
 }
 
 function createCard(item) {
@@ -852,31 +895,55 @@ function renderItems() {
   if (!container) return;
 
   container.innerHTML = "";
-  const groupTitles = GROUP_TITLES[activeCategory] || {};
-  const addedGroup = new Set();
+  const filteredItems = ITEMS.filter(applyFilters);
+  const categories = Array.from(catButtons)
+    .map((btn) => btn.dataset.cat)
+    .filter(Boolean);
 
-  ITEMS.filter((item) => item.cat === activeCategory)
-    .filter(applyFilters)
-    .forEach((item) => {
-      const groupTitle = groupTitles[item.group];
-      if (groupTitle && !addedGroup.has(item.group)) {
-        const heading = document.createElement("h3");
-        heading.className =
-          "col-span-full mt-6 mb-3 text-sm sm:text-base font-semibold uppercase tracking-[0.18em] text-hb-muted pl-1";
-        heading.textContent = groupTitle;
-        container.appendChild(heading);
-        addedGroup.add(item.group);
-      }
+  let renderedGroups = [];
 
-      container.appendChild(createCard(item));
-    });
+  categories.forEach((category) => {
+    const catItems = filteredItems.filter((item) => item.cat === category);
+    const groupTitles = GROUP_TITLES[category] || {};
+    const addedGroup = new Set();
 
-  if (!container.childElementCount) {
-    const empty = document.createElement("p");
-    empty.className = "text-center text-sm text-hb-muted col-span-full py-4";
-    empty.textContent = "Sonuç bulunamadı.";
-    container.appendChild(empty);
-  }
+    const heading = document.createElement("h2");
+    heading.className =
+      `col-span-full ${container.childElementCount ? "mt-8" : "mt-2"} mb-3 text-base sm:text-lg font-semibold uppercase tracking-[0.18em] text-hb-muted pl-1`;
+    heading.textContent = CATEGORY_TITLES[category] || category;
+    heading.dataset.category = category;
+    heading.id = `cat-${category}`;
+    container.appendChild(heading);
+
+    if (!catItems.length) {
+      const empty = document.createElement("p");
+      empty.className = "text-sm text-hb-muted col-span-full pb-2";
+      empty.textContent = "Bu kategoride sonuç yok.";
+      container.appendChild(empty);
+    } else {
+      catItems.forEach((item) => {
+        const groupTitle = groupTitles[item.group];
+        if (groupTitle && !addedGroup.has(item.group)) {
+          const groupHeading = document.createElement("h3");
+          groupHeading.className =
+            "col-span-full mt-4 mb-3 text-sm sm:text-base font-semibold uppercase tracking-[0.18em] text-hb-muted pl-1";
+          groupHeading.textContent = groupTitle;
+          groupHeading.dataset.group = item.group;
+          groupHeading.id = `group-${item.group}`;
+          container.appendChild(groupHeading);
+          addedGroup.add(item.group);
+        }
+
+        container.appendChild(createCard(item));
+      });
+    }
+
+    if (category === activeCategory) {
+      renderedGroups = Array.from(addedGroup);
+    }
+  });
+
+  renderGroupNav(renderedGroups);
 }
 
 function openModal(item) {
@@ -924,8 +991,8 @@ catButtons.forEach((btn) => {
 
     activeCategory = cat;
     catButtons.forEach((b) => b.classList.toggle("active", b === btn));
-    toggleSections(cat);
     renderItems();
+    scrollToCategory(cat);
   });
 });
 
@@ -953,5 +1020,4 @@ modalOverlay?.addEventListener("click", (event) => {
 });
 
 // Initial render
-toggleSections(activeCategory);
 renderItems();
