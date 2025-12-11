@@ -8,10 +8,10 @@ const GROUP_TITLES = {
     ekmekustu: "Ekmek Üstü",
     bowl: "Bowl",
     baslangic: "Başlangıçlar",
-    salata: "Salatalar",
+    salad: "Salatalar",
     noodle: "Noodle & Makarna",
     meat: "Et Yemekleri",
-    tavuk: "Tavuk Yemekleri"
+    chicken: "Tavuk Yemekleri"
   },
   burger: {},
   pizza: {},
@@ -27,13 +27,7 @@ const GROUP_TITLES = {
     kokteyl: "Alkolsüz Kokteyller"
   }
 };
-  icecek: {
-    soda: "Meşrubatlar",
-    milkshake: "Milkshake",
-    frozen: "Frozen",
-    kokteyl: "Alkolsüz Kokteyller"
-  }
-};
+
 // ─────────────────────────────
 //  MENU ITEMS — KAHVALTI + TOST
 // ─────────────────────────────
@@ -153,16 +147,13 @@ const ITEMS = [
   },
 
 ];
+
 // ─────────────────────────────
 //  ITEMS — ANA YEMEKLER
 // ─────────────────────────────
 
 ITEMS.push(
   // ─────────── EKMEK ÜSTÜ ───────────
-  {
-    cat: "anayemek",
-    group: "ekmekustu",
-    title: "Eggs Benedict",
   {
     cat: "anayemek",
     group: "ekmekustu",
@@ -176,10 +167,6 @@ ITEMS.push(
     cat: "anayemek",
     group: "ekmekustu",
     title: "Avokado",
-  {
-    cat: "anayemek",
-    group: "ekmekustu",
-    title: "Avokado",
     price: 250,
     desc: "Avokado, poşe yumurta, sote sebzeler ve akdeniz yeşillikleri.",
     img: "images/items/avokado-toast.webp",
@@ -188,11 +175,7 @@ ITEMS.push(
   {
     cat: "anayemek",
     group: "ekmekustu",
-    title: "Vegeterian",
-  {
-    cat: "anayemek",
-    group: "ekmekustu",
-    title: "Vegeterian",
+    title: "Vegetarian",
     price: 250,
     desc: "Kırmızı biber, çeçil peynir, mantar, kızarmış domates ve akdeniz yeşillikleri.",
     img: "images/items/vegetarian-toast.webp",
@@ -204,19 +187,11 @@ ITEMS.push(
     cat: "anayemek",
     group: "bowl",
     title: "Tavuklu Bowl",
-  {
-    cat: "anayemek",
-    group: "bowl",
-    title: "Tavuklu Bowl",
     price: 280,
     desc: "Izgara tavuk, ızgara sebzeler, kuskus makarna, akdeniz yeşilliği, nar ekşisi.",
     img: "images/items/tavuklu-bowl.webp",
     tags: []
   },
-  {
-    cat: "anayemek",
-    group: "bowl",
-    title: "Turkish Bowl",
   {
     cat: "anayemek",
     group: "bowl",
@@ -315,11 +290,7 @@ ITEMS.push(
   // ─────────── DÜRÜMLER ───────────
   {
     cat: "anayemek",
-    group: "tavuk",
-    title: "Tavuk Dürüm",
-  {
-    cat: "anayemek",
-    group: "tavuk",
+    group: "chicken",
     title: "Tavuk Dürüm",
     price: 320,
     desc: "Jülyen tavuk, mantar, renkli biber, kaşar, patates tava ve yeşillikler.",
@@ -339,11 +310,7 @@ ITEMS.push(
   // ─────────── MEKSİKA YEMEKLERİ ───────────
   {
     cat: "anayemek",
-    group: "tavuk",
-    title: "Burritos Tavuk",
-  {
-    cat: "anayemek",
-    group: "tavuk",
+    group: "chicken",
     title: "Burritos Tavuk",
     price: 330,
     desc: "Tortilla içinde tavuk, burritos sos, sebzeler, cheddar, patates kızartması.",
@@ -365,19 +332,11 @@ ITEMS.push(
     cat: "anayemek",
     group: "noodle",
     title: "Sebzeli Noodle",
-  {
-    cat: "anayemek",
-    group: "noodle",
-    title: "Sebzeli Noodle",
     price: 310,
     desc: "Sebzeli wok noodle, kabak, havuç, biberler, susam, mantar, soya sos.",
     img: "images/items/noodle-veggie.webp",
     tags: ["veg"]
   },
-  {
-    cat: "anayemek",
-    group: "noodle",
-    title: "Tavuklu Noodle",
   {
     cat: "anayemek",
     group: "noodle",
@@ -391,19 +350,11 @@ ITEMS.push(
     cat: "anayemek",
     group: "noodle",
     title: "Fettuccine Alfredo",
-  {
-    cat: "anayemek",
-    group: "noodle",
-    title: "Fettuccine Alfredo",
     price: 320,
     desc: "Tavuk, mantar, krema, parmesan ve pesto ile hazırlanan fettuccine.",
     img: "images/items/alfredo.webp",
     tags: ["cheese"]
   },
-  {
-    cat: "anayemek",
-    group: "noodle",
-    title: "Penne Arabiata",
   {
     cat: "anayemek",
     group: "noodle",
@@ -452,6 +403,7 @@ ITEMS.push(
     tags: ["spicy"]
   }
 );
+
 // ─────────────────────────────
 //  ITEMS — PİZZA + BURGER + TATLILAR
 // ─────────────────────────────
@@ -695,6 +647,7 @@ ITEMS.push(
     tags: ["dessert"]
   }
 );
+
 // ─────────────────────────────
 //  ITEMS — İÇECEKLER
 // ─────────────────────────────
@@ -728,57 +681,7 @@ ITEMS.push(
   { cat: "kahve", group: "cold", title: "Ice Latte Karamel", price: 210, desc: "Karamelli buzlu latte.", img: "images/items/ice-latte-caramel.webp", tags: [], caffeine: "130 mg" },
   { cat: "kahve", group: "cold", title: "Ice Latte Vanilya", price: 210, desc: "Vanilyalı buzlu latte.", img: "images/items/ice-latte-vanilla.webp", tags: [], caffeine: "130 mg" },
   { cat: "kahve", group: "cold", title: "Ice Spanish Latte", price: 210, desc: "Tatlı soğuk Spanish latte.", img: "images/items/ice-spanish.webp", tags: [], caffeine: "130 mg" },
-  { cat: "kahve", group: "cold", title: "Ice Caramel Machiato", price: 210, desc: "Buzlu karamelli macchiato.", img: "images/items/ice-macchiato.webp", tags: [], caffeine: "120 mg" },
-  { cat: "kahve", group: "cold", title: "Ice Latte Fındık", price: 210, desc: "Fındıklı buzlu latte.", img: "images/items/ice-latte-hazelnut.webp", tags: [], caffeine: "130 mg" },
-  { cat: "kahve", group: "cold", title: "Affogato", price: 230, desc: "Dondurma + espresso.", img: "images/items/affogato.webp", tags: [], caffeine: "80 mg" },
-  { cat: "kahve", group: "cold", title: "Ice Flat White", price: 220, desc: "Buzlu flat white.", img: "images/items/ice-flatwhite.webp", tags: [], caffeine: "150 mg" },
-  { cat: "kahve", group: "cold", title: "Ice Cortado", price: 220, desc: "Buzlu cortado.", img: "images/items/ice-cortado.webp", tags: [], caffeine: "120 mg" },
-  { cat: "kahve", group: "cold", title: "Ice Pumpkin Latte (Yeni)", price: 210, desc: "Buzlu pumpkin latte.", img: "images/items/ice-pumpkin.webp", tags: [], caffeine: "130 mg" },
-
-  // ─────────── MİLKSHAKE ───────────
-  { cat: "icecek", group: "milkshake", title: "Milkshake Çilek", price: 220, desc: "Çilekli milkshake.", img: "images/items/milkshake-strawberry.webp", tags: ["dessert"] },
-  { cat: "icecek", group: "milkshake", title: "Milkshake Çikolata", price: 220, desc: "Çikolatalı milkshake.", img: "images/items/milkshake-choco.webp", tags: ["dessert"] },
-  { cat: "icecek", group: "milkshake", title: "Milkshake Oreo", price: 220, desc: "Oreo parçacıklı milkshake.", img: "images/items/milkshake-oreo.webp", tags: ["dessert"] },
-  { cat: "icecek", group: "milkshake", title: "Milkshake Muz", price: 220, desc: "Muzlu milkshake.", img: "images/items/milkshake-banana.webp", tags: ["dessert"] },
-
-  // ─────────── FROZEN ───────────
-  { cat: "icecek", group: "frozen", title: "Frozen Karpuz", price: 210, desc: "Karpuzlu frozen.", img: "images/items/frozen-watermelon.webp", tags: [] },
-  { cat: "icecek", group: "frozen", title: "Frozen Böğürtlen", price: 210, desc: "Böğürtlen frozen.", img: "images/items/frozen-blackberry.webp", tags: [] },
-  { cat: "icecek", group: "frozen", title: "Frozen Çilek", price: 210, desc: "Çilek frozen.", img: "images/items/frozen-strawberry.webp", tags: [] },
-  { cat: "icecek", group: "frozen", title: "Cool Lime Frozen", price: 210, desc: "Cool lime aromalı frozen.", img: "images/items/frozen-lime.webp", tags: [] },
-
-  // ─────────── ALKOLSÜZ KOKTEYLLER ───────────
-  { cat: "icecek", group: "kokteyl", title: "Mojito", price: 210, desc: "Esmer şeker, limon, nane, soda, sprite.", img: "images/items/mojito.webp", tags: [] },
-  { cat: "icecek", group: "kokteyl", title: "Sex on The Beach", price: 210, desc: "Şeftali şurubu, ananas suyu, portakal suyu, grenadin.", img: "images/items/sex-on-the-beach.webp", tags: [] },
-  { cat: "icecek", group: "kokteyl", title: "Purple Rain", price: 210, desc: "Böğürtlen, passion fruit, turunç aroması.", img: "images/items/purple-rain.webp", tags: [] },
-  { cat: "icecek", group: "kokteyl", title: "Cool Lime (Yeni)", price: 210, desc: "Ferahlık veren cool lime.", img: "images/items/cool-lime.webp", tags: [] },
-  { cat: "icecek", group: "soda", title: "Coca Cola", price: 120, desc: "Zero ve şekersiz seçenekleri ile.", img: "images/items/cola.webp", tags: [] },
-  { cat: "icecek", group: "soda", title: "Fanta", price: 120, desc: "Gazlı portakallı içecek.", img: "images/items/fanta.webp", tags: [] },
-  { cat: "icecek", group: "soda", title: "Sprite", price: 120, desc: "Limon aromalı gazlı içecek.", img: "images/items/sprite.webp", tags: [] },
-  { cat: "icecek", group: "soda", title: "Fuse Tea", price: 120, desc: "Şeftali, limon, mango, ananas seçenekleri.", img: "images/items/fusetea.webp", tags: [] },
-  { cat: "icecek", group: "soda", title: "Cappy", price: 120, desc: "Vişne, şeftali, karışık.", img: "images/items/cappy.webp", tags: [] },
-  { cat: "icecek", group: "soda", title: "Burn", price: 160, desc: "Enerji içeceği.", img: "images/items/burn.webp", tags: [] },
-  { cat: "icecek", group: "soda", title: "Cam Şişe Su", price: 50, desc: "Doğal kaynak suyu.", img: "images/items/water.webp", tags: [] },
-  { cat: "icecek", group: "soda", title: "Minera Maden Suyu", price: 100, desc: "Doğal maden suyu.", img: "images/items/minera.webp", tags: [] },
-  { cat: "icecek", group: "soda", title: "Minera Limon Aromalı", price: 100, desc: "Limon aromalı maden suyu.", img: "images/items/minera-lemon.webp", tags: [] },
-  { cat: "icecek", group: "soda", title: "Minera Elma Aromalı", price: 100, desc: "Elma aromalı maden suyu.", img: "images/items/minera-apple.webp", tags: [] },
-  { cat: "icecek", group: "soda", title: "Minera Karpuz Çilek", price: 100, desc: "Aromalı maden suyu.", img: "images/items/minera-fruit.webp", tags: [] },
-  { cat: "icecek", group: "soda", title: "Churchill", price: 120, desc: "Limon, tuz ve soda karışımı.", img: "images/items/churchill.webp", tags: [] },
-  { cat: "icecek", group: "soda", title: "Ayran", price: 90, desc: "Geleneksel ayran.", img: "images/items/ayran.webp", tags: [] },
-  { cat: "icecek", group: "soda", title: "Taze Portakal Suyu", price: 210, desc: "Taze sıkılmış.", img: "images/items/orange-juice.webp", tags: [] },
-  { cat: "icecek", group: "soda", title: "RedBull", price: 190, desc: "Enerji içeceği.", img: "images/items/redbull.webp", tags: [] },
-
-  // ─────────── SOĞUK KAHVELER ───────────
-  { cat: "kahve", group: "cold", title: "Ice White Mocha", price: 210, desc: "Buzlu beyaz çikolatalı mocha.", img: "images/items/ice-white-mocha.webp", tags: [], caffeine: "150 mg" },
-  { cat: "kahve", group: "cold", title: "Ice Americano", price: 170, desc: "Serinletici buzlu Americano.", img: "images/items/ice-americano.webp", tags: [], caffeine: "140 mg" },
-  { cat: "kahve", group: "cold", title: "Ice Latte", price: 210, desc: "Buzlu latte.", img: "images/items/ice-latte.webp", tags: [], caffeine: "130 mg" },
-  { cat: "kahve", group: "cold", title: "Ice Mocha", price: 210, desc: "Buzlu mocha.", img: "images/items/ice-mocha.webp", tags: [], caffeine: "150 mg" },
-  { cat: "kahve", group: "cold", title: "Chocolate Frappe", price: 210, desc: "Çikolatalı frappe.", img: "images/items/choco-frappe.webp", tags: [], caffeine: "100 mg" },
-  { cat: "kahve", group: "cold", title: "Caramel Frappe", price: 210, desc: "Karamelli frappe.", img: "images/items/caramel-frappe.webp", tags: [], caffeine: "100 mg" },
-  { cat: "kahve", group: "cold", title: "Ice Latte Karamel", price: 210, desc: "Karamelli buzlu latte.", img: "images/items/ice-latte-caramel.webp", tags: [], caffeine: "130 mg" },
-  { cat: "kahve", group: "cold", title: "Ice Latte Vanilya", price: 210, desc: "Vanilyalı buzlu latte.", img: "images/items/ice-latte-vanilla.webp", tags: [], caffeine: "130 mg" },
-  { cat: "kahve", group: "cold", title: "Ice Spanish Latte", price: 210, desc: "Tatlı soğuk Spanish latte.", img: "images/items/ice-spanish.webp", tags: [], caffeine: "130 mg" },
-  { cat: "kahve", group: "cold", title: "Ice Caramel Machiato", price: 210, desc: "Buzlu karamelli macchiato.", img: "images/items/ice-macchiato.webp", tags: [], caffeine: "120 mg" },
+  { cat: "kahve", group: "cold", title: "Ice Caramel Macchiato", price: 210, desc: "Buzlu karamelli macchiato.", img: "images/items/ice-macchiato.webp", tags: [], caffeine: "120 mg" },
   { cat: "kahve", group: "cold", title: "Ice Latte Fındık", price: 210, desc: "Fındıklı buzlu latte.", img: "images/items/ice-latte-hazelnut.webp", tags: [], caffeine: "130 mg" },
   { cat: "kahve", group: "cold", title: "Affogato", price: 230, desc: "Dondurma + espresso.", img: "images/items/affogato.webp", tags: [], caffeine: "80 mg" },
   { cat: "kahve", group: "cold", title: "Ice Flat White", price: 220, desc: "Buzlu flat white.", img: "images/items/ice-flatwhite.webp", tags: [], caffeine: "150 mg" },
@@ -810,28 +713,7 @@ ITEMS.push(
   { cat: "kahve", group: "hot", title: "Espresso", price: 100, desc: "Yoğun espresso shot.", img: "images/items/espresso.webp", tags: [], caffeine: "63 mg" },
   { cat: "kahve", group: "hot", title: "Double Espresso", price: 120, desc: "Çift shot espresso.", img: "images/items/double-espresso.webp", tags: [], caffeine: "126 mg" },
   { cat: "kahve", group: "hot", title: "Latte Macchiato", price: 180, desc: "Süt ve espresso katmanları.", img: "images/items/latte-macchiato.webp", tags: [], caffeine: "120 mg" },
-  { cat: "kahve", group: "hot", title: "Caramel Machiato", price: 180, desc: "Karamelli macchiato.", img: "images/items/caramel-macchiato.webp", tags: [], caffeine: "120 mg" },
-  { cat: "kahve", group: "hot", title: "Americano", price: 160, desc: "Espresso + sıcak su.", img: "images/items/americano.webp", tags: [], caffeine: "140 mg" },
-  { cat: "kahve", group: "hot", title: "Cappuccino", price: 180, desc: "Espresso + süt köpüğü.", img: "images/items/cappuccino.webp", tags: [], caffeine: "120 mg" },
-  { cat: "kahve", group: "hot", title: "Cafe Latte", price: 180, desc: "Klasik latte.", img: "images/items/latte.webp", tags: [], caffeine: "120 mg" },
-  { cat: "kahve", group: "hot", title: "Mocha", price: 190, desc: "Çikolatalı mocha.", img: "images/items/mocha.webp", tags: [], caffeine: "150 mg" },
-  { cat: "kahve", group: "hot", title: "White Chocolate Mocha", price: 190, desc: "Beyaz çikolatalı mocha.", img: "images/items/white-mocha.webp", tags: [], caffeine: "150 mg" },
-  { cat: "kahve", group: "hot", title: "Flat White", price: 180, desc: "Yoğun kahveli flat white.", img: "images/items/flatwhite.webp", tags: [], caffeine: "150 mg" },
-  { cat: "kahve", group: "hot", title: "Cortado", price: 180, desc: "Espresso + az süt.", img: "images/items/cortado.webp", tags: [], caffeine: "120 mg" },
-  { cat: "kahve", group: "hot", title: "Türk Kahvesi", price: 130, desc: "Klasik Türk kahvesi.", img: "images/items/turkish-coffee.webp", tags: [], caffeine: "65 mg" },
-  { cat: "kahve", group: "hot", title: "Türk Kahvesi Double", price: 170, desc: "Çift porsiyon.", img: "images/items/turkish-double.webp", tags: [], caffeine: "120 mg" },
-  { cat: "sicak", title: "Sıcak Çikolata", price: 180, desc: "Yoğun sıcak çikolata.", img: "images/items/hot-chocolate.webp", tags: [] },
-  { cat: "sicak", title: "Sahlep", price: 180, desc: "Kışın vazgeçilmezi.", img: "images/items/sahlep.webp", tags: [] },
-  { cat: "kahve", group: "hot", title: "Espresso Shot", price: 50, desc: "Tek shot espresso.", img: "images/items/espresso-shot.webp", tags: [], caffeine: "63 mg" },
-  { cat: "sicak", title: "Fincan Süt", price: 120, desc: "Sıcak süt.", img: "images/items/milk.webp", tags: [] },
-  { cat: "kahve", group: "hot", title: "Sütlü Filtre Kahve", price: 190, desc: "Süt eklenmiş filtre kahve.", img: "images/items/filter-coffee-milk.webp", tags: [], caffeine: "130 mg" },
-  { cat: "sicak", title: "Ballı Fincan Süt", price: 160, desc: "Bal ile sıcak süt.", img: "images/items/milk-honey.webp", tags: [] },
-  { cat: "kahve", group: "hot", title: "Pumpkin Latte (Yeni)", price: 190, desc: "Balkabaklı latte.", img: "images/items/pumpkin-latte.webp", tags: [], caffeine: "130 mg" },
-  { cat: "kahve", group: "hot", title: "Filtre Kahve", price: 160, desc: "Klasik filtre kahve.", img: "images/items/filter-coffee.webp", tags: [], caffeine: "140 mg" },
-  { cat: "kahve", group: "hot", title: "Espresso", price: 100, desc: "Yoğun espresso shot.", img: "images/items/espresso.webp", tags: [], caffeine: "63 mg" },
-  { cat: "kahve", group: "hot", title: "Double Espresso", price: 120, desc: "Çift shot espresso.", img: "images/items/double-espresso.webp", tags: [], caffeine: "126 mg" },
-  { cat: "kahve", group: "hot", title: "Latte Macchiato", price: 180, desc: "Süt ve espresso katmanları.", img: "images/items/latte-macchiato.webp", tags: [], caffeine: "120 mg" },
-  { cat: "kahve", group: "hot", title: "Caramel Machiato", price: 180, desc: "Karamelli macchiato.", img: "images/items/caramel-macchiato.webp", tags: [], caffeine: "120 mg" },
+  { cat: "kahve", group: "hot", title: "Caramel Macchiato", price: 180, desc: "Karamelli macchiato.", img: "images/items/caramel-macchiato.webp", tags: [], caffeine: "120 mg" },
   { cat: "kahve", group: "hot", title: "Americano", price: 160, desc: "Espresso + sıcak su.", img: "images/items/americano.webp", tags: [], caffeine: "140 mg" },
   { cat: "kahve", group: "hot", title: "Cappuccino", price: 180, desc: "Espresso + süt köpüğü.", img: "images/items/cappuccino.webp", tags: [], caffeine: "120 mg" },
   { cat: "kahve", group: "hot", title: "Cafe Latte", price: 180, desc: "Klasik latte.", img: "images/items/latte.webp", tags: [], caffeine: "120 mg" },
@@ -897,7 +779,7 @@ const TAG_LABELS = {
   dessert: { label: "Tatlı", color: "text-pink-600" },
 };
 
-const formatPrice = (price) => `${price}₺`;
+const formatPrice = (price) => (typeof price === "number" ? `${price}₺` : "" );
 
 function toggleSections(category) {
   const showMenu = category !== "hiddenback";
@@ -916,7 +798,8 @@ function syncFilterButtons(key, isActive) {
 function applyFilters(item) {
   const term = searchTerm.trim().toLowerCase();
   const matchesSearch = term
-    ? item.title.toLowerCase().includes(term) || item.desc.toLowerCase().includes(term)
+    ? (item.title && item.title.toLowerCase().includes(term)) ||
+      (item.desc && item.desc.toLowerCase().includes(term))
     : true;
 
   const activeKeys = Object.entries(activeFilters)
@@ -924,7 +807,7 @@ function applyFilters(item) {
     .map(([key]) => key);
 
   const matchesTags = activeKeys.length
-    ? activeKeys.every((tag) => item.tags?.includes(tag))
+    ? activeKeys.every((tag) => (item.tags || []).includes(tag))
     : true;
 
   return matchesSearch && matchesTags;
@@ -936,7 +819,7 @@ function createCard(item) {
 
   const caffeineLine =
     item.cat === "kahve" && item.caffeine
-      ? `<p class=\"text-xs text-hb-muted\">≈ ${item.caffeine} kafein</p>`
+      ? `<p class="text-xs text-hb-muted">≈ ${item.caffeine} kafein</p>`
       : "";
 
   card.innerHTML = `
@@ -948,7 +831,7 @@ function createCard(item) {
         <h3 class="text-base font-semibold leading-tight">${item.title}</h3>
         <span class="text-sm font-semibold">${formatPrice(item.price)}</span>
       </div>
-      <p class="text-sm text-hb-muted leading-relaxed">${item.desc}</p>
+      <p class="text-sm text-hb-muted leading-relaxed">${item.desc || ""}</p>
       ${caffeineLine}
       <div class="flex flex-wrap gap-2 text-[11px] text-hb-muted">
         ${(item.tags || [])
@@ -1002,7 +885,7 @@ function openModal(item) {
   modalImg.src = item.img;
   modalImg.alt = item.title;
   modalTitle.textContent = item.title;
-  modalDesc.textContent = item.desc;
+  modalDesc.textContent = item.desc || "";
   modalPrice.textContent = formatPrice(item.price);
 
   const activeKeys = Object.entries(activeFilters)
