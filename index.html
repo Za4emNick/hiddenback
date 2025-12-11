@@ -7,35 +7,37 @@
   <meta name="description" content="HiddenBack Café — Yalova. Modern beyaz minimalist menü.">
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="style.css">
-
+  <!-- СНАЧАЛА конфиг Tailwind, ПОТОМ подключение CDN -->
   <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ["Inter", "ui-sans-serif"],
+    tailwind = {
+      config: {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "ui-sans-serif"],
+            }
           }
         }
       }
     }
   </script>
+  <script src="https://cdn.tailwindcss.com"></script>
 
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body class="bg-white text-black overflow-hidden">
 
-  <!-- Intro Screen (dark) -->
+  <!-- Intro Screen (черный фон + логотип) -->
   <div id="intro-screen" class="fixed inset-0 bg-black flex items-center justify-center z-[9999]">
-    <img src="images/logo-x-x.webp" class="w-40 opacity-0 animate-intro-glitch" id="intro-logo">
+    <img src="images/logo-x-x.webp" class="w-40 opacity-0 animate-intro-glitch" id="intro-logo" alt="HiddenBack Intro Logo">
   </div>
 
   <!-- Header -->
   <header class="flex items-center justify-between p-4 border-b border-neutral-300 bg-white dark:bg-black dark:border-neutral-800">
     <div class="flex items-center gap-2">
-      <img src="images/logo-x-x.webp" class="w-10">
+      <img src="images/logo-x-x.webp" class="w-10" alt="HiddenBack Logo">
       <span class="text-xl font-semibold tracking-wide">HiddenBack</span>
     </div>
 
@@ -46,15 +48,14 @@
         <option value="ru">RU</option>
       </select>
 
-      <button id="theme-toggle" class="text-2xl">☀️</button>
+      <button id="theme-toggle" class="text-2xl" type="button">☀️</button>
     </div>
   </header>
 
-  <main class="flex h-screen overflow-hidden">
-
+  <main class="flex h-[calc(100vh-64px)] overflow-hidden">
     <!-- Sidebar Menu -->
     <aside class="w-64 bg-neutral-100 border-r border-neutral-300 p-4 overflow-y-auto 
-                 dark:bg-neutral-950 dark:border-neutral-800">
+                   dark:bg-neutral-950 dark:border-neutral-800">
       <nav class="space-y-3 text-lg">
         <button class="cat-btn" data-cat="kahvalti">KAHVALTI</button>
         <button class="cat-btn" data-cat="anayemek">ANA YEMEKLER</button>
@@ -70,19 +71,19 @@
     <section id="items-container"
       class="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-6 overflow-y-auto bg-white dark:bg-black">
     </section>
-
   </main>
 
   <!-- Modal -->
   <div id="modal-overlay"
-       class="hidden fixed inset-0 bg-black/40 backdrop-blur-sm items-center justify-center z-50 dark:bg-black/70">
+       class="hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-50 dark:bg-black/70
+              items-center justify-center flex">
 
     <div id="modal"
          class="bg-white dark:bg-neutral-900 p-6 rounded-xl max-w-md w-full relative animate-fade border border-neutral-300 dark:border-neutral-700">
       
-      <button id="modal-close" class="absolute right-4 top-4 text-2xl dark:text-white">✕</button>
+      <button id="modal-close" class="absolute right-4 top-4 text-2xl dark:text-white" type="button">✕</button>
 
-      <img id="modal-img" src="" class="rounded-lg w-full mb-4">
+      <img id="modal-img" src="" class="rounded-lg w-full mb-4" alt="">
       <h2 id="modal-title" class="text-2xl font-semibold mb-2 dark:text-white"></h2>
       <p id="modal-desc" class="mb-3 opacity-80 dark:text-neutral-300"></p>
       <p id="modal-price" class="text-xl font-semibold dark:text-white"></p>
