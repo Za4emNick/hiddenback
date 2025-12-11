@@ -29,6 +29,16 @@ const GROUP_TITLES = {
 };
 
 const CATEGORY_TITLES = {
+  kahvalti: "Kahvaltı",
+  anayemek: "Ana Yemekler",
+  burger: "Burger",
+  pizza: "Pizza",
+  tatli: "Tatlılar",
+  kahve: "Kahveler",
+  icecek: "İçecekler",
+};
+
+const CATEGORY_TITLES = {
   hiddenback: "Hakkımızda",
   kahvalti: "Kahvaltı",
   anayemek: "Ana Yemekler",
@@ -754,7 +764,6 @@ ITEMS.push(
 //  RENDERING & INTERACTION LOGIC
 // ─────────────────────────────
 
-const hiddenbackSection = document.getElementById("hiddenback-section");
 const container = document.getElementById("items-container");
 const modalOverlay = document.getElementById("modal-overlay");
 const modalImg = document.getElementById("modal-img");
@@ -778,7 +787,8 @@ const activeFilters = {
   dessert: false,
 };
 
-let activeCategory = "hiddenback";
+const defaultCategory = document.querySelector(".cat-btn")?.dataset.cat || "";
+let activeCategory = defaultCategory;
 let searchTerm = "";
 
 const TAG_LABELS = {
@@ -812,6 +822,49 @@ function applyFilters(item) {
     : true;
 
   return matchesSearch && matchesTags;
+}
+
+function scrollToGroup(group) {
+  const heading = container?.querySelector(`[data-group="${group}"]`);
+  if (!heading) return;
+
+  const offset = 90;
+  const top = heading.getBoundingClientRect().top + window.scrollY - offset;
+  window.scrollTo({ top, behavior: "smooth" });
+}
+
+function scrollToCategory(category) {
+  const heading = container?.querySelector(`#cat-${category}`);
+  if (!heading) return;
+
+  const offset = 90;
+  const top = heading.getBoundingClientRect().top + window.scrollY - offset;
+  window.scrollTo({ top, behavior: "smooth" });
+}
+
+function renderGroupNav(groups) {
+  if (!groupNav || !groupNavButtons) return;
+
+  const titles = GROUP_TITLES[activeCategory] || {};
+  const visibleGroups = groups.filter((group) => titles[group]);
+
+  groupNavButtons.innerHTML = "";
+
+  if (!visibleGroups.length) {
+    groupNav.classList.add("hidden");
+    return;
+  }
+
+  visibleGroups.forEach((group) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "filter-chip";
+    btn.textContent = titles[group];
+    btn.addEventListener("click", () => scrollToGroup(group));
+    groupNavButtons.appendChild(btn);
+  });
+
+  groupNav.classList.remove("hidden");
 }
 
 function scrollToGroup(group) {
@@ -942,7 +995,7 @@ function renderItems() {
   const filteredItems = ITEMS.filter(applyFilters);
   const categories = Array.from(catButtons)
     .map((btn) => btn.dataset.cat)
-    .filter((cat) => cat && cat !== "hiddenback");
+    .filter(Boolean);
 
   let renderedGroups = [];
 
