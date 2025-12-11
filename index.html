@@ -54,9 +54,10 @@
       transform: translateY(-1px);
     }
     .cat-btn.active {
-      background: #111827;
+      background: #000000;
       color: #ffffff;
-      border-color: #111827;
+      border-color: #ffffff;
+      box-shadow: 0 0 0 1px #ffffff;
     }
     .card-fade {
       animation: cardFade 0.25s ease-out;
@@ -91,6 +92,50 @@
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+    /* Mobile drawer */
+    #mobile-drawer-overlay {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    #mobile-drawer-overlay.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #mobile-cat-drawer {
+      transform: translateY(100%);
+      transition: transform 0.25s ease;
+    }
+
+    #mobile-cat-drawer.open {
+      transform: translateY(0);
+    }
+
+    .cat-btn.dark {
+      background: #050505;
+      border-color: #1f2937;
+      color: #f8fafc;
+      font-weight: 600;
+    }
+
+    .cat-btn.dark:hover {
+      background: #0f0f0f;
+    }
+
+    .cat-btn.dark.active {
+      background: #0b0b0b;
+      color: #ffffff;
+      border-color: #ffffff;
+      box-shadow: inset 0 0 0 1px #ffffff;
+    }
+
+    #mobile-drawer-handle.hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+
     /* Layout switcher for Hakkımızda */
     #layout-root.home-layout {
       grid-template-columns: 1fr;
@@ -119,6 +164,14 @@
     #layout-root.home-layout #cat-panel-label {
       margin-bottom: 0;
     }
+
+    /* Bottom drawer layout */
+    #mobile-cat-drawer .cat-btn {
+      width: auto;
+      min-width: 140px;
+      text-align: center;
+      white-space: nowrap;
+    }
   </style>
 </head>
 
@@ -142,10 +195,10 @@
   </header>
 
   <!-- MAIN -->
-  <main id="layout-root" class="max-w-7xl mx-auto px-4 pt-4 pb-10 grid grid-cols-[160px_1fr] sm:grid-cols-[180px_1fr] md:grid-cols-[220px_1fr] gap-4 md:gap-6 items-start">
+  <main id="layout-root" class="max-w-7xl mx-auto px-4 pt-4 pb-10 grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-4 md:gap-6 items-start">
 
     <!-- SIDEBAR КАТЕГОРИЙ -->
-    <aside class="w-full" id="cat-panel">
+    <aside class="w-full hidden lg:block" id="cat-panel">
       <div class="bg-white border border-hb-border rounded-2xl p-3 sm:p-4 flex flex-col gap-3 md:gap-2 sticky top-20" id="cat-panel-inner">
         <p class="text-[11px] sm:text-xs font-medium text-hb-muted uppercase tracking-[0.18em] pl-1 mb-1" id="cat-panel-label">
           Menü
@@ -176,7 +229,7 @@
               <p class="text-[11px] font-semibold tracking-[0.2em] text-hb-muted mb-2">
                 h i d d e n b a c k • YALOVA
               </p>
-              <h1 class="text-2xl sm:text-3xl font-semibold mb-3 text-hb-muted">
+              <h1 class="text-2xl sm:text-3xl font-semibold mb-3 text-hb-text">
                 Şehrin tam merkezinde, gözlerden uzakta saklanan eski bir kafe.
               </h1>
               <p class="text-sm text-hb-muted leading-relaxed mb-3">
@@ -289,6 +342,14 @@
         <!-- SEARCH + FILTERS (desktop) -->
         <section id="controls-wrapper" class="flex flex-col gap-2 mb-1">
           <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+            <div class="flex items-center justify-between gap-2 lg:hidden">
+              <button id="mobile-menu-open" type="button" class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-hb-border bg-white text-sm font-medium shadow-sm">
+                <span class="text-lg leading-none">☰</span>
+                <span>Menü</span>
+              </button>
+              <p class="text-xs text-hb-muted">Kategorileri açmak için dokun</p>
+            </div>
+
             <div class="relative flex-1">
               <input id="search-desktop" type="text" placeholder="Menüde ara..."
                      class="w-full text-sm border border-hb-border rounded-full px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-gray-300">
@@ -340,6 +401,44 @@
       </section>
     </section>
   </main>
+
+  <!-- MOBILE MENU DRAWER -->
+  <button
+    id="mobile-drawer-handle"
+    type="button"
+    class="lg:hidden fixed left-4 bottom-6 z-40 bg-black text-white px-3 py-2 rounded-full shadow-xl flex items-center gap-2 text-sm"
+    aria-label="Menü kategorilerini aç">
+    <span class="text-lg leading-none">☰</span>
+    <span class="font-medium">Menü</span>
+  </button>
+
+  <div id="mobile-drawer-overlay" class="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-40"></div>
+  <aside id="mobile-cat-drawer" class="lg:hidden fixed inset-x-0 bottom-0 h-[38vh] min-h-[240px] bg-black/95 text-white z-50 shadow-[0_-16px_60px_rgba(0,0,0,0.35)] rounded-t-3xl overflow-hidden flex flex-col">
+    <div class="flex items-center justify-between px-5 py-4 border-b border-white/10">
+      <div class="flex items-center gap-3">
+        <span class="inline-block w-9 h-1 rounded-full bg-white/40"></span>
+        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">Menü</p>
+      </div>
+      <button id="mobile-menu-close" type="button" class="text-white/70 hover:text-white text-xl">✕</button>
+    </div>
+    <div class="p-4 pb-5 flex-1 overflow-hidden">
+      <div class="flex flex-col gap-3 h-full">
+        <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/60">Kategoriler</p>
+        <div class="flex-1 overflow-x-auto overflow-y-hidden no-scrollbar">
+          <div class="flex flex-nowrap gap-2 pr-3" id="cat-buttons-mobile">
+            <button class="cat-btn dark active" data-cat="hiddenback">Hakkımızda</button>
+            <button class="cat-btn dark" data-cat="kahvalti">Kahvaltı</button>
+            <button class="cat-btn dark" data-cat="anayemek">Ana Yemekler</button>
+            <button class="cat-btn dark" data-cat="burger">Burger</button>
+            <button class="cat-btn dark" data-cat="pizza">Pizza</button>
+            <button class="cat-btn dark" data-cat="tatli">Tatlılar</button>
+            <button class="cat-btn dark" data-cat="kahve">Kahveler</button>
+            <button class="cat-btn dark" data-cat="icecek">İçecekler</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
 
   <!-- MOBILE FILTERS PANEL (появляется по кнопке, позже подключим) -->
   <div id="mobile-filters-panel" class="hidden border-t border-hb-border bg-white px-3 pb-2 md:hidden">
