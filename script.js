@@ -763,11 +763,8 @@ const groupNavButtons = document.getElementById("group-nav-buttons");
 const catButtons = document.querySelectorAll(".cat-btn");
 const filterChips = document.querySelectorAll(".filter-chip");
 const searchDesktop = document.getElementById("search-desktop");
-const mobileDrawer = document.getElementById("mobile-cat-drawer");
-const mobileOverlay = document.getElementById("mobile-drawer-overlay");
-const mobileMenuOpen = document.getElementById("mobile-menu-open");
-const mobileMenuClose = document.getElementById("mobile-menu-close");
-const mobileDrawerHandle = document.getElementById("mobile-drawer-handle");
+const mobileTopMenu = document.getElementById("mobile-top-menu");
+const mobileMenuPeek = document.getElementById("mobile-menu-peek");
 
 const activeFilters = {
   veg: false,
@@ -778,7 +775,6 @@ const activeFilters = {
 
 let activeCategory = "hiddenback";
 let searchTerm = "";
-let touchStartX = 0;
 
 const TAG_LABELS = {
   veg: { label: "Vejetaryen", color: "text-emerald-600" },
@@ -798,33 +794,18 @@ function isMobileView() {
   return window.innerWidth < 1024;
 }
 
-function setMobileHandleVisibility() {
-  if (!mobileDrawerHandle) return;
+function updateMobileMenuBar() {
+  if (!mobileTopMenu) return;
 
-  const shouldShow =
-    isMobileView() &&
-    activeCategory === "hiddenback" &&
-    !mobileDrawer?.classList.contains("open");
-
-  mobileDrawerHandle.classList.toggle("hide", !shouldShow);
+  const shouldShow = isMobileView() && activeCategory !== "hiddenback";
+  mobileTopMenu.classList.toggle("hidden", !shouldShow);
 }
 
-function closeMobileDrawer() {
-  if (!mobileDrawer || !mobileOverlay) return;
+function updateMobilePeek() {
+  if (!mobileMenuPeek) return;
 
-  mobileDrawer.classList.remove("open");
-  mobileOverlay.classList.remove("visible");
-  document.body.style.overflow = "";
-  setMobileHandleVisibility();
-}
-
-function openMobileDrawer() {
-  if (!mobileDrawer || !mobileOverlay) return;
-
-  mobileDrawer.classList.add("open");
-  mobileOverlay.classList.add("visible");
-  document.body.style.overflow = "hidden";
-  mobileDrawerHandle?.classList.add("hide");
+  const shouldShow = isMobileView() && activeCategory === "hiddenback";
+  mobileMenuPeek.classList.toggle("hidden", !shouldShow);
 }
 
 function toggleSections(category) {
@@ -835,11 +816,11 @@ function toggleSections(category) {
   menuSection?.classList.toggle("hidden", !showMenu);
   if (!showMenu) {
     renderGroupNav([]);
-    closeMobileDrawer();
   }
 
   updateLayout(category);
-  setMobileHandleVisibility();
+  updateMobileMenuBar();
+  updateMobilePeek();
 }
 
 function syncFilterButtons(key, isActive) {
@@ -1010,19 +991,19 @@ function closeModal() {
   modalOverlay?.classList.add("hidden");
 }
 
+function setCategory(cat) {
+  if (!cat) return;
+
+  activeCategory = cat;
+  catButtons.forEach((b) => b.classList.toggle("active", b.dataset.cat === cat));
+  toggleSections(cat);
+  renderItems();
+}
+
 catButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
     const { cat } = btn.dataset;
-    if (!cat) return;
-
-    activeCategory = cat;
-    catButtons.forEach((b) => b.classList.toggle("active", b.dataset.cat === cat));
-    toggleSections(cat);
-    renderItems();
-
-    if (isMobileView()) {
-      closeMobileDrawer();
-    }
+    setCategory(cat);
   });
 });
 
@@ -1043,6 +1024,16 @@ if (searchDesktop) {
     renderItems();
   });
 }
+
+mobileMenuPeek?.addEventListener("click", () => {
+  setCategory("kahvalti");
+  menuSection?.scrollIntoView({ behavior: "smooth" });
+});
+
+window.addEventListener("resize", () => {
+  updateMobileMenuBar();
+  updateMobilePeek();
+});
 
 mobileMenuOpen?.addEventListener("click", openMobileDrawer);
 mobileMenuClose?.addEventListener("click", closeMobileDrawer);
@@ -1157,6 +1148,4 @@ modalOverlay?.addEventListener("click", (event) => {
 });
 
 // Initial render
-toggleSections(activeCategory);
-renderItems();
-setMobileHandleVisibility();
+setCategory(activeCategory);

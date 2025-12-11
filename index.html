@@ -165,12 +165,67 @@
       margin-bottom: 0;
     }
 
-    /* Bottom drawer layout */
-    #mobile-cat-drawer .cat-btn {
-      width: auto;
-      min-width: 140px;
+    /* Mobile top menu layout */
+    #mobile-top-menu {
+      position: sticky;
+      top: 70px;
+      z-index: 30;
+      margin-left: -1rem;
+      margin-right: -1rem;
+      padding: 0.75rem 1rem 0.85rem;
+      background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.9) 70%, rgba(247,247,247,0.85) 100%);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid #e5e5e5;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+    }
+
+    #mobile-top-menu .pyramid-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.6rem 0.75rem;
+      justify-items: center;
+      align-items: stretch;
+    }
+
+    #mobile-top-menu .cat-btn {
+      width: 100%;
+      max-width: 190px;
       text-align: center;
-      white-space: nowrap;
+      padding: 0.7rem 1rem;
+      border-radius: 14px;
+      border: 1.5px solid #111827;
+      background: #ffffff;
+      font-weight: 600;
+      color: #111827;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.04);
+    }
+
+    #mobile-top-menu .cat-btn:hover {
+      background: #f8f8f8;
+      transform: translateY(-2px);
+    }
+
+    #mobile-top-menu .cat-btn.active {
+      background: #111827;
+      color: #ffffff;
+      border-color: #111827;
+      box-shadow: 0 0 0 1px #111827, 0 10px 24px rgba(0,0,0,0.1);
+    }
+
+    #mobile-top-menu .cat-btn:nth-child(odd) { transform: translateY(2px); }
+    #mobile-top-menu .cat-btn:nth-child(even) { transform: translateY(-2px); }
+
+    @media (max-width: 480px) {
+      #mobile-top-menu {
+        top: 64px;
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+      }
+
+      #mobile-top-menu .cat-btn {
+        font-size: 0.95rem;
+        max-width: 170px;
+      }
     }
   </style>
 </head>
@@ -340,20 +395,23 @@
       <section id="menu-section" class="flex flex-col gap-3 hidden">
 
         <!-- SEARCH + FILTERS (desktop) -->
-        <section id="controls-wrapper" class="flex flex-col gap-2 mb-1">
-          <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-            <div class="flex items-center justify-between gap-2 lg:hidden">
-              <button id="mobile-menu-open" type="button" class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-hb-border bg-white text-sm font-medium shadow-sm">
-                <span class="text-lg leading-none">☰</span>
-                <span>Menü</span>
-              </button>
-              <p class="text-xs text-hb-muted">Kategorileri açmak için dokun</p>
-            </div>
+        <div id="mobile-top-menu" class="lg:hidden hidden">
+          <div class="pyramid-grid">
+            <button class="cat-btn" data-cat="hiddenback">Hakkımızda</button>
+            <button class="cat-btn" data-cat="kahvalti">Kahvaltı</button>
+            <button class="cat-btn" data-cat="anayemek">Ana Yemekler</button>
+            <button class="cat-btn" data-cat="burger">Burger</button>
+            <button class="cat-btn" data-cat="pizza">Pizza</button>
+            <button class="cat-btn" data-cat="tatli">Tatlılar</button>
+            <button class="cat-btn" data-cat="kahve">Kahveler</button>
+            <button class="cat-btn" data-cat="icecek">İçecekler</button>
+          </div>
+        </div>
 
-            <div class="relative flex-1">
-              <input id="search-desktop" type="text" placeholder="Menüde ara..."
-                     class="w-full text-sm border border-hb-border rounded-full px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-gray-300">
-            </div>
+        <section id="controls-wrapper" class="flex flex-col gap-2 mb-1">
+          <div class="relative flex-1">
+            <input id="search-desktop" type="text" placeholder="Menüde ara..."
+                   class="w-full text-sm border border-hb-border rounded-full px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-gray-300">
           </div>
 
           <div class="flex items-center gap-2 text-xs overflow-x-auto no-scrollbar py-1">
@@ -402,43 +460,13 @@
     </section>
   </main>
 
-  <!-- MOBILE MENU DRAWER -->
   <button
-    id="mobile-drawer-handle"
+    id="mobile-menu-peek"
     type="button"
-    class="lg:hidden fixed left-4 bottom-6 z-40 bg-black text-white px-3 py-2 rounded-full shadow-xl flex items-center gap-2 text-sm"
-    aria-label="Menü kategorilerini aç">
-    <span class="text-lg leading-none">☰</span>
-    <span class="font-medium">Menü</span>
+    class="lg:hidden hidden fixed left-4 bottom-6 z-30 bg-black text-white px-3 py-2 rounded-full shadow-xl text-sm font-semibold tracking-wide"
+  >
+    Menü
   </button>
-
-  <div id="mobile-drawer-overlay" class="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-40"></div>
-  <aside id="mobile-cat-drawer" class="lg:hidden fixed inset-x-0 bottom-0 h-[38vh] min-h-[240px] bg-black/95 text-white z-50 shadow-[0_-16px_60px_rgba(0,0,0,0.35)] rounded-t-3xl overflow-hidden flex flex-col">
-    <div class="flex items-center justify-between px-5 py-4 border-b border-white/10">
-      <div class="flex items-center gap-3">
-        <span class="inline-block w-9 h-1 rounded-full bg-white/40"></span>
-        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">Menü</p>
-      </div>
-      <button id="mobile-menu-close" type="button" class="text-white/70 hover:text-white text-xl">✕</button>
-    </div>
-    <div class="p-4 pb-5 flex-1 overflow-hidden">
-      <div class="flex flex-col gap-3 h-full">
-        <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/60">Kategoriler</p>
-        <div class="flex-1 overflow-x-auto overflow-y-hidden no-scrollbar">
-          <div class="flex flex-nowrap gap-2 pr-3" id="cat-buttons-mobile">
-            <button class="cat-btn dark active" data-cat="hiddenback">Hakkımızda</button>
-            <button class="cat-btn dark" data-cat="kahvalti">Kahvaltı</button>
-            <button class="cat-btn dark" data-cat="anayemek">Ana Yemekler</button>
-            <button class="cat-btn dark" data-cat="burger">Burger</button>
-            <button class="cat-btn dark" data-cat="pizza">Pizza</button>
-            <button class="cat-btn dark" data-cat="tatli">Tatlılar</button>
-            <button class="cat-btn dark" data-cat="kahve">Kahveler</button>
-            <button class="cat-btn dark" data-cat="icecek">İçecekler</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </aside>
 
   <!-- MOBILE FILTERS PANEL (появляется по кнопке, позже подключим) -->
   <div id="mobile-filters-panel" class="hidden border-t border-hb-border bg-white px-3 pb-2 md:hidden">
