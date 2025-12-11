@@ -1,47 +1,4 @@
 // ─────────────────────────────
-//  GLOBAL STATE
-// ─────────────────────────────
-
-let activeCategory = "hiddenback";
-let searchTerm = "";
-const activeFilters = {
-  veg: false,
-  spicy: false,
-  cheese: false,
-  breakfast: false,
-  dessert: false
-};
-
-// ─────────────────────────────
-//  DOM ELEMENTS
-// ─────────────────────────────
-
-const hiddenbackSection  = document.getElementById("hiddenback-section");
-const menuSection        = document.getElementById("menu-section");
-const container          = document.getElementById("items-container");
-const instagramBlock     = document.getElementById("instagram-block");
-
-const modalOverlay       = document.getElementById("modal-overlay");
-const modalImg           = document.getElementById("modal-img");
-const modalTitle         = document.getElementById("modal-title");
-const modalDesc          = document.getElementById("modal-desc");
-const modalPrice         = document.getElementById("modal-price");
-const modalExtra         = document.getElementById("modal-extra");
-const modalClose         = document.getElementById("modal-close");
-
-const catButtons         = document.querySelectorAll(".cat-btn");
-const filterChips        = document.querySelectorAll(".filter-chip");
-const searchDesktop      = document.getElementById("search-desktop");
-const searchMobile       = document.getElementById("search-mobile");
-
-const filterToggleBtn    = document.getElementById("filter-toggle");
-const mobileFiltersBox   = document.getElementById("mobile-filters-panel");
-const scrollTopBtn       = document.getElementById("scroll-top-btn");
-const mobileMenuBar      = document.getElementById("mobile-menu-bar");
-const controlsWrapper    = document.getElementById("controls-wrapper");
-
-
-// ─────────────────────────────
 //  GROUP TITLES (вывод подзаголовков внутри категорий)
 // ─────────────────────────────
 
@@ -713,21 +670,21 @@ ITEMS.push(
   { cat: "icecek", title: "RedBull", price: 190, desc: "Enerji içeceği.", img: "images/items/redbull.webp", tags: [] },
 
   // ─────────── SOĞUK KAHVELER ───────────
-  { cat: "kahve", title: "Ice White Mocha", price: 210, desc: "Buzlu beyaz çikolatalı mocha.", img: "images/items/ice-white-mocha.webp", tags: [] },
-  { cat: "kahve", title: "Ice Americano", price: 170, desc: "Serinletici buzlu Americano.", img: "images/items/ice-americano.webp", tags: [] },
-  { cat: "kahve", title: "Ice Latte", price: 210, desc: "Buzlu latte.", img: "images/items/ice-latte.webp", tags: [] },
-  { cat: "kahve", title: "Ice Mocha", price: 210, desc: "Buzlu mocha.", img: "images/items/ice-mocha.webp", tags: [] },
-  { cat: "kahve", title: "Chocolate Frappe", price: 210, desc: "Çikolatalı frappe.", img: "images/items/choco-frappe.webp", tags: [] },
-  { cat: "kahve", title: "Caramel Frappe", price: 210, desc: "Karamelli frappe.", img: "images/items/caramel-frappe.webp", tags: [] },
-  { cat: "kahve", title: "Ice Latte Karamel", price: 210, desc: "Karamelli buzlu latte.", img: "images/items/ice-latte-caramel.webp", tags: [] },
-  { cat: "kahve", title: "Ice Latte Vanilya", price: 210, desc: "Vanilyalı buzlu latte.", img: "images/items/ice-latte-vanilla.webp", tags: [] },
-  { cat: "kahve", title: "Ice Spanish Latte", price: 210, desc: "Tatlı soğuk Spanish latte.", img: "images/items/ice-spanish.webp", tags: [] },
-  { cat: "kahve", title: "Ice Caramel Machiato", price: 210, desc: "Buzlu karamelli macchiato.", img: "images/items/ice-macchiato.webp", tags: [] },
-  { cat: "kahve", title: "Ice Latte Fındık", price: 210, desc: "Fındıklı buzlu latte.", img: "images/items/ice-latte-hazelnut.webp", tags: [] },
-  { cat: "kahve", title: "Affogato", price: 230, desc: "Dondurma + espresso.", img: "images/items/affogato.webp", tags: [] },
-  { cat: "kahve", title: "Ice Flat White", price: 220, desc: "Buzlu flat white.", img: "images/items/ice-flatwhite.webp", tags: [] },
-  { cat: "kahve", title: "Ice Cortado", price: 220, desc: "Buzlu cortado.", img: "images/items/ice-cortado.webp", tags: [] },
-  { cat: "kahve", title: "Ice Pumpkin Latte (Yeni)", price: 210, desc: "Buzlu pumpkin latte.", img: "images/items/ice-pumpkin.webp", tags: [] },
+  { cat: "kahve", title: "Ice White Mocha", price: 210, desc: "Buzlu beyaz çikolatalı mocha.", img: "images/items/ice-white-mocha.webp", tags: [], caffeine: "150 mg" },
+  { cat: "kahve", title: "Ice Americano", price: 170, desc: "Serinletici buzlu Americano.", img: "images/items/ice-americano.webp", tags: [], caffeine: "140 mg" },
+  { cat: "kahve", title: "Ice Latte", price: 210, desc: "Buzlu latte.", img: "images/items/ice-latte.webp", tags: [], caffeine: "130 mg" },
+  { cat: "kahve", title: "Ice Mocha", price: 210, desc: "Buzlu mocha.", img: "images/items/ice-mocha.webp", tags: [], caffeine: "150 mg" },
+  { cat: "kahve", title: "Chocolate Frappe", price: 210, desc: "Çikolatalı frappe.", img: "images/items/choco-frappe.webp", tags: [], caffeine: "100 mg" },
+  { cat: "kahve", title: "Caramel Frappe", price: 210, desc: "Karamelli frappe.", img: "images/items/caramel-frappe.webp", tags: [], caffeine: "100 mg" },
+  { cat: "kahve", title: "Ice Latte Karamel", price: 210, desc: "Karamelli buzlu latte.", img: "images/items/ice-latte-caramel.webp", tags: [], caffeine: "130 mg" },
+  { cat: "kahve", title: "Ice Latte Vanilya", price: 210, desc: "Vanilyalı buzlu latte.", img: "images/items/ice-latte-vanilla.webp", tags: [], caffeine: "130 mg" },
+  { cat: "kahve", title: "Ice Spanish Latte", price: 210, desc: "Tatlı soğuk Spanish latte.", img: "images/items/ice-spanish.webp", tags: [], caffeine: "130 mg" },
+  { cat: "kahve", title: "Ice Caramel Machiato", price: 210, desc: "Buzlu karamelli macchiato.", img: "images/items/ice-macchiato.webp", tags: [], caffeine: "120 mg" },
+  { cat: "kahve", title: "Ice Latte Fındık", price: 210, desc: "Fındıklı buzlu latte.", img: "images/items/ice-latte-hazelnut.webp", tags: [], caffeine: "130 mg" },
+  { cat: "kahve", title: "Affogato", price: 230, desc: "Dondurma + espresso.", img: "images/items/affogato.webp", tags: [], caffeine: "80 mg" },
+  { cat: "kahve", title: "Ice Flat White", price: 220, desc: "Buzlu flat white.", img: "images/items/ice-flatwhite.webp", tags: [], caffeine: "150 mg" },
+  { cat: "kahve", title: "Ice Cortado", price: 220, desc: "Buzlu cortado.", img: "images/items/ice-cortado.webp", tags: [], caffeine: "120 mg" },
+  { cat: "kahve", title: "Ice Pumpkin Latte (Yeni)", price: 210, desc: "Buzlu pumpkin latte.", img: "images/items/ice-pumpkin.webp", tags: [], caffeine: "130 mg" },
 
   // ─────────── MİLKSHAKE ───────────
   { cat: "icecek", title: "Milkshake Çilek", price: 220, desc: "Çilekli milkshake.", img: "images/items/milkshake-strawberry.webp", tags: ["dessert"] },
@@ -750,27 +707,27 @@ ITEMS.push(
   // ─────────── SICAK İÇECEKLER ───────────
   { cat: "sicak", title: "Demleme Çay", price: 50, desc: "Taze demlenmiş çay.", img: "images/items/tea.webp", tags: [] },
   { cat: "sicak", title: "Demleme Çay (Fincan)", price: 70, desc: "Fincanda demleme çay.", img: "images/items/tea-cup.webp", tags: [] },
-  { cat: "kahve", title: "Filtre Kahve", price: 160, desc: "Klasik filtre kahve.", img: "images/items/filter-coffee.webp", tags: [] },
-  { cat: "kahve", title: "Espresso", price: 100, desc: "Yoğun espresso shot.", img: "images/items/espresso.webp", tags: [] },
-  { cat: "kahve", title: "Double Espresso", price: 120, desc: "Çift shot espresso.", img: "images/items/double-espresso.webp", tags: [] },
-  { cat: "kahve", title: "Latte Macchiato", price: 180, desc: "Süt ve espresso katmanları.", img: "images/items/latte-macchiato.webp", tags: [] },
-  { cat: "kahve", title: "Caramel Machiato", price: 180, desc: "Karamelli macchiato.", img: "images/items/caramel-macchiato.webp", tags: [] },
-  { cat: "kahve", title: "Americano", price: 160, desc: "Espresso + sıcak su.", img: "images/items/americano.webp", tags: [] },
-  { cat: "kahve", title: "Cappuccino", price: 180, desc: "Espresso + süt köpüğü.", img: "images/items/cappuccino.webp", tags: [] },
-  { cat: "kahve", title: "Cafe Latte", price: 180, desc: "Klasik latte.", img: "images/items/latte.webp", tags: [] },
-  { cat: "kahve", title: "Mocha", price: 190, desc: "Çikolatalı mocha.", img: "images/items/mocha.webp", tags: [] },
-  { cat: "kahve", title: "White Chocolate Mocha", price: 190, desc: "Beyaz çikolatalı mocha.", img: "images/items/white-mocha.webp", tags: [] },
-  { cat: "kahve", title: "Flat White", price: 180, desc: "Yoğun kahveli flat white.", img: "images/items/flatwhite.webp", tags: [] },
-  { cat: "kahve", title: "Cortado", price: 180, desc: "Espresso + az süt.", img: "images/items/cortado.webp", tags: [] },
-  { cat: "kahve", title: "Türk Kahvesi", price: 130, desc: "Klasik Türk kahvesi.", img: "images/items/turkish-coffee.webp", tags: [] },
-  { cat: "kahve", title: "Türk Kahvesi Double", price: 170, desc: "Çift porsiyon.", img: "images/items/turkish-double.webp", tags: [] },
+  { cat: "kahve", title: "Filtre Kahve", price: 160, desc: "Klasik filtre kahve.", img: "images/items/filter-coffee.webp", tags: [], caffeine: "140 mg" },
+  { cat: "kahve", title: "Espresso", price: 100, desc: "Yoğun espresso shot.", img: "images/items/espresso.webp", tags: [], caffeine: "63 mg" },
+  { cat: "kahve", title: "Double Espresso", price: 120, desc: "Çift shot espresso.", img: "images/items/double-espresso.webp", tags: [], caffeine: "126 mg" },
+  { cat: "kahve", title: "Latte Macchiato", price: 180, desc: "Süt ve espresso katmanları.", img: "images/items/latte-macchiato.webp", tags: [], caffeine: "120 mg" },
+  { cat: "kahve", title: "Caramel Machiato", price: 180, desc: "Karamelli macchiato.", img: "images/items/caramel-macchiato.webp", tags: [], caffeine: "120 mg" },
+  { cat: "kahve", title: "Americano", price: 160, desc: "Espresso + sıcak su.", img: "images/items/americano.webp", tags: [], caffeine: "140 mg" },
+  { cat: "kahve", title: "Cappuccino", price: 180, desc: "Espresso + süt köpüğü.", img: "images/items/cappuccino.webp", tags: [], caffeine: "120 mg" },
+  { cat: "kahve", title: "Cafe Latte", price: 180, desc: "Klasik latte.", img: "images/items/latte.webp", tags: [], caffeine: "120 mg" },
+  { cat: "kahve", title: "Mocha", price: 190, desc: "Çikolatalı mocha.", img: "images/items/mocha.webp", tags: [], caffeine: "150 mg" },
+  { cat: "kahve", title: "White Chocolate Mocha", price: 190, desc: "Beyaz çikolatalı mocha.", img: "images/items/white-mocha.webp", tags: [], caffeine: "150 mg" },
+  { cat: "kahve", title: "Flat White", price: 180, desc: "Yoğun kahveli flat white.", img: "images/items/flatwhite.webp", tags: [], caffeine: "150 mg" },
+  { cat: "kahve", title: "Cortado", price: 180, desc: "Espresso + az süt.", img: "images/items/cortado.webp", tags: [], caffeine: "120 mg" },
+  { cat: "kahve", title: "Türk Kahvesi", price: 130, desc: "Klasik Türk kahvesi.", img: "images/items/turkish-coffee.webp", tags: [], caffeine: "65 mg" },
+  { cat: "kahve", title: "Türk Kahvesi Double", price: 170, desc: "Çift porsiyon.", img: "images/items/turkish-double.webp", tags: [], caffeine: "120 mg" },
   { cat: "sicak", title: "Sıcak Çikolata", price: 180, desc: "Yoğun sıcak çikolata.", img: "images/items/hot-chocolate.webp", tags: [] },
   { cat: "sicak", title: "Sahlep", price: 180, desc: "Kışın vazgeçilmezi.", img: "images/items/sahlep.webp", tags: [] },
-  { cat: "kahve", title: "Espresso Shot", price: 50, desc: "Tek shot espresso.", img: "images/items/espresso-shot.webp", tags: [] },
+  { cat: "kahve", title: "Espresso Shot", price: 50, desc: "Tek shot espresso.", img: "images/items/espresso-shot.webp", tags: [], caffeine: "63 mg" },
   { cat: "sicak", title: "Fincan Süt", price: 120, desc: "Sıcak süt.", img: "images/items/milk.webp", tags: [] },
-  { cat: "kahve", title: "Sütlü Filtre Kahve", price: 190, desc: "Süt eklenmiş filtre kahve.", img: "images/items/filter-coffee-milk.webp", tags: [] },
+  { cat: "kahve", title: "Sütlü Filtre Kahve", price: 190, desc: "Süt eklenmiş filtre kahve.", img: "images/items/filter-coffee-milk.webp", tags: [], caffeine: "130 mg" },
   { cat: "sicak", title: "Ballı Fincan Süt", price: 160, desc: "Bal ile sıcak süt.", img: "images/items/milk-honey.webp", tags: [] },
-  { cat: "kahve", title: "Pumpkin Latte (Yeni)", price: 190, desc: "Balkabaklı latte.", img: "images/items/pumpkin-latte.webp", tags: [] },
+  { cat: "kahve", title: "Pumpkin Latte (Yeni)", price: 190, desc: "Balkabaklı latte.", img: "images/items/pumpkin-latte.webp", tags: [], caffeine: "130 mg" },
 
   // ─────────── DÜNYA ÇAYLARI ───────────
   { cat: "sicak", title: "Red Forest", price: 190, desc: "Kırmızı orman meyvelerinin aroması.", img: "images/items/red-forest.webp", tags: [] },
@@ -780,3 +737,217 @@ ITEMS.push(
 
 );
 
+// ─────────────────────────────
+//  RENDERING & INTERACTION LOGIC
+// ─────────────────────────────
+
+const hiddenbackSection = document.getElementById("hiddenback-section");
+const menuSection = document.getElementById("menu-section");
+const container = document.getElementById("items-container");
+const instagramBlock = document.getElementById("instagram-block");
+
+const modalOverlay = document.getElementById("modal-overlay");
+const modalImg = document.getElementById("modal-img");
+const modalTitle = document.getElementById("modal-title");
+const modalDesc = document.getElementById("modal-desc");
+const modalPrice = document.getElementById("modal-price");
+const modalExtra = document.getElementById("modal-extra");
+const modalClose = document.getElementById("modal-close");
+
+const catButtons = document.querySelectorAll(".cat-btn");
+const filterChips = document.querySelectorAll(".filter-chip");
+const searchDesktop = document.getElementById("search-desktop");
+
+const activeFilters = {
+  veg: false,
+  spicy: false,
+  cheese: false,
+  breakfast: false,
+  dessert: false,
+};
+
+let activeCategory = "hiddenback";
+let searchTerm = "";
+
+const TAG_LABELS = {
+  veg: { label: "Vejetaryen", color: "text-emerald-600" },
+  spicy: { label: "Acılı", color: "text-red-600" },
+  cheese: { label: "Peynirli", color: "text-amber-600" },
+  breakfast: { label: "Kahvaltı", color: "text-sky-600" },
+  dessert: { label: "Tatlı", color: "text-pink-600" },
+};
+
+const formatPrice = (price) => `${price}₺`;
+
+function toggleSections(category) {
+  const showMenu = category !== "hiddenback";
+
+  hiddenbackSection?.classList.toggle("hidden", showMenu);
+  instagramBlock?.classList.toggle("hidden", showMenu);
+  menuSection?.classList.toggle("hidden", !showMenu);
+}
+
+function syncFilterButtons(key, isActive) {
+  document.querySelectorAll(`[data-filter="${key}"]`).forEach((btn) => {
+    btn.classList.toggle("active", isActive);
+  });
+}
+
+function applyFilters(item) {
+  const term = searchTerm.trim().toLowerCase();
+  const matchesSearch = term
+    ? item.title.toLowerCase().includes(term) || item.desc.toLowerCase().includes(term)
+    : true;
+
+  const activeKeys = Object.entries(activeFilters)
+    .filter(([, value]) => value)
+    .map(([key]) => key);
+
+  const matchesTags = activeKeys.length
+    ? activeKeys.every((tag) => item.tags?.includes(tag))
+    : true;
+
+  return matchesSearch && matchesTags;
+}
+
+function createCard(item) {
+  const card = document.createElement("article");
+  card.className = "bg-white border border-hb-border rounded-2xl p-4 sm:p-5 flex flex-col gap-3 shadow-[0_6px_18px_rgba(0,0,0,0.04)] card-fade";
+
+  const caffeineLine =
+    item.cat === "kahve" && item.caffeine
+      ? `<p class=\"text-xs text-hb-muted\">≈ ${item.caffeine} kafein</p>`
+      : "";
+
+  card.innerHTML = `
+    <div class="rounded-xl overflow-hidden bg-neutral-200 aspect-[4/3]">
+      <img src="${item.img}" alt="${item.title}" class="w-full h-full object-cover">
+    </div>
+    <div class="flex flex-col gap-2">
+      <div class="flex items-start justify-between gap-2">
+        <h3 class="text-base font-semibold leading-tight">${item.title}</h3>
+        <span class="text-sm font-semibold">${formatPrice(item.price)}</span>
+      </div>
+      <p class="text-sm text-hb-muted leading-relaxed">${item.desc}</p>
+      ${caffeineLine}
+      <div class="flex flex-wrap gap-2 text-[11px] text-hb-muted">
+        ${(item.tags || [])
+          .map((tag) => {
+            const meta = TAG_LABELS[tag];
+            return meta ? `<span class="px-2 py-0.5 rounded-full bg-gray-100 ${meta.color}">${meta.label}</span>` : "";
+          })
+          .join("")}
+      </div>
+    </div>
+  `;
+
+  card.addEventListener("click", () => openModal(item));
+  return card;
+}
+
+function renderItems() {
+  if (!container) return;
+
+  container.innerHTML = "";
+  const groupTitles = GROUP_TITLES[activeCategory] || {};
+  const addedGroup = new Set();
+
+  ITEMS.filter((item) => item.cat === activeCategory)
+    .filter(applyFilters)
+    .forEach((item) => {
+      const groupTitle = groupTitles[item.group];
+      if (groupTitle && !addedGroup.has(item.group)) {
+        const heading = document.createElement("h3");
+        heading.className = "text-[11px] font-semibold uppercase tracking-[0.18em] text-hb-muted pl-1";
+        heading.textContent = groupTitle;
+        container.appendChild(heading);
+        addedGroup.add(item.group);
+      }
+
+      container.appendChild(createCard(item));
+    });
+
+  if (!container.childElementCount) {
+    const empty = document.createElement("p");
+    empty.className = "text-center text-sm text-hb-muted col-span-full py-4";
+    empty.textContent = "Sonuç bulunamadı.";
+    container.appendChild(empty);
+  }
+}
+
+function openModal(item) {
+  if (!modalOverlay) return;
+
+  modalImg.src = item.img;
+  modalImg.alt = item.title;
+  modalTitle.textContent = item.title;
+  modalDesc.textContent = item.desc;
+  modalPrice.textContent = formatPrice(item.price);
+
+  const activeKeys = Object.entries(activeFilters)
+    .filter(([, value]) => value)
+    .map(([key]) => TAG_LABELS[key]?.label)
+    .filter(Boolean);
+
+  const extraParts = [];
+
+  if (item.cat === "kahve" && item.caffeine) {
+    extraParts.push(`≈ ${item.caffeine} kafein`);
+  }
+
+  if (activeKeys.length) {
+    extraParts.push(`Filtreler: ${activeKeys.join(", ")}`);
+  }
+
+  if (extraParts.length) {
+    modalExtra.textContent = extraParts.join(" · ");
+    modalExtra.classList.remove("hidden");
+  } else {
+    modalExtra.classList.add("hidden");
+  }
+
+  modalOverlay.classList.remove("hidden");
+}
+
+function closeModal() {
+  modalOverlay?.classList.add("hidden");
+}
+
+catButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const { cat } = btn.dataset;
+    if (!cat) return;
+
+    activeCategory = cat;
+    catButtons.forEach((b) => b.classList.toggle("active", b === btn));
+    toggleSections(cat);
+    renderItems();
+  });
+});
+
+filterChips.forEach((chip) => {
+  chip.addEventListener("click", () => {
+    const key = chip.dataset.filter;
+    if (!key || !(key in activeFilters)) return;
+
+    activeFilters[key] = !activeFilters[key];
+    syncFilterButtons(key, activeFilters[key]);
+    renderItems();
+  });
+});
+
+if (searchDesktop) {
+  searchDesktop.addEventListener("input", (e) => {
+    searchTerm = e.target.value;
+    renderItems();
+  });
+}
+
+modalClose?.addEventListener("click", closeModal);
+modalOverlay?.addEventListener("click", (event) => {
+  if (event.target === modalOverlay) closeModal();
+});
+
+// Initial render
+toggleSections(activeCategory);
+renderItems();
