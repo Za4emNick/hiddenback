@@ -37,15 +37,16 @@
 
     .cat-btn {
       display: block;
-      width: 100%;
+      width: auto;
+      min-width: 120px;
       padding: 0.85rem 1rem;
       border-radius: 999px;
       border: 1px solid #e5e5e5;
       font-size: 1rem;
-      text-align: left;
+      text-align: center;
       background: #ffffff;
       transition: background 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
-      white-space: normal;
+      white-space: nowrap;
       line-height: 1.4;
       min-height: 3.2rem;
     }
@@ -90,6 +91,7 @@
 
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
   </style>
 </head>
 
@@ -113,28 +115,26 @@
   </header>
 
   <!-- MAIN -->
-  <main class="max-w-7xl mx-auto px-4 pt-4 pb-10 grid grid-cols-[160px_1fr] sm:grid-cols-[180px_1fr] md:grid-cols-[220px_1fr] gap-4 md:gap-6 items-start">
+  <main id="layout-root" class="max-w-7xl mx-auto px-4 pt-4 pb-10 flex flex-col gap-4 md:gap-6">
 
-    <!-- SIDEBAR КАТЕГОРИЙ -->
-    <aside class="w-full">
-      <div class="bg-white border border-hb-border rounded-2xl p-3 sm:p-4 flex flex-col gap-3 md:gap-2 sticky top-20">
-        <p class="text-[11px] sm:text-xs font-medium text-hb-muted uppercase tracking-[0.18em] pl-1 mb-1">
-          Menü
-        </p>
-        <div class="flex flex-col gap-2">
-          <button class="cat-btn active" data-cat="hiddenback">Hakkımızda</button>
-          <button class="cat-btn" data-cat="kahvalti">Kahvaltı</button>
-          <button class="cat-btn" data-cat="anayemek">Ana Yemekler</button>
-          <button class="cat-btn" data-cat="burger">Burger</button>
-          <button class="cat-btn" data-cat="pizza">Pizza</button>
-          <button class="cat-btn" data-cat="tatli">Tatlılar</button>
-          <button class="cat-btn" data-cat="kahve">Kahveler</button>
-          <button class="cat-btn" data-cat="icecek">İçecekler</button>
-        </div>
+    <!-- КАТЕГОРИИ (горизонтальный бар) -->
+    <section class="bg-white border border-hb-border rounded-2xl p-3 sm:p-4 flex flex-col gap-2 sticky top-20 z-10" id="cat-panel">
+      <p class="text-[11px] sm:text-xs font-medium text-hb-muted uppercase tracking-[0.18em] pl-1" id="cat-panel-label">
+        Menü
+      </p>
+      <div class="flex flex-nowrap gap-2 overflow-x-auto no-scrollbar pb-1" id="cat-buttons">
+        <button class="cat-btn active" data-cat="hiddenback">Hakkımızda</button>
+        <button class="cat-btn" data-cat="kahvalti">Kahvaltı</button>
+        <button class="cat-btn" data-cat="anayemek">Ana Yemekler</button>
+        <button class="cat-btn" data-cat="burger">Burger</button>
+        <button class="cat-btn" data-cat="pizza">Pizza</button>
+        <button class="cat-btn" data-cat="tatli">Tatlılar</button>
+        <button class="cat-btn" data-cat="kahve">Kahveler</button>
+        <button class="cat-btn" data-cat="icecek">İçecekler</button>
       </div>
-    </aside>
+    </section>
 
-    <!-- ПРАВАЯ ЧАСТЬ -->
+    <!-- КОНТЕНТ -->
     <section class="flex-1 flex flex-col gap-4 md:gap-5">
 
       <!-- HIDDENBACK / ГЛАВНАЯ -->
@@ -254,8 +254,8 @@
         </a>
       </div>
 
-      <!-- MENU SECTION (по умолчанию скрыт, откроем через JS при выборе категорий) -->
-      <section id="menu-section" class="flex flex-col gap-3 hidden">
+      <!-- MENU SECTION -->
+      <section id="menu-section" class="flex flex-col gap-3">
 
         <!-- SEARCH + FILTERS (desktop) -->
         <section id="controls-wrapper" class="flex flex-col gap-2 mb-1">
@@ -287,17 +287,19 @@
                 <span>Peynirli</span>
               </button>
 
-              <button class="filter-chip" data-filter="breakfast">
-                <span class="inline-block w-1.5 h-1.5 rounded-full bg-sky-400"></span>
-                <span>Kahvaltı</span>
-              </button>
-
               <button class="filter-chip" data-filter="dessert">
                 <span class="inline-block w-1.5 h-1.5 rounded-full bg-pink-400"></span>
                 <span>Tatlı</span>
               </button>
             </div>
           </div>
+          <section id="group-nav" class="hidden flex items-center gap-2 text-xs overflow-x-auto no-scrollbar py-1">
+            <span class="text-[11px] text-hb-muted uppercase tracking-[0.18em] pl-1 shrink-0">
+              Bölümler
+            </span>
+
+            <div id="group-nav-buttons" class="flex flex-nowrap gap-2"></div>
+          </section>
         </section>
 
         <!-- GRID -->
@@ -326,11 +328,6 @@
       <button class="filter-chip" data-filter="cheese">
         <span class="inline-block w-1.5 h-1.5 rounded-full bg-amber-400"></span>
         <span>Peynirli</span>
-      </button>
-
-      <button class="filter-chip" data-filter="breakfast">
-        <span class="inline-block w-1.5 h-1.5 rounded-full bg-sky-400"></span>
-        <span>Kahvaltı</span>
       </button>
 
       <button class="filter-chip" data-filter="dessert">
