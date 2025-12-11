@@ -747,6 +747,7 @@ const hiddenbackSection = document.getElementById("hiddenback-section");
 const menuSection = document.getElementById("menu-section");
 const container = document.getElementById("items-container");
 const instagramBlock = document.getElementById("instagram-block");
+const layoutRoot = document.getElementById("layout-root");
 
 const modalOverlay = document.getElementById("modal-overlay");
 const modalImg = document.getElementById("modal-img");
@@ -756,6 +757,9 @@ const modalPrice = document.getElementById("modal-price");
 const modalExtra = document.getElementById("modal-extra");
 const modalClose = document.getElementById("modal-close");
 
+const groupNav = document.getElementById("group-nav");
+const groupNavButtons = document.getElementById("group-nav-buttons");
+
 const catButtons = document.querySelectorAll(".cat-btn");
 const filterChips = document.querySelectorAll(".filter-chip");
 const searchDesktop = document.getElementById("search-desktop");
@@ -764,7 +768,6 @@ const activeFilters = {
   veg: false,
   spicy: false,
   cheese: false,
-  breakfast: false,
   dessert: false,
 };
 
@@ -775,11 +778,15 @@ const TAG_LABELS = {
   veg: { label: "Vejetaryen", color: "text-emerald-600" },
   spicy: { label: "Acılı", color: "text-red-600" },
   cheese: { label: "Peynirli", color: "text-amber-600" },
-  breakfast: { label: "Kahvaltı", color: "text-sky-600" },
   dessert: { label: "Tatlı", color: "text-pink-600" },
 };
 
 const formatPrice = (price) => (typeof price === "number" ? `${price}₺` : "" );
+
+function updateLayout(category) {
+  const isHome = category === "hiddenback";
+  layoutRoot?.classList.toggle("home-layout", isHome);
+}
 
 function toggleSections(category) {
   const showMenu = category !== "hiddenback";
@@ -787,6 +794,11 @@ function toggleSections(category) {
   hiddenbackSection?.classList.toggle("hidden", showMenu);
   instagramBlock?.classList.toggle("hidden", showMenu);
   menuSection?.classList.toggle("hidden", !showMenu);
+  if (!showMenu) {
+    renderGroupNav([]);
+  }
+
+  updateLayout(category);
 }
 
 function syncFilterButtons(key, isActive) {
@@ -811,6 +823,40 @@ function applyFilters(item) {
     : true;
 
   return matchesSearch && matchesTags;
+}
+
+function scrollToGroup(group) {
+  const heading = container?.querySelector(`[data-group="${group}"]`);
+  if (!heading) return;
+
+  const offset = 90;
+  const top = heading.getBoundingClientRect().top + window.scrollY - offset;
+  window.scrollTo({ top, behavior: "smooth" });
+}
+
+function renderGroupNav(groups) {
+  if (!groupNav || !groupNavButtons) return;
+
+  const titles = GROUP_TITLES[activeCategory] || {};
+  const visibleGroups = groups.filter((group) => titles[group]);
+
+  groupNavButtons.innerHTML = "";
+
+  if (!visibleGroups.length || activeCategory === "hiddenback") {
+    groupNav.classList.add("hidden");
+    return;
+  }
+
+  visibleGroups.forEach((group) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "filter-chip";
+    btn.textContent = titles[group];
+    btn.addEventListener("click", () => scrollToGroup(group));
+    groupNavButtons.appendChild(btn);
+  });
+
+  groupNav.classList.remove("hidden");
 }
 
 function createCard(item) {
@@ -854,6 +900,7 @@ function renderItems() {
   container.innerHTML = "";
   const groupTitles = GROUP_TITLES[activeCategory] || {};
   const addedGroup = new Set();
+  const renderedGroups = [];
 
   ITEMS.filter((item) => item.cat === activeCategory)
     .filter(applyFilters)
@@ -864,12 +911,17 @@ function renderItems() {
         heading.className =
           "col-span-full mt-6 mb-3 text-sm sm:text-base font-semibold uppercase tracking-[0.18em] text-hb-muted pl-1";
         heading.textContent = groupTitle;
+        heading.dataset.group = item.group;
+        heading.id = `group-${item.group}`;
         container.appendChild(heading);
         addedGroup.add(item.group);
+        renderedGroups.push(item.group);
       }
 
       container.appendChild(createCard(item));
     });
+
+  renderGroupNav(renderedGroups);
 
   if (!container.childElementCount) {
     const empty = document.createElement("p");
