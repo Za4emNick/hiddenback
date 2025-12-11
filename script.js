@@ -394,21 +394,65 @@ const items = {
     { title: "Ayran", desc: "Serinleten ayran.", price: "90₺", priceValue: 90, img: "images/icecek/ayran.webp", tags: [] }
   ]
 };
+// ─────────────────────────────
+//  КОФЕИН ДЛЯ КОФЕ (по названию)
+// ─────────────────────────────
+
+const caffeineByDrink = {
+  "Espresso": "Yüksek (~80 mg)",
+  "Double Espresso": "Çok yüksek (~120 mg)",
+  "Americano": "Orta (~80 mg)",
+  "Latte": "Orta (~80 mg)",
+  "Cappuccino": "Orta (~80 mg)",
+  "Flat White": "Yüksek (~100 mg)",
+  "Mocha": "Orta-Yüksek",
+  "Ice Americano": "Orta (~80 mg)",
+  "Ice Latte": "Orta",
+  "Ice White Mocha": "Orta",
+  "Matcha Latte": "Orta (matcha)",
+  "Ice Matcha Latte": "Orta (matcha)",
+  "Strawberry Matcha": "Orta (matcha)",
+  "Orange Mango Matcha": "Orta (matcha)"
+  // можно дописать свои варианты по желанию
+};
+
+// ─────────────────────────────
+//  ГРУППЫ ДЛЯ ПОДРАЗДЕЛОВ В КАТЕГОРИЯХ
+// ─────────────────────────────
+
+const GROUP_TITLES = {
+  kahve: {
+    hot: "Sıcak Kahveler",
+    cold: "Soğuk Kahveler"
+  },
+  icecek: {
+    milkshake: "Milkshake",
+    frozen: "Frozen",
+    soft: "Meşrubatlar",
+    cocktail: "Kokteyller"
+  },
+  anayemek: {
+    chicken: "Tavuk Yemekleri",
+    meat: "Et Yemekleri",
+    salad: "Salatalar",
+    toast: "Tostlar & Ekmek Üstü",
+    other: "Bowl & Noodle"
+  }
+};
 
 
 // ─────────────────────────────
 //  GLOBAL STATE
 // ─────────────────────────────
 
-let activeCategory = "kahvalti";
+let activeCategory = "hiddenback";
 let searchTerm = "";
 const activeFilters = {
   veg: false,
   spicy: false,
   cheese: false,
   breakfast: false,
-  dessert: false,
-  price: null // 'low' | 'mid' | 'high'
+  dessert: false
 };
 
 
@@ -416,26 +460,34 @@ const activeFilters = {
 //  DOM ELEMENTS
 // ─────────────────────────────
 
-const container        = document.getElementById("items-container");
-const modalOverlay     = document.getElementById("modal-overlay");
-const modalImg         = document.getElementById("modal-img");
-const modalTitle       = document.getElementById("modal-title");
-const modalDesc        = document.getElementById("modal-desc");
-const modalPrice       = document.getElementById("modal-price");
-const modalClose       = document.getElementById("modal-close");
+const hiddenbackSection  = document.getElementById("hiddenback-section");
+const menuSection        = document.getElementById("menu-section");
+const container          = document.getElementById("items-container");
 
-const catButtons       = document.querySelectorAll(".cat-btn");
-const filterChips      = document.querySelectorAll(".filter-chip");
+const instagramBlock     = document.getElementById("instagram-block");
 
-const searchDesktop    = document.getElementById("search-desktop");
-const searchMobile     = document.getElementById("search-mobile");
-const filterToggleBtn  = document.getElementById("filter-toggle");
-const mobileFiltersBox = document.getElementById("mobile-filters-panel");
-const scrollTopBtn     = document.getElementById("scroll-top-btn");
+const modalOverlay       = document.getElementById("modal-overlay");
+const modalImg           = document.getElementById("modal-img");
+const modalTitle         = document.getElementById("modal-title");
+const modalDesc          = document.getElementById("modal-desc");
+const modalPrice         = document.getElementById("modal-price");
+const modalExtra         = document.getElementById("modal-extra");
+const modalClose         = document.getElementById("modal-close");
 
+const catButtons         = document.querySelectorAll(".cat-btn");
+const filterChips        = document.querySelectorAll(".filter-chip");
+
+const searchDesktop      = document.getElementById("search-desktop");
+const searchMobile       = document.getElementById("search-mobile");
+
+const filterToggleBtn    = document.getElementById("filter-toggle");
+const mobileFiltersBox   = document.getElementById("mobile-filters-panel");
+const scrollTopBtn       = document.getElementById("scroll-top-btn");
+const mobileMenuBar      = document.getElementById("mobile-menu-bar");
+const controlsWrapper    = document.getElementById("controls-wrapper");
 
 // ─────────────────────────────
-//  FILTER LOGIC
+//  UTILS: tag/price/search filters
 // ─────────────────────────────
 
 function passesTagFilters(item) {
@@ -448,92 +500,209 @@ function passesTagFilters(item) {
   return true;
 }
 
-function passesPriceFilter(item) {
-  if (!activeFilters.price) return true;
-  const p = item.priceValue || 0;
-
-  if (activeFilters.price === "low")  return p < 200;
-  if (activeFilters.price === "mid")  return p >= 200 && p <= 300;
-  if (activeFilters.price === "high") return p > 300;
-
-  return true;
-}
-
 function passesSearch(item) {
   if (!searchTerm) return true;
   const q = searchTerm.toLowerCase();
   return (
-    item.title.toLowerCase().includes(q) ||
-    item.desc.toLowerCase().includes(q)
+    (item.title || "").toLowerCase().includes(q) ||
+    (item.desc || "").toLowerCase().includes(q)
   );
 }
 
 function filteredList(list) {
   return list.filter(item =>
     passesSearch(item) &&
-    passesTagFilters(item) &&
-    passesPriceFilter(item)
+    passesTagFilters(item)
   );
 }
 
 
 // ─────────────────────────────
-//  RENDERING
+//  ГРУППИРОВКА ДЛЯ ПОДРАЗДЕЛОВ
+// ─────────────────────────────
+
+function detectGroup(cat, item) {
+  const title = (item.title || "").toLowerCase();
+
+  if (cat === "kahve") {
+    // всё, что начинается с "ice" -> холодное
+    if (title.includes("ice") || title.includes("iced")) return "cold";
+    return "hot";
+  }
+
+  if (cat === "icecek") {
+    if (title.includes("milkshake")) return "milkshake";
+    if (title.includes("frozen"))   return "frozen";
+    if (title.includes("mojito") || title.includes("kokteyl") || title.includes("cocktail")) return "cocktail";
+    return "soft";
+  }
+
+  if (cat === "anayemek") {
+    if (title.includes("salata") || title.includes("salad")) return "salad";
+    if (title.includes("tavuk")) return "chicken";
+    if (title.includes("beef") || title.includes("et")) return "meat";
+    if (title.includes("tost") || title.includes("toast") || title.includes("ekmek")) return "toast";
+    return "other";
+  }
+
+  return null;
+}
+
+// ─────────────────────────────
+//  РЕНДЕР КАТЕГОРИИ
 // ─────────────────────────────
 
 function renderCategory(cat) {
-  activeCategory = cat;
   const list = items[cat] || [];
   const visible = filteredList(list);
 
   container.innerHTML = "";
 
-  if (!visible.length) {
+  // если нет групп — обычный грид
+  if (!GROUP_TITLES[cat]) {
+    if (!visible.length) {
+      const empty = document.createElement("div");
+      empty.className = "text-sm text-hb-muted col-span-full py-8 text-center";
+      empty.textContent = "Bu filtrelerle sonuç bulunamadı.";
+      container.appendChild(empty);
+      return;
+    }
+
+    visible.forEach((item) => {
+      const card = createCard(item);
+      container.appendChild(card);
+    });
+    return;
+  }
+
+  // с группами
+  const groups = GROUP_TITLES[cat];
+  const keys   = Object.keys(groups);
+
+  keys.forEach((gKey, index) => {
+    const groupItems = visible.filter(item => detectGroup(cat, item) === gKey);
+    if (!groupItems.length) return;
+
+    // заголовок раздела
+    const h = document.createElement("div");
+    h.className = "col-span-full mt-3 mb-1";
+    h.innerHTML = `<h3 class="text-sm font-semibold uppercase tracking-[0.18em] text-hb-muted ${
+      index === 0 ? "mt-1" : "mt-4"
+    }">${groups[gKey]}</h3>`;
+    container.appendChild(h);
+
+    // карточки
+    groupItems.forEach((item) => {
+      const card = createCard(item);
+      container.appendChild(card);
+    });
+  });
+
+  // если вообще ничего не отобразилось (фильтры убили всё)
+  if (!container.children.length) {
     const empty = document.createElement("div");
     empty.className = "text-sm text-hb-muted col-span-full py-8 text-center";
     empty.textContent = "Bu filtrelerle sonuç bulunamadı.";
     container.appendChild(empty);
-    return;
   }
+}
 
-  visible.forEach((item) => {
-    const card = document.createElement("button");
-    card.type = "button";
-    card.className =
-      "text-left rounded-2xl bg-white border border-hb-border hover:border-gray-400 " +
-      "shadow-sm hover:shadow-md transition p-3 sm:p-4 flex flex-col " +
-      "card-fade hover:scale-[1.01]";
+// создание карточки
+function createCard(item) {
+  const card = document.createElement("button");
+  card.type = "button";
+  card.className =
+    "text-left rounded-2xl bg-white border border-hb-border hover:border-gray-400 " +
+    "shadow-sm hover:shadow-md transition p-3 sm:p-4 flex flex-col " +
+    "card-fade hover:scale-[1.01]";
 
-    const imgSrc = item.img || "images/placeholder.webp";
+  const imgSrc = item.img || "images/placeholder.webp";
 
-    card.innerHTML = `
-      <div class="w-full mb-3 overflow-hidden rounded-xl bg-neutral-100 aspect-[4/3]">
-        <img src="${imgSrc}" alt="${item.title}"
-             class="w-full h-full object-cover transition-transform duration-200 hover:scale-[1.03]"
-             onerror="this.style.display='none'; this.parentElement.classList.add('bg-neutral-200');">
-      </div>
-      <h3 class="text-base font-semibold mb-1">${item.title}</h3>
-      <p class="text-sm text-hb-muted mb-2 min-h-[2.5rem] line-clamp-3">${item.desc}</p>
-      <p class="text-sm font-semibold mt-auto">${item.price}</p>
-    `;
+  card.innerHTML = `
+    <div class="w-full mb-3 overflow-hidden rounded-xl bg-neutral-100 aspect-[4/3]">
+      <img src="${imgSrc}" alt="${item.title}"
+           class="w-full h-full object-cover transition-transform duration-200 hover:scale-[1.03]"
+           onerror="this.style.display='none'; this.parentElement.classList.add('bg-neutral-200');">
+    </div>
+    <h3 class="text-base font-semibold mb-1">${item.title || ""}</h3>
+    <p class="text-sm text-hb-muted mb-2 min-h-[2.5rem] line-clamp-3">${item.desc || ""}</p>
+    <p class="text-sm font-semibold mt-auto">${item.price || ""}</p>
+  `;
 
-    card.addEventListener("click", () => openModal(item));
-    container.appendChild(card);
-  });
+  card.addEventListener("click", () => openModal(item));
+  return card;
+}
+
+// ─────────────────────────────
+//  ПЕРЕКЛЮЧЕНИЕ КАТЕГОРИЙ
+// ─────────────────────────────
+
+function switchCategory(cat) {
+  activeCategory = cat;
+
+  // подсветка кнопок
+  catButtons.forEach((b) => b.classList.remove("active"));
+  document
+    .querySelectorAll(`.cat-btn[data-cat="${cat}"]`)
+    .forEach((b) => b.classList.add("active"));
+
+  if (cat === "hiddenback") {
+    // показываем Главную / HiddenBack
+    hiddenbackSection.classList.remove("hidden");
+    menuSection.classList.add("hidden");
+
+    if (instagramBlock) instagramBlock.classList.remove("hidden");
+
+    // сверху/справа ничего лишнего — без поиска и фильтров
+    if (controlsWrapper) controlsWrapper.classList.add("hidden");
+    if (mobileMenuBar)   mobileMenuBar.classList.add("hidden");
+    if (mobileFiltersBox) mobileFiltersBox.classList.add("hidden");
+  } else {
+    // показываем обычное меню
+    hiddenbackSection.classList.add("hidden");
+    menuSection.classList.remove("hidden");
+
+    if (instagramBlock) instagramBlock.classList.add("hidden");
+
+    if (controlsWrapper) controlsWrapper.classList.remove("hidden");
+    if (mobileMenuBar)   mobileMenuBar.classList.remove("hidden");
+
+    renderCategory(cat);
+
+    if (window.innerWidth < 768) {
+      container.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
 }
 
 
+
 // ─────────────────────────────
-//  MODAL
+//  MODAL (с кофеином для кофе)
 // ─────────────────────────────
 
 function openModal(item) {
   const imgSrc = item.img || "images/placeholder.webp";
   modalImg.src = imgSrc;
-  modalImg.alt = item.title;
-  modalTitle.textContent = item.title;
-  modalDesc.textContent = item.desc;
-  modalPrice.textContent = item.price;
+  modalImg.alt = item.title || "";
+  modalTitle.textContent = item.title || "";
+  modalDesc.textContent = item.desc || "";
+  modalPrice.textContent = item.price || "";
+
+  // кофеин только для kahve
+  if (activeCategory === "kahve") {
+    const c = caffeineByDrink[item.title] || null;
+    if (c) {
+      modalExtra.textContent = `Kafein seviyesi: ${c}`;
+      modalExtra.classList.remove("hidden");
+    } else {
+      modalExtra.textContent = "";
+      modalExtra.classList.add("hidden");
+    }
+  } else {
+    modalExtra.textContent = "";
+    modalExtra.classList.add("hidden");
+  }
 
   modalOverlay.classList.remove("hidden");
 }
@@ -554,28 +723,16 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeModal();
 });
 
-
 // ─────────────────────────────
-//  CATEGORY SWITCH
+//  CATEGORY CLICK HANDLERS
 // ─────────────────────────────
 
 catButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
     const cat = btn.dataset.cat;
-    // подсветка
-    catButtons.forEach((b) => b.classList.remove("active"));
-    document
-      .querySelectorAll(`.cat-btn[data-cat="${cat}"]`)
-      .forEach((b) => b.classList.add("active"));
-
-    renderCategory(cat);
-
-    if (window.innerWidth < 768) {
-      container.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    switchCategory(cat);
   });
 });
-
 
 // ─────────────────────────────
 //  FILTERS
@@ -583,29 +740,16 @@ catButtons.forEach((btn) => {
 
 filterChips.forEach((chip) => {
   const tagFilter = chip.dataset.filter;
-  const priceFilter = chip.dataset.filterPrice;
 
   chip.addEventListener("click", () => {
-    if (tagFilter) {
-      activeFilters[tagFilter] = !activeFilters[tagFilter];
-    }
+    if (activeCategory === "hiddenback" || !tagFilter) return;
 
-    if (priceFilter) {
-      // одиночный выбор по цене
-      if (activeFilters.price === priceFilter) {
-        activeFilters.price = null;
-      } else {
-        activeFilters.price = priceFilter;
-      }
-    }
+    activeFilters[tagFilter] = !activeFilters[tagFilter];
 
-    // обновляем активные классы
+    // обновляем активные классы только по тегам
     filterChips.forEach((c) => {
       const tf = c.dataset.filter;
-      const pf = c.dataset.filterPrice;
-      c.classList.remove("active");
-      if (tf && activeFilters[tf]) c.classList.add("active");
-      if (pf && activeFilters.price === pf) c.classList.add("active");
+      c.classList.toggle("active", !!tf && activeFilters[tf]);
     });
 
     renderCategory(activeCategory);
@@ -618,13 +762,17 @@ filterChips.forEach((chip) => {
 // ─────────────────────────────
 
 function updateSearch(value) {
+  if (activeCategory === "hiddenback") return; // на главной поиск не работает
+
   searchTerm = value.trim();
+
   if (searchDesktop && document.activeElement !== searchDesktop) {
     searchDesktop.value = value;
   }
   if (searchMobile && document.activeElement !== searchMobile) {
     searchMobile.value = value;
   }
+
   renderCategory(activeCategory);
 }
 
@@ -638,7 +786,6 @@ if (searchMobile) {
     updateSearch(e.target.value);
   });
 }
-
 
 // ─────────────────────────────
 //  MOBILE CONTROLS
@@ -656,11 +803,11 @@ if (scrollTopBtn) {
   });
 }
 
-
 // ─────────────────────────────
-//  INITIAL RENDER
+//  INITIAL LOAD
 // ─────────────────────────────
 
 document.addEventListener("DOMContentLoaded", () => {
-  renderCategory(activeCategory);
+  // стартуем с HiddenBack / Главная
+  switchCategory("hiddenback");
 });
