@@ -866,6 +866,40 @@ function renderGroupNav(groups) {
   groupNav.classList.remove("hidden");
 }
 
+function scrollToGroup(group) {
+  const heading = container?.querySelector(`[data-group="${group}"]`);
+  if (!heading) return;
+
+  const offset = 90;
+  const top = heading.getBoundingClientRect().top + window.scrollY - offset;
+  window.scrollTo({ top, behavior: "smooth" });
+}
+
+function renderGroupNav(groups) {
+  if (!groupNav || !groupNavButtons) return;
+
+  const titles = GROUP_TITLES[activeCategory] || {};
+  const visibleGroups = groups.filter((group) => titles[group]);
+
+  groupNavButtons.innerHTML = "";
+
+  if (!visibleGroups.length || activeCategory === "hiddenback") {
+    groupNav.classList.add("hidden");
+    return;
+  }
+
+  visibleGroups.forEach((group) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "filter-chip";
+    btn.textContent = titles[group];
+    btn.addEventListener("click", () => scrollToGroup(group));
+    groupNavButtons.appendChild(btn);
+  });
+
+  groupNav.classList.remove("hidden");
+}
+
 function createCard(item) {
   const card = document.createElement("article");
   card.className = "bg-white border border-hb-border rounded-2xl p-4 sm:p-5 flex flex-col gap-3 shadow-[0_6px_18px_rgba(0,0,0,0.04)] card-fade";
