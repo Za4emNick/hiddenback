@@ -808,7 +808,7 @@ function applyFilters(item) {
   return matchesSearch && matchesTags;
 }
 
-function createCard(item, groupTitle) {
+function createCard(item) {
   const card = document.createElement("article");
   card.className = "bg-white border border-hb-border rounded-2xl p-4 sm:p-5 flex flex-col gap-3 shadow-[0_6px_18px_rgba(0,0,0,0.04)] card-fade";
 
@@ -817,12 +817,7 @@ function createCard(item, groupTitle) {
       ? `<p class=\"text-xs text-hb-muted\">≈ ${item.caffeine} kafein</p>`
       : "";
 
-  const groupBadge = groupTitle
-    ? `<div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-hb-muted -mb-1">${groupTitle}</div>`
-    : "";
-
   card.innerHTML = `
-    ${groupBadge}
     <div class="rounded-xl overflow-hidden bg-neutral-200 aspect-[4/3]">
       <img src="${item.img}" alt="${item.title}" class="w-full h-full object-cover">
     </div>
@@ -859,13 +854,16 @@ function renderItems() {
     .filter(applyFilters)
     .forEach((item) => {
       const groupTitle = groupTitles[item.group];
-      const isFirstInGroup = groupTitle && !addedGroup.has(item.group);
-
-      if (isFirstInGroup) {
+      if (groupTitle && !addedGroup.has(item.group)) {
+        const heading = document.createElement("h3");
+        heading.className =
+          "col-span-full mt-4 mb-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-hb-muted pl-1";
+        heading.textContent = groupTitle;
+        container.appendChild(heading);
         addedGroup.add(item.group);
       }
 
-      container.appendChild(createCard(item, isFirstInGroup ? groupTitle : undefined));
+      container.appendChild(createCard(item));
     });
 
   if (!container.childElementCount) {
