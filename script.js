@@ -763,6 +763,8 @@ const groupNavButtons = document.getElementById("group-nav-buttons");
 const catButtons = document.querySelectorAll(".cat-btn");
 const filterChips = document.querySelectorAll(".filter-chip");
 const searchDesktop = document.getElementById("search-desktop");
+const mobileTopMenu = document.getElementById("mobile-top-menu");
+const mobileMenuPeek = document.getElementById("mobile-menu-peek");
 
 const activeFilters = {
   veg: false,
@@ -788,6 +790,24 @@ function updateLayout(category) {
   layoutRoot?.classList.toggle("home-layout", isHome);
 }
 
+function isMobileView() {
+  return window.innerWidth < 1024;
+}
+
+function updateMobileMenuBar() {
+  if (!mobileTopMenu) return;
+
+  const shouldShow = isMobileView() && activeCategory !== "hiddenback";
+  mobileTopMenu.classList.toggle("hidden", !shouldShow);
+}
+
+function updateMobilePeek() {
+  if (!mobileMenuPeek) return;
+
+  const shouldShow = isMobileView() && activeCategory === "hiddenback";
+  mobileMenuPeek.classList.toggle("hidden", !shouldShow);
+}
+
 function toggleSections(category) {
   const showMenu = category !== "hiddenback";
 
@@ -799,6 +819,8 @@ function toggleSections(category) {
   }
 
   updateLayout(category);
+  updateMobileMenuBar();
+  updateMobilePeek();
 }
 
 function syncFilterButtons(key, isActive) {
@@ -969,15 +991,19 @@ function closeModal() {
   modalOverlay?.classList.add("hidden");
 }
 
+function setCategory(cat) {
+  if (!cat) return;
+
+  activeCategory = cat;
+  catButtons.forEach((b) => b.classList.toggle("active", b.dataset.cat === cat));
+  toggleSections(cat);
+  renderItems();
+}
+
 catButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
     const { cat } = btn.dataset;
-    if (!cat) return;
-
-    activeCategory = cat;
-    catButtons.forEach((b) => b.classList.toggle("active", b === btn));
-    toggleSections(cat);
-    renderItems();
+    setCategory(cat);
   });
 });
 
@@ -999,11 +1025,20 @@ if (searchDesktop) {
   });
 }
 
+mobileMenuPeek?.addEventListener("click", () => {
+  setCategory("kahvalti");
+  menuSection?.scrollIntoView({ behavior: "smooth" });
+});
+
+window.addEventListener("resize", () => {
+  updateMobileMenuBar();
+  updateMobilePeek();
+});
+
 modalClose?.addEventListener("click", closeModal);
 modalOverlay?.addEventListener("click", (event) => {
   if (event.target === modalOverlay) closeModal();
 });
 
 // Initial render
-toggleSections(activeCategory);
-renderItems();
+setCategory(activeCategory);
