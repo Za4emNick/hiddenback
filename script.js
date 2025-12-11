@@ -767,6 +767,7 @@ const mobileDrawer = document.getElementById("mobile-cat-drawer");
 const mobileOverlay = document.getElementById("mobile-drawer-overlay");
 const mobileMenuOpen = document.getElementById("mobile-menu-open");
 const mobileMenuClose = document.getElementById("mobile-menu-close");
+const mobileDrawerHandle = document.getElementById("mobile-drawer-handle");
 
 const activeFilters = {
   veg: false,
@@ -803,6 +804,7 @@ function closeMobileDrawer() {
   mobileDrawer.classList.remove("open");
   mobileOverlay.classList.remove("visible");
   document.body.style.overflow = "";
+  mobileDrawerHandle?.classList.remove("hide");
 }
 
 function openMobileDrawer() {
@@ -811,6 +813,7 @@ function openMobileDrawer() {
   mobileDrawer.classList.add("open");
   mobileOverlay.classList.add("visible");
   document.body.style.overflow = "hidden";
+  mobileDrawerHandle?.classList.add("hide");
 }
 
 function toggleSections(category) {
@@ -1032,6 +1035,7 @@ if (searchDesktop) {
 mobileMenuOpen?.addEventListener("click", openMobileDrawer);
 mobileMenuClose?.addEventListener("click", closeMobileDrawer);
 mobileOverlay?.addEventListener("click", closeMobileDrawer);
+mobileDrawerHandle?.addEventListener("click", openMobileDrawer);
 
 window.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && mobileDrawer?.classList.contains("open")) {
@@ -1042,6 +1046,7 @@ window.addEventListener("keydown", (event) => {
 window.addEventListener("resize", () => {
   if (!isMobileView()) {
     closeMobileDrawer();
+    mobileDrawerHandle?.classList.remove("hide");
   }
 });
 
