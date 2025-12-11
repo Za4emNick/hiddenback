@@ -1,0 +1,38 @@
+/* Intro glitch animation */
+@keyframes glitch {
+  0% { opacity: 0.2; transform: scale(1); }
+  20% { opacity: 1; transform: scale(1.02); }
+  40% { opacity: 0.4; }
+  60% { opacity: 1; transform: scale(0.98); }
+  80% { opacity: 0.3; }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.animate-intro-glitch {
+  animation: glitch 2s infinite;
+}
+
+/* Modal fade */
+@keyframes fade {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.animate-fade {
+  animation: fade 0.25s ease-out;
+}
+
+/* Category button style */
+.cat-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid #333;
+  border-radius: 8px;
+  text-align: left;
+  transition: 0.2s;
+}
+.cat-btn:hover {
+  background: #222;
+}
+/* styles here */

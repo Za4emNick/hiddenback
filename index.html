@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HiddenBack — Menü</title>
+  <meta name="description" content="HiddenBack Café — Yalova. Modern beyaz minimalist menü.">
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Inter", "ui-sans-serif"],
+          }
+        }
+      }
+    }
+  </script>
+
+</head>
+
+<body class="bg-white text-black overflow-hidden">
+
+  <!-- Intro Screen (dark) -->
+  <div id="intro-screen" class="fixed inset-0 bg-black flex items-center justify-center z-[9999]">
+    <img src="images/logo-x-x.webp" class="w-40 opacity-0 animate-intro-glitch" id="intro-logo">
+  </div>
+
+  <!-- Header -->
+  <header class="flex items-center justify-between p-4 border-b border-neutral-300 bg-white dark:bg-black dark:border-neutral-800">
+    <div class="flex items-center gap-2">
+      <img src="images/logo-x-x.webp" class="w-10">
+      <span class="text-xl font-semibold tracking-wide">HiddenBack</span>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <select id="lang-select" class="bg-neutral-100 p-2 rounded border border-neutral-300 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white">
+        <option value="tr">TR</option>
+        <option value="en">EN</option>
+        <option value="ru">RU</option>
+      </select>
+
+      <button id="theme-toggle" class="text-2xl">☀️</button>
+    </div>
+  </header>
+
+  <main class="flex h-screen overflow-hidden">
+
+    <!-- Sidebar Menu -->
+    <aside class="w-64 bg-neutral-100 border-r border-neutral-300 p-4 overflow-y-auto 
+                 dark:bg-neutral-950 dark:border-neutral-800">
+      <nav class="space-y-3 text-lg">
+        <button class="cat-btn" data-cat="kahvalti">KAHVALTI</button>
+        <button class="cat-btn" data-cat="anayemek">ANA YEMEKLER</button>
+        <button class="cat-btn" data-cat="burger">BURGER</button>
+        <button class="cat-btn" data-cat="pizza">PİZZA</button>
+        <button class="cat-btn" data-cat="tatli">TATLILAR</button>
+        <button class="cat-btn" data-cat="kahve">KAHVELER</button>
+        <button class="cat-btn" data-cat="icecek">İÇECEKLER</button>
+      </nav>
+    </aside>
+
+    <!-- Items Container -->
+    <section id="items-container"
+      class="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-6 overflow-y-auto bg-white dark:bg-black">
+    </section>
+
+  </main>
+
+  <!-- Modal -->
+  <div id="modal-overlay"
+       class="hidden fixed inset-0 bg-black/40 backdrop-blur-sm items-center justify-center z-50 dark:bg-black/70">
+
+    <div id="modal"
+         class="bg-white dark:bg-neutral-900 p-6 rounded-xl max-w-md w-full relative animate-fade border border-neutral-300 dark:border-neutral-700">
+      
+      <button id="modal-close" class="absolute right-4 top-4 text-2xl dark:text-white">✕</button>
+
+      <img id="modal-img" src="" class="rounded-lg w-full mb-4">
+      <h2 id="modal-title" class="text-2xl font-semibold mb-2 dark:text-white"></h2>
+      <p id="modal-desc" class="mb-3 opacity-80 dark:text-neutral-300"></p>
+      <p id="modal-price" class="text-xl font-semibold dark:text-white"></p>
+    </div>
+
+  </div>
+
+  <script src="theme.js"></script>
+  <script src="intro.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>
