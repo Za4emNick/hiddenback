@@ -754,7 +754,12 @@ const container = document.getElementById("items-container");
 const instagramBlock = document.getElementById("instagram-block");
 const layoutRoot = document.getElementById("layout-root");
 const introOverlay = document.getElementById("intro-overlay");
+const introPanel = document.querySelector(".intro-panel");
 const languageButtons = document.querySelectorAll(".intro-lang-btn");
+const introSequence = document.getElementById("intro-sequence");
+const typewriterTextEl = document.getElementById("typewriter-text");
+const walkerTrack = document.getElementById("walker-track");
+const walker = document.getElementById("walker");
 
 const modalOverlay = document.getElementById("modal-overlay");
 const modal = document.getElementById("modal");
@@ -789,6 +794,7 @@ const activeFilters = {
 let activeCategory = "hiddenback";
 let searchTerm = "";
 let introStarted = false;
+let selectedLanguage = document.documentElement.lang || "tr";
 
 const TAG_LABELS = {
   veg: { label: "Vejetaryen", color: "text-emerald-600" },
@@ -799,10 +805,16 @@ const TAG_LABELS = {
 
 const formatPrice = (price) => (typeof price === "number" ? `${price}₺` : "" );
 
-function startIntro() {
-  if (!introOverlay || introStarted) return;
+function setLanguage(lang) {
+  selectedLanguage = lang;
+  document.documentElement.lang = lang;
+  document.documentElement.dataset.lang = lang;
+  // подготовка под будущие языковые файлы
+}
 
-  introStarted = true;
+function startReveal() {
+  if (!introOverlay || introOverlay.classList.contains("intro-reveal")) return;
+
   introOverlay.classList.add("intro-reveal");
 
   const revealDuration = 3400;
@@ -818,6 +830,58 @@ function startIntro() {
   }, finishDelay);
 }
 
+function playTypewriter(text, targetEl, speed = 75) {
+  return new Promise((resolve) => {
+    if (!targetEl) return resolve();
+
+    targetEl.textContent = "";
+    const letters = Array.from(text);
+    let index = 0;
+
+    const tick = () => {
+      targetEl.textContent += letters[index] ?? "";
+      index += 1;
+      if (index < letters.length) {
+        setTimeout(tick, speed);
+      } else {
+        resolve();
+      }
+    };
+
+    tick();
+  });
+}
+
+function startWalkerSequence() {
+  if (!walker || !walkerTrack) {
+    startReveal();
+    return;
+  }
+
+  walker.classList.add("walking");
+  walkerTrack.classList.add("walking");
+  const fallback = setTimeout(() => startReveal(), 5200);
+
+  walker.addEventListener("animationend", () => {
+    clearTimeout(fallback);
+    startReveal();
+  }, { once: true });
+}
+
+async function launchIntroFlow(lang) {
+  if (!introOverlay || introStarted) return;
+
+  introStarted = true;
+  setLanguage(lang);
+
+  introPanel?.classList.add("intro-panel-hide");
+  introSequence?.classList.remove("hidden");
+  requestAnimationFrame(() => introSequence?.classList.add("active"));
+
+  await playTypewriter("h i d d e n b a c k", typewriterTextEl);
+  setTimeout(() => startWalkerSequence(), 250);
+}
+
 function initIntroOverlay() {
   if (!introOverlay) return;
 
@@ -826,8 +890,7 @@ function initIntroOverlay() {
   languageButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
       const lang = btn.dataset.lang || "tr";
-      document.documentElement.lang = lang;
-      startIntro();
+      launchIntroFlow(lang);
     });
   });
 }
