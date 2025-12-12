@@ -13,8 +13,10 @@ const GROUP_TITLES = {
     meat: "Et Yemekleri",
     chicken: "Tavuk Yemekleri"
   },
-  burger: {},
-  pizza: {},
+  burgerpizza: {
+    pizza: "Pizzalar",
+    burger: "Burgerler",
+  },
   tatli: {},
   kahve: {
     hot: "Sıcak Kahveler",
@@ -411,7 +413,8 @@ ITEMS.push(
 ITEMS.push(
   // ─────────── PİZZALAR ───────────
   {
-    cat: "pizza",
+    cat: "burgerpizza",
+    group: "pizza",
     title: "Pizza Margherita",
     price: 320,
     desc: "Mozarella peyniri ve pesto sos ile klasik Margherita.",
@@ -419,7 +422,8 @@ ITEMS.push(
     tags: ["veg", "cheese"]
   },
   {
-    cat: "pizza",
+    cat: "burgerpizza",
+    group: "pizza",
     title: "Pizza Karışık",
     price: 340,
     desc: "Mozarella, mısır, zeytin, biber, mantar, salam, sosis, sucuk.",
@@ -427,7 +431,8 @@ ITEMS.push(
     tags: ["cheese"]
   },
   {
-    cat: "pizza",
+    cat: "burgerpizza",
+    group: "pizza",
     title: "Pizza Dört Peynir",
     price: 340,
     desc: "Cheddar, gravyer, mozarella ve parmesan peyniri.",
@@ -435,7 +440,8 @@ ITEMS.push(
     tags: ["cheese", "veg"]
   },
   {
-    cat: "pizza",
+    cat: "burgerpizza",
+    group: "pizza",
     title: "Pizza BBQ Tavuk",
     price: 340,
     desc: "BBQ tavuk, zeytin, kapya biber ve mozarella.",
@@ -443,7 +449,8 @@ ITEMS.push(
     tags: ["cheese"]
   },
   {
-    cat: "pizza",
+    cat: "burgerpizza",
+    group: "pizza",
     title: "Pizza Vegeterian",
     price: 340,
     desc: "Izgara havuç, kabak, mantar, renkli biberler ve mozarella.",
@@ -453,7 +460,8 @@ ITEMS.push(
 
   // ─────────── BURGERLER ───────────
   {
-    cat: "burger",
+    cat: "burgerpizza",
+    group: "burger",
     title: "Klasik Burger",
     price: 340,
     desc: "Dana burger, karamelize soğan, cheddar, marul ve özel sos.",
@@ -461,7 +469,8 @@ ITEMS.push(
     tags: ["cheese"]
   },
   {
-    cat: "burger",
+    cat: "burgerpizza",
+    group: "burger",
     title: "Tavuk Burger",
     price: 320,
     desc: "Izgara tavuk, karamelize soğan, cheddar, marul ve burger sos.",
@@ -469,7 +478,8 @@ ITEMS.push(
     tags: []
   },
   {
-    cat: "burger",
+    cat: "burgerpizza",
+    group: "burger",
     title: "Üç Peynir Burger",
     price: 350,
     desc: "Burger köftesi, üç peynir sos, karamelize soğan ve özel sos.",
@@ -750,6 +760,7 @@ const instagramBlock = document.getElementById("instagram-block");
 const layoutRoot = document.getElementById("layout-root");
 
 const modalOverlay = document.getElementById("modal-overlay");
+const modal = document.getElementById("modal");
 const modalImg = document.getElementById("modal-img");
 const modalTitle = document.getElementById("modal-title");
 const modalDesc = document.getElementById("modal-desc");
@@ -759,10 +770,17 @@ const modalClose = document.getElementById("modal-close");
 
 const groupNav = document.getElementById("group-nav");
 const groupNavButtons = document.getElementById("group-nav-buttons");
+const mobileTopMenu = document.getElementById("mobile-top-menu");
+const menuArrow = document.getElementById("menu-arrow");
+const backToTopBtn = document.getElementById("back-to-top");
 
 const catButtons = document.querySelectorAll(".cat-btn");
 const filterChips = document.querySelectorAll(".filter-chip");
 const searchDesktop = document.getElementById("search-desktop");
+const mobileDrawerToggle = document.getElementById("mobile-drawer-toggle");
+const mobileDrawer = document.getElementById("mobile-drawer");
+const drawerOverlay = document.getElementById("drawer-overlay");
+const drawerClose = document.getElementById("drawer-close");
 
 const activeFilters = {
   veg: false,
@@ -788,6 +806,58 @@ function updateLayout(category) {
   layoutRoot?.classList.toggle("home-layout", isHome);
 }
 
+function isMobileView() {
+  return window.innerWidth < 1024;
+}
+
+function updateDrawerTrigger() {
+  if (!mobileDrawerToggle) return;
+
+  const shouldShow = isMobileView() && activeCategory === "hiddenback";
+  mobileDrawerToggle.classList.toggle("hidden", !shouldShow);
+}
+
+function updateMobileTopMenu(showMenu) {
+  if (!mobileTopMenu) return;
+
+  const shouldShow = showMenu && isMobileView();
+  mobileTopMenu.classList.toggle("hidden", !shouldShow);
+  if (shouldShow) {
+    updateMenuArrow();
+  }
+}
+
+function updateMenuArrow() {
+  if (!menuArrow || !menuSection) return;
+
+  const threshold = Math.max(0, menuSection.offsetTop - 80);
+  const pastMenu = window.scrollY > threshold;
+  menuArrow.textContent = pastMenu ? "↑" : "↓";
+}
+
+function updateBackToTop() {
+  if (!backToTopBtn || !menuSection) return;
+
+  const pastThreshold = window.scrollY > menuSection.offsetTop + 240;
+  const shouldShow = isMobileView() && activeCategory !== "hiddenback" && pastThreshold;
+  backToTopBtn.classList.toggle("hidden", !shouldShow);
+}
+
+function openDrawer() {
+  if (!mobileDrawer || !drawerOverlay) return;
+  if (!isMobileView()) return;
+
+  mobileDrawer.classList.add("open");
+  drawerOverlay.classList.remove("hidden");
+}
+
+function closeDrawer() {
+  if (!mobileDrawer || !drawerOverlay) return;
+
+  mobileDrawer.classList.remove("open");
+  drawerOverlay.classList.add("hidden");
+}
+
 function toggleSections(category) {
   const showMenu = category !== "hiddenback";
 
@@ -799,6 +869,9 @@ function toggleSections(category) {
   }
 
   updateLayout(category);
+  updateDrawerTrigger();
+  updateMobileTopMenu(showMenu);
+  updateBackToTop();
 }
 
 function syncFilterButtons(key, isActive) {
@@ -969,15 +1042,23 @@ function closeModal() {
   modalOverlay?.classList.add("hidden");
 }
 
+function setCategory(cat) {
+  if (!cat) return;
+
+  activeCategory = cat;
+  catButtons.forEach((b) => b.classList.toggle("active", b.dataset.cat === cat));
+  toggleSections(cat);
+  renderItems();
+  updateBackToTop();
+}
+
 catButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
     const { cat } = btn.dataset;
-    if (!cat) return;
-
-    activeCategory = cat;
-    catButtons.forEach((b) => b.classList.toggle("active", b === btn));
-    toggleSections(cat);
-    renderItems();
+    setCategory(cat);
+    if (isMobileView()) {
+      closeDrawer();
+    }
   });
 });
 
@@ -999,11 +1080,49 @@ if (searchDesktop) {
   });
 }
 
+mobileDrawerToggle?.addEventListener("click", () => {
+  if (activeCategory === "hiddenback") {
+    setCategory("kahvalti");
+    menuSection?.scrollIntoView({ behavior: "smooth" });
+  }
+  openDrawer();
+});
+
+drawerOverlay?.addEventListener("click", closeDrawer);
+drawerClose?.addEventListener("click", closeDrawer);
+
+window.addEventListener("resize", () => {
+  updateDrawerTrigger();
+  updateMobileTopMenu(activeCategory !== "hiddenback");
+  if (!isMobileView()) {
+    closeDrawer();
+  }
+  updateMenuArrow();
+  updateBackToTop();
+});
+
+window.addEventListener("scroll", () => {
+  updateMenuArrow();
+  updateBackToTop();
+});
+
 modalClose?.addEventListener("click", closeModal);
 modalOverlay?.addEventListener("click", (event) => {
-  if (event.target === modalOverlay) closeModal();
+  const clickedOutside = event.target === modalOverlay || (modal && !modal.contains(event.target));
+  if (clickedOutside) closeModal();
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !modalOverlay?.classList.contains("hidden")) {
+    closeModal();
+  }
+});
+
+backToTopBtn?.addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
 // Initial render
-toggleSections(activeCategory);
-renderItems();
+setCategory(activeCategory);
+updateMenuArrow();
+updateBackToTop();
