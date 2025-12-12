@@ -754,6 +754,8 @@ const container = document.getElementById("items-container");
 const instagramBlock = document.getElementById("instagram-block");
 const layoutRoot = document.getElementById("layout-root");
 const introOverlay = document.getElementById("intro-overlay");
+const introPanel = document.querySelector(".intro-panel");
+const languageButtons = document.querySelectorAll(".intro-lang-btn");
 
 const modalOverlay = document.getElementById("modal-overlay");
 const modal = document.getElementById("modal");
@@ -787,6 +789,8 @@ const activeFilters = {
 
 let activeCategory = "hiddenback";
 let searchTerm = "";
+let introStarted = false;
+let selectedLanguage = document.documentElement.lang || "tr";
 
 const TAG_LABELS = {
   veg: { label: "Vejetaryen", color: "text-emerald-600" },
@@ -797,26 +801,53 @@ const TAG_LABELS = {
 
 const formatPrice = (price) => (typeof price === "number" ? `${price}₺` : "" );
 
-function startIntro() {
-  if (!introOverlay) return;
+function setLanguage(lang) {
+  selectedLanguage = lang;
+  document.documentElement.lang = lang;
+  document.documentElement.dataset.lang = lang;
+  // подготовка под будущие языковые файлы
+}
 
-  document.body.classList.add("intro-active");
+function startReveal() {
+  if (!introOverlay || introOverlay.classList.contains("intro-reveal")) return;
 
-  const revealDelay = 6000;
-  const finishDelay = 10000;
+  introOverlay.classList.add("intro-reveal");
 
-  setTimeout(() => {
-    introOverlay.classList.add("intro-reveal");
-  }, revealDelay);
+  const revealDuration = 1400;
+  const finishDelay = revealDuration + 200;
 
   setTimeout(() => {
     introOverlay.classList.add("intro-finish");
     document.body.classList.remove("intro-active");
 
     setTimeout(() => {
-      introOverlay.remove();
-    }, 900);
+      introOverlay?.remove();
+    }, 600);
   }, finishDelay);
+}
+
+function launchIntroFlow(lang) {
+  if (!introOverlay || introStarted) return;
+
+  introStarted = true;
+  setLanguage(lang);
+
+  introPanel?.classList.add("intro-panel-hide");
+
+  requestAnimationFrame(() => startReveal());
+}
+
+function initIntroOverlay() {
+  if (!introOverlay) return;
+
+  document.body.classList.add("intro-active");
+
+  languageButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const lang = btn.dataset.lang || "tr";
+      launchIntroFlow(lang);
+    });
+  });
 }
 
 function updateLayout(category) {
@@ -1144,7 +1175,7 @@ window.addEventListener("keydown", (event) => {
   }
 });
 
-startIntro();
+initIntroOverlay();
 // Initial render
 setCategory(activeCategory);
 updateMenuArrow();
