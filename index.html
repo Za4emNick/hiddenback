@@ -168,48 +168,49 @@
     /* Mobile top menu layout */
     #mobile-top-menu {
       position: sticky;
-      top: 70px;
+      top: 60px;
       z-index: 30;
-      margin-left: -1rem;
-      margin-right: -1rem;
-      padding: 0.75rem 1rem 0.85rem;
-      background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.9) 70%, rgba(247,247,247,0.85) 100%);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid #e5e5e5;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+      margin-left: -1.25rem;
+      margin-right: -1.25rem;
+      padding: 0.95rem 1.25rem 1rem;
+      background: linear-gradient(180deg, rgba(17,17,17,0.82) 0%, rgba(17,17,17,0.72) 30%, rgba(17,17,17,0.55) 100%);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 14px 32px rgba(0,0,0,0.18);
     }
 
     #mobile-top-menu .pyramid-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 0.6rem 0.75rem;
+      grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+      gap: 0.65rem 0.75rem;
       justify-items: center;
       align-items: stretch;
     }
 
     #mobile-top-menu .cat-btn {
       width: 100%;
-      max-width: 190px;
+      max-width: 200px;
       text-align: center;
-      padding: 0.7rem 1rem;
-      border-radius: 14px;
-      border: 1.5px solid #111827;
-      background: #ffffff;
-      font-weight: 600;
-      color: #111827;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.04);
+      padding: 0.85rem 1.1rem;
+      border-radius: 15px;
+      border: 1.8px solid rgba(255,255,255,0.85);
+      background: rgba(255,255,255,0.96);
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      color: #0f172a;
+      box-shadow: 0 12px 26px rgba(0,0,0,0.14);
     }
 
     #mobile-top-menu .cat-btn:hover {
-      background: #f8f8f8;
-      transform: translateY(-2px);
+      background: #f1f5f9;
+      transform: translateY(-2px) scale(1.01);
     }
 
     #mobile-top-menu .cat-btn.active {
-      background: #111827;
+      background: #0f172a;
       color: #ffffff;
-      border-color: #111827;
-      box-shadow: 0 0 0 1px #111827, 0 10px 24px rgba(0,0,0,0.1);
+      border-color: #ffffff;
+      box-shadow: 0 0 0 1px #ffffff, 0 14px 30px rgba(0,0,0,0.18);
     }
 
     #mobile-top-menu .cat-btn:nth-child(odd) { transform: translateY(2px); }
@@ -262,8 +263,7 @@
           <button class="cat-btn active" data-cat="hiddenback">Hakkımızda</button>
           <button class="cat-btn" data-cat="kahvalti">Kahvaltı</button>
           <button class="cat-btn" data-cat="anayemek">Ana Yemekler</button>
-          <button class="cat-btn" data-cat="burger">Burger</button>
-          <button class="cat-btn" data-cat="pizza">Pizza</button>
+          <button class="cat-btn" data-cat="burgerpizza">Burger &amp; Pizza</button>
           <button class="cat-btn" data-cat="tatli">Tatlılar</button>
           <button class="cat-btn" data-cat="kahve">Kahveler</button>
           <button class="cat-btn" data-cat="icecek">İçecekler</button>
@@ -400,8 +400,7 @@
             <button class="cat-btn" data-cat="hiddenback">Hakkımızda</button>
             <button class="cat-btn" data-cat="kahvalti">Kahvaltı</button>
             <button class="cat-btn" data-cat="anayemek">Ana Yemekler</button>
-            <button class="cat-btn" data-cat="burger">Burger</button>
-            <button class="cat-btn" data-cat="pizza">Pizza</button>
+            <button class="cat-btn" data-cat="burgerpizza">Burger &amp; Pizza</button>
             <button class="cat-btn" data-cat="tatli">Tatlılar</button>
             <button class="cat-btn" data-cat="kahve">Kahveler</button>
             <button class="cat-btn" data-cat="icecek">İçecekler</button>
@@ -463,9 +462,9 @@
   <button
     id="mobile-menu-peek"
     type="button"
-    class="lg:hidden hidden fixed left-4 bottom-6 z-30 bg-black text-white px-3 py-2 rounded-full shadow-xl text-sm font-semibold tracking-wide"
+    class="lg:hidden hidden fixed right-4 bottom-6 z-40 bg-black/95 text-white px-3.5 py-2.5 rounded-full shadow-[0_12px_30px_rgba(0,0,0,0.28)] text-sm font-semibold tracking-wide border border-white/30"
   >
-    Menü
+    Menü ⇧
   </button>
 
   <!-- MOBILE FILTERS PANEL (появляется по кнопке, позже подключим) -->

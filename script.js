@@ -13,8 +13,7 @@ const GROUP_TITLES = {
     meat: "Et Yemekleri",
     chicken: "Tavuk Yemekleri"
   },
-  burger: {},
-  pizza: {},
+  burgerpizza: {},
   tatli: {},
   kahve: {
     hot: "Sıcak Kahveler",
@@ -411,7 +410,7 @@ ITEMS.push(
 ITEMS.push(
   // ─────────── PİZZALAR ───────────
   {
-    cat: "pizza",
+    cat: "burgerpizza",
     title: "Pizza Margherita",
     price: 320,
     desc: "Mozarella peyniri ve pesto sos ile klasik Margherita.",
@@ -419,7 +418,7 @@ ITEMS.push(
     tags: ["veg", "cheese"]
   },
   {
-    cat: "pizza",
+    cat: "burgerpizza",
     title: "Pizza Karışık",
     price: 340,
     desc: "Mozarella, mısır, zeytin, biber, mantar, salam, sosis, sucuk.",
@@ -427,7 +426,7 @@ ITEMS.push(
     tags: ["cheese"]
   },
   {
-    cat: "pizza",
+    cat: "burgerpizza",
     title: "Pizza Dört Peynir",
     price: 340,
     desc: "Cheddar, gravyer, mozarella ve parmesan peyniri.",
@@ -435,7 +434,7 @@ ITEMS.push(
     tags: ["cheese", "veg"]
   },
   {
-    cat: "pizza",
+    cat: "burgerpizza",
     title: "Pizza BBQ Tavuk",
     price: 340,
     desc: "BBQ tavuk, zeytin, kapya biber ve mozarella.",
@@ -443,7 +442,7 @@ ITEMS.push(
     tags: ["cheese"]
   },
   {
-    cat: "pizza",
+    cat: "burgerpizza",
     title: "Pizza Vegeterian",
     price: 340,
     desc: "Izgara havuç, kabak, mantar, renkli biberler ve mozarella.",
@@ -453,7 +452,7 @@ ITEMS.push(
 
   // ─────────── BURGERLER ───────────
   {
-    cat: "burger",
+    cat: "burgerpizza",
     title: "Klasik Burger",
     price: 340,
     desc: "Dana burger, karamelize soğan, cheddar, marul ve özel sos.",
@@ -461,7 +460,7 @@ ITEMS.push(
     tags: ["cheese"]
   },
   {
-    cat: "burger",
+    cat: "burgerpizza",
     title: "Tavuk Burger",
     price: 320,
     desc: "Izgara tavuk, karamelize soğan, cheddar, marul ve burger sos.",
@@ -469,7 +468,7 @@ ITEMS.push(
     tags: []
   },
   {
-    cat: "burger",
+    cat: "burgerpizza",
     title: "Üç Peynir Burger",
     price: 350,
     desc: "Burger köftesi, üç peynir sos, karamelize soğan ve özel sos.",
@@ -1024,6 +1023,16 @@ if (searchDesktop) {
     renderItems();
   });
 }
+
+mobileMenuPeek?.addEventListener("click", () => {
+  setCategory("kahvalti");
+  menuSection?.scrollIntoView({ behavior: "smooth" });
+});
+
+window.addEventListener("resize", () => {
+  updateMobileMenuBar();
+  updateMobilePeek();
+});
 
 mobileMenuPeek?.addEventListener("click", () => {
   setCategory("kahvalti");
