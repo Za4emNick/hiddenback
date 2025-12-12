@@ -769,6 +769,7 @@ const modalClose = document.getElementById("modal-close");
 
 const groupNav = document.getElementById("group-nav");
 const groupNavButtons = document.getElementById("group-nav-buttons");
+const mobileTopMenu = document.getElementById("mobile-top-menu");
 
 const catButtons = document.querySelectorAll(".cat-btn");
 const filterChips = document.querySelectorAll(".filter-chip");
@@ -809,8 +810,15 @@ function isMobileView() {
 function updateDrawerTrigger() {
   if (!mobileDrawerToggle) return;
 
-  const shouldShow = isMobileView();
+  const shouldShow = isMobileView() && activeCategory === "hiddenback";
   mobileDrawerToggle.classList.toggle("hidden", !shouldShow);
+}
+
+function updateMobileTopMenu(showMenu) {
+  if (!mobileTopMenu) return;
+
+  const shouldShow = showMenu && isMobileView();
+  mobileTopMenu.classList.toggle("hidden", !shouldShow);
 }
 
 function openDrawer() {
@@ -840,6 +848,7 @@ function toggleSections(category) {
 
   updateLayout(category);
   updateDrawerTrigger();
+  updateMobileTopMenu(showMenu);
 }
 
 function syncFilterButtons(key, isActive) {
@@ -1046,6 +1055,25 @@ if (searchDesktop) {
     renderItems();
   });
 }
+
+mobileDrawerToggle?.addEventListener("click", () => {
+  if (activeCategory === "hiddenback") {
+    setCategory("kahvalti");
+    menuSection?.scrollIntoView({ behavior: "smooth" });
+  }
+  openDrawer();
+});
+
+drawerOverlay?.addEventListener("click", closeDrawer);
+drawerClose?.addEventListener("click", closeDrawer);
+
+window.addEventListener("resize", () => {
+  updateDrawerTrigger();
+  updateMobileTopMenu(activeCategory !== "hiddenback");
+  if (!isMobileView()) {
+    closeDrawer();
+  }
+});
 
 mobileDrawerToggle?.addEventListener("click", () => {
   if (activeCategory === "hiddenback") {
