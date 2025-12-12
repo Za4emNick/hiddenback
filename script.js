@@ -753,6 +753,7 @@ const menuSection = document.getElementById("menu-section");
 const container = document.getElementById("items-container");
 const instagramBlock = document.getElementById("instagram-block");
 const layoutRoot = document.getElementById("layout-root");
+const introOverlay = document.getElementById("intro-overlay");
 
 const modalOverlay = document.getElementById("modal-overlay");
 const modal = document.getElementById("modal");
@@ -795,6 +796,28 @@ const TAG_LABELS = {
 };
 
 const formatPrice = (price) => (typeof price === "number" ? `${price}₺` : "" );
+
+function startIntro() {
+  if (!introOverlay) return;
+
+  document.body.classList.add("intro-active");
+
+  const revealDelay = 6000;
+  const finishDelay = 10000;
+
+  setTimeout(() => {
+    introOverlay.classList.add("intro-reveal");
+  }, revealDelay);
+
+  setTimeout(() => {
+    introOverlay.classList.add("intro-finish");
+    document.body.classList.remove("intro-active");
+
+    setTimeout(() => {
+      introOverlay.remove();
+    }, 900);
+  }, finishDelay);
+}
 
 function updateLayout(category) {
   const isHome = category === "hiddenback";
@@ -1121,6 +1144,7 @@ window.addEventListener("keydown", (event) => {
   }
 });
 
+startIntro();
 // Initial render
 setCategory(activeCategory);
 updateMenuArrow();

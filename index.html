@@ -35,6 +35,128 @@
       -webkit-font-smoothing: antialiased;
     }
 
+    /* Intro overlay */
+    body.intro-active {
+      overflow: hidden;
+    }
+
+    #intro-overlay {
+      position: fixed;
+      inset: 0;
+      --reveal-radius: 0%;
+      background: radial-gradient(circle at center, transparent 0%, transparent var(--reveal-radius), #050505 calc(var(--reveal-radius) + 1%), #050505 100%);
+      background-color: #050505;
+      color: #f5f5f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+      overflow: hidden;
+    }
+
+    #intro-overlay.intro-finish {
+      opacity: 0;
+      transform: scale(1.04);
+      pointer-events: none;
+    }
+
+    #intro-overlay.intro-reveal {
+      animation: introReveal 3.6s ease-in-out forwards;
+    }
+
+    #intro-overlay.intro-reveal .intro-logo {
+      animation: logoFade 2.4s ease-in forwards;
+      animation-delay: 0.3s;
+    }
+
+    .intro-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(14px, 3vw, 22px);
+      font-size: clamp(68px, 12vw, 120px);
+      letter-spacing: 0.16em;
+      font-weight: 600;
+      position: relative;
+    }
+
+    .intro-eyes {
+      display: flex;
+      gap: clamp(24px, 4vw, 46px);
+    }
+
+    .intro-eye {
+      opacity: 0;
+      display: inline-block;
+      animation: eyeBlink 3.5s ease forwards;
+    }
+
+    .intro-eye.left { animation-delay: 0.6s; }
+    .intro-eye.right { animation-delay: 1.2s; }
+
+    .intro-smile {
+      width: clamp(150px, 28vw, 240px);
+      height: auto;
+      stroke: currentColor;
+      stroke-width: 7;
+      fill: none;
+      stroke-linecap: round;
+      stroke-dasharray: 260;
+      stroke-dashoffset: 260;
+      animation: smileDraw 1.6s ease forwards;
+      animation-delay: 3.8s;
+    }
+
+    .intro-logo::after {
+      content: "";
+      width: 96px;
+      height: 96px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(1.08);
+      opacity: 0;
+      animation: haloFade 0.8s ease forwards;
+      animation-delay: 2s;
+    }
+
+    .intro-logo-wrapper {
+      position: relative;
+      display: inline-flex;
+    }
+
+    @keyframes eyeBlink {
+      0% { opacity: 0; transform: translateY(-10px) scale(0.8); }
+      55% { opacity: 1; transform: translateY(0) scale(1.08); }
+      75% { transform: translateY(6px) scale(0.94); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes smileDraw {
+      from { stroke-dashoffset: 260; opacity: 0.15; }
+      to { stroke-dashoffset: 0; opacity: 1; }
+    }
+
+    @keyframes introReveal {
+      0% { --reveal-radius: 0%; }
+      10% { --reveal-radius: 4%; }
+      50% { --reveal-radius: 16%; }
+      100% { --reveal-radius: 180%; }
+    }
+
+    @keyframes logoFade {
+      from { opacity: 1; transform: scale(1); }
+      to { opacity: 0; transform: scale(0.9); }
+    }
+
+    @keyframes haloFade {
+      from { opacity: 0; transform: translate(-50%, -50%) scale(0.96); }
+      to { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+    }
+
     .cat-btn {
       display: block;
       width: 100%;
@@ -269,6 +391,21 @@
 </head>
 
 <body class="bg-hb-bg text-hb-text font-sans pb-16 md:pb-6">
+
+  <!-- INTRO OVERLAY -->
+  <div id="intro-overlay" aria-hidden="true">
+    <div class="intro-logo-wrapper">
+      <div class="intro-logo">
+        <div class="intro-eyes">
+          <span class="intro-eye left">X</span>
+          <span class="intro-eye right">X</span>
+        </div>
+        <svg class="intro-smile" viewBox="0 0 120 70" role="presentation">
+          <path d="M15 25 C 35 55, 85 55, 105 25" />
+        </svg>
+      </div>
+    </div>
+  </div>
 
   <!-- HEADER -->
   <header class="bg-white border-b border-hb-border sticky top-0 z-20">
