@@ -222,6 +222,23 @@
       transition: opacity 0.2s ease;
     }
 
+    /* Ensure overlays are hidden even if utility classes fail to load */
+    #drawer-overlay,
+    #modal-overlay {
+      display: none;
+      pointer-events: none;
+    }
+
+    #drawer-overlay.is-open {
+      display: block;
+      pointer-events: auto;
+    }
+
+    #modal-overlay.is-open {
+      display: flex;
+      pointer-events: auto;
+    }
+
     #mobile-drawer-overlay.visible {
       opacity: 1;
       pointer-events: auto;

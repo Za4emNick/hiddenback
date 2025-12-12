@@ -808,6 +808,14 @@ const THEME_ICONS = {
 const LOGO_LIGHT_SRC = brandLogo?.dataset.logoLight || "logo-x-x.jpg";
 const LOGO_DARK_SRC = brandLogo?.dataset.logoDark || LOGO_LIGHT_SRC;
 
+const THEME_STORAGE_KEY = "hb-theme";
+const THEME_ICONS = {
+  light: `<svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M12 4.75a.75.75 0 0 1 .75-.75h.5a.75.75 0 0 1 .75.75V6a.75.75 0 0 1-.75.75h-.5A.75.75 0 0 1 12 6V4.75Zm0 13.25a.75.75 0 0 1 .75.75v1.25a.75.75 0 0 1-.75.75h-.5a.75.75 0 0 1-.75-.75V18a.75.75 0 0 1 .75-.75h.5Zm7-6.75a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-.75.75H18a.75.75 0 0 1-.75-.75v-.5A.75.75 0 0 1 18 11h1Zm-13 0a.75.75 0 0 1 .75.75v.5A.75.75 0 0 1 6 13H4.75A.75.75 0 0 1 4 12.25v-.5A.75.75 0 0 1 4.75 11H6Zm10.66-4.91a.75.75 0 0 1 1.06 0l.35.35a.75.75 0 0 1 0 1.06l-.88.88a.75.75 0 0 1-1.06-1.06l.53-.53ZM7.62 15.44a.75.75 0 0 1 1.06 0l.35.35a.75.75 0 0 1 0 1.06l-.88.88a.75.75 0 1 1-1.06-1.06l.53-.53Zm8.82 1.41a.75.75 0 0 1 0-1.06l.53-.53a.75.75 0 0 1 1.06 0l.88.88a.75.75 0 0 1-1.06 1.06l-.35-.35-.53.53a.75.75 0 0 1-1.06 0ZM8.97 7.44a.75.75 0 0 1 0-1.06l.53-.53a.75.75 0 0 1 1.06 0l.88.88A.75.75 0 1 1 10.38 8.8l-.35-.35-.53.53a.75.75 0 0 1-1.06 0ZM12 8.5A3.5 3.5 0 1 0 12 15.5 3.5 3.5 0 0 0 12 8.5Z" /></svg>`,
+  dark: `<svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M17.75 14.5a6.25 6.25 0 0 1-8.25-8.25c.15-.4-.24-.83-.64-.65A7.75 7.75 0 1 0 18.9 17.14c.18-.4-.25-.79-.65-.64a6.16 6.16 0 0 1-.5.2Z" /></svg>`
+};
+const LOGO_LIGHT_SRC = brandLogo?.dataset.logoLight || "logo-x-x.jpg";
+const LOGO_DARK_SRC = brandLogo?.dataset.logoDark || LOGO_LIGHT_SRC;
+
 const TAG_LABELS = {
   veg: { label: "Vejetaryen", color: "text-emerald-600" },
   spicy: { label: "Acılı", color: "text-red-600" },
@@ -895,6 +903,7 @@ function openDrawer() {
   if (!isMobileView()) return;
 
   mobileDrawer.classList.add("open");
+  drawerOverlay.classList.add("is-open");
   drawerOverlay.classList.remove("hidden");
 }
 
@@ -902,6 +911,7 @@ function closeDrawer() {
   if (!mobileDrawer || !drawerOverlay) return;
 
   mobileDrawer.classList.remove("open");
+  drawerOverlay.classList.remove("is-open");
   drawerOverlay.classList.add("hidden");
 }
 
@@ -1082,10 +1092,12 @@ function openModal(item) {
     modalExtra.classList.add("hidden");
   }
 
+  modalOverlay.classList.add("is-open");
   modalOverlay.classList.remove("hidden");
 }
 
 function closeModal() {
+  modalOverlay?.classList.remove("is-open");
   modalOverlay?.classList.add("hidden");
 }
 
