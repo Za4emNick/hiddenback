@@ -760,6 +760,7 @@ const instagramBlock = document.getElementById("instagram-block");
 const layoutRoot = document.getElementById("layout-root");
 
 const modalOverlay = document.getElementById("modal-overlay");
+const modal = document.getElementById("modal");
 const modalImg = document.getElementById("modal-img");
 const modalTitle = document.getElementById("modal-title");
 const modalDesc = document.getElementById("modal-desc");
@@ -1105,232 +1106,20 @@ window.addEventListener("scroll", () => {
   updateBackToTop();
 });
 
-mobileDrawerToggle?.addEventListener("click", () => {
-  if (activeCategory === "hiddenback") {
-    setCategory("kahvalti");
-    menuSection?.scrollIntoView({ behavior: "smooth" });
-  }
-  openDrawer();
-});
-
-drawerOverlay?.addEventListener("click", closeDrawer);
-drawerClose?.addEventListener("click", closeDrawer);
-
-window.addEventListener("resize", () => {
-  updateDrawerTrigger();
-  updateMobileTopMenu(activeCategory !== "hiddenback");
-  if (!isMobileView()) {
-    closeDrawer();
-  }
-  updateMenuArrow();
-});
-
-window.addEventListener("scroll", updateMenuArrow);
-
-mobileDrawerToggle?.addEventListener("click", () => {
-  if (activeCategory === "hiddenback") {
-    setCategory("kahvalti");
-    menuSection?.scrollIntoView({ behavior: "smooth" });
-  }
-  openDrawer();
-});
-
-drawerOverlay?.addEventListener("click", closeDrawer);
-drawerClose?.addEventListener("click", closeDrawer);
-
-window.addEventListener("resize", () => {
-  updateDrawerTrigger();
-  updateMobileTopMenu(activeCategory !== "hiddenback");
-  if (!isMobileView()) {
-    closeDrawer();
-  }
-});
-
-mobileDrawerToggle?.addEventListener("click", () => {
-  if (activeCategory === "hiddenback") {
-    setCategory("kahvalti");
-    menuSection?.scrollIntoView({ behavior: "smooth" });
-  }
-  openDrawer();
-});
-
-drawerOverlay?.addEventListener("click", closeDrawer);
-drawerClose?.addEventListener("click", closeDrawer);
-
-window.addEventListener("resize", () => {
-  updateDrawerTrigger();
-  updateMobileTopMenu(activeCategory !== "hiddenback");
-  if (!isMobileView()) {
-    closeDrawer();
-  }
-});
-
-mobileDrawerToggle?.addEventListener("click", () => {
-  if (activeCategory === "hiddenback") {
-    setCategory("kahvalti");
-    menuSection?.scrollIntoView({ behavior: "smooth" });
-  }
-  openDrawer();
-});
-
-drawerOverlay?.addEventListener("click", closeDrawer);
-drawerClose?.addEventListener("click", closeDrawer);
-
-window.addEventListener("resize", () => {
-  updateDrawerTrigger();
-  if (!isMobileView()) {
-    closeDrawer();
-  }
-});
-
-mobileMenuPeek?.addEventListener("click", () => {
-  setCategory("kahvalti");
-  menuSection?.scrollIntoView({ behavior: "smooth" });
-});
-
-window.addEventListener("resize", () => {
-  updateMobileMenuBar();
-  updateMobilePeek();
-});
-
-mobileMenuPeek?.addEventListener("click", () => {
-  setCategory("kahvalti");
-  menuSection?.scrollIntoView({ behavior: "smooth" });
-});
-
-window.addEventListener("resize", () => {
-  updateMobileMenuBar();
-  updateMobilePeek();
-});
-
-mobileMenuPeek?.addEventListener("click", () => {
-  setCategory("kahvalti");
-  menuSection?.scrollIntoView({ behavior: "smooth" });
-});
-
-window.addEventListener("resize", () => {
-  updateMobileMenuBar();
-  updateMobilePeek();
-});
-
-mobileMenuOpen?.addEventListener("click", openMobileDrawer);
-mobileMenuClose?.addEventListener("click", closeMobileDrawer);
-mobileOverlay?.addEventListener("click", closeMobileDrawer);
-mobileDrawerHandle?.addEventListener("click", openMobileDrawer);
-
-window.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && mobileDrawer?.classList.contains("open")) {
-    closeMobileDrawer();
-  }
-});
-
-window.addEventListener("resize", () => {
-  if (!isMobileView()) {
-    closeMobileDrawer();
-  }
-
-  setMobileHandleVisibility();
-});
-
-window.addEventListener("touchstart", (event) => {
-  touchStartX = event.touches[0]?.clientX || 0;
-});
-
-window.addEventListener("touchend", (event) => {
-  const endX = event.changedTouches[0]?.clientX || 0;
-  const delta = endX - touchStartX;
-
-  if (!isMobileView()) return;
-
-  if (delta > 80 && touchStartX < 40) {
-    openMobileDrawer();
-  } else if (delta < -80 && mobileDrawer?.classList.contains("open")) {
-    closeMobileDrawer();
-  }
-});
-
-mobileMenuOpen?.addEventListener("click", openMobileDrawer);
-mobileMenuClose?.addEventListener("click", closeMobileDrawer);
-mobileOverlay?.addEventListener("click", closeMobileDrawer);
-mobileDrawerHandle?.addEventListener("click", openMobileDrawer);
-
-window.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && mobileDrawer?.classList.contains("open")) {
-    closeMobileDrawer();
-  }
-});
-
-window.addEventListener("resize", () => {
-  if (!isMobileView()) {
-    closeMobileDrawer();
-  }
-
-  setMobileHandleVisibility();
-});
-
-window.addEventListener("touchstart", (event) => {
-  touchStartX = event.touches[0]?.clientX || 0;
-});
-
-window.addEventListener("touchend", (event) => {
-  const endX = event.changedTouches[0]?.clientX || 0;
-  const delta = endX - touchStartX;
-
-  if (!isMobileView()) return;
-
-  if (delta > 80 && touchStartX < 40) {
-    openMobileDrawer();
-  } else if (delta < -80 && mobileDrawer?.classList.contains("open")) {
-    closeMobileDrawer();
-  }
-});
-
-mobileMenuOpen?.addEventListener("click", openMobileDrawer);
-mobileMenuClose?.addEventListener("click", closeMobileDrawer);
-mobileOverlay?.addEventListener("click", closeMobileDrawer);
-mobileDrawerHandle?.addEventListener("click", openMobileDrawer);
-
-window.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && mobileDrawer?.classList.contains("open")) {
-    closeMobileDrawer();
-  }
-});
-
-window.addEventListener("resize", () => {
-  if (!isMobileView()) {
-    closeMobileDrawer();
-    mobileDrawerHandle?.classList.remove("hide");
-  }
-});
-
-window.addEventListener("touchstart", (event) => {
-  touchStartX = event.touches[0]?.clientX || 0;
-});
-
-window.addEventListener("touchend", (event) => {
-  const endX = event.changedTouches[0]?.clientX || 0;
-  const delta = endX - touchStartX;
-
-  if (!isMobileView()) return;
-
-  if (delta > 80 && touchStartX < 40) {
-    openMobileDrawer();
-  } else if (delta < -80 && mobileDrawer?.classList.contains("open")) {
-    closeMobileDrawer();
-  }
-});
-
 modalClose?.addEventListener("click", closeModal);
 modalOverlay?.addEventListener("click", (event) => {
-  if (event.target === modalOverlay) closeModal();
+  const clickedOutside = event.target === modalOverlay || (modal && !modal.contains(event.target));
+  if (clickedOutside) closeModal();
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !modalOverlay?.classList.contains("hidden")) {
+    closeModal();
+  }
 });
 
 backToTopBtn?.addEventListener("click", () => {
-  if (!menuSection) return;
-
-  const offset = 72;
-  const top = menuSection.offsetTop - offset;
-  window.scrollTo({ top, behavior: "smooth" });
+  window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
 // Initial render
