@@ -51,7 +51,7 @@
       align-items: center;
       justify-content: center;
       z-index: 50;
-      transition: opacity 0.8s ease, transform 0.8s ease;
+      transition: opacity 0.6s ease, transform 0.6s ease;
       overflow: hidden;
     }
 
@@ -62,99 +62,245 @@
     }
 
     #intro-overlay.intro-reveal {
-      animation: introReveal 3.6s ease-in-out forwards;
+      animation: introReveal 3.4s ease-in-out forwards;
     }
 
-    #intro-overlay.intro-reveal .intro-logo {
-      animation: logoFade 2.4s ease-in forwards;
-      animation-delay: 0.3s;
+    #intro-overlay.intro-reveal .intro-panel {
+      opacity: 0;
+      transform: translateY(10px);
     }
 
-    .intro-logo {
+    .intro-panel {
+      width: min(90%, 440px);
+      background: rgba(10, 10, 10, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: clamp(20px, 4vw, 28px);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: clamp(14px, 3vw, 22px);
-      font-size: clamp(68px, 12vw, 120px);
-      letter-spacing: 0.16em;
-      font-weight: 600;
-      position: relative;
+      gap: 12px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      backdrop-filter: blur(6px);
     }
 
-    .intro-eyes {
+    .intro-panel-hide {
+      opacity: 0;
+      transform: translateY(12px) scale(0.98);
+      pointer-events: none;
+    }
+
+    .intro-badge {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #a5a5a5;
+    }
+
+    .intro-title {
+      font-size: clamp(1.15rem, 3vw, 1.4rem);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .intro-desc {
+      color: #c5c5c5;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .intro-langs {
       display: flex;
-      gap: clamp(24px, 4vw, 46px);
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 6px 0 4px;
     }
 
-    .intro-eye {
-      opacity: 0;
-      display: inline-block;
-      animation: eyeBlink 3.5s ease forwards;
-    }
-
-    .intro-eye.left { animation-delay: 0.6s; }
-    .intro-eye.right { animation-delay: 1.2s; }
-
-    .intro-smile {
-      width: clamp(150px, 28vw, 240px);
-      height: auto;
-      stroke: currentColor;
-      stroke-width: 7;
-      fill: none;
-      stroke-linecap: round;
-      stroke-dasharray: 260;
-      stroke-dashoffset: 260;
-      animation: smileDraw 1.6s ease forwards;
-      animation-delay: 3.8s;
-    }
-
-    .intro-logo::after {
-      content: "";
-      width: 96px;
-      height: 96px;
+    .intro-lang-btn {
+      padding: 0.75rem 1.15rem;
       border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%) scale(1.08);
-      opacity: 0;
-      animation: haloFade 0.8s ease forwards;
-      animation-delay: 2s;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: #0f0f0f;
+      color: #f7f7f7;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease;
     }
 
-    .intro-logo-wrapper {
+    .intro-lang-btn:hover,
+    .intro-lang-btn:focus-visible {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.4);
+      background: #141414;
+      transform: translateY(-1px);
+    }
+
+    .intro-note {
+      font-size: 0.85rem;
+      color: #9ca3af;
+      letter-spacing: 0.01em;
+    }
+
+    /* Intro sequence */
+    #intro-sequence {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+      color: #f5f5f5;
+    }
+
+    #intro-sequence.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .typewriter-line {
+      font-family: "SFMono-Regular", "Consolas", "Monaco", "ui-monospace", "monospace";
+      font-size: clamp(1rem, 3vw, 1.15rem);
+      letter-spacing: 0.08em;
+      white-space: nowrap;
       position: relative;
       display: inline-flex;
+      align-items: center;
+      gap: 0.4em;
     }
 
-    @keyframes eyeBlink {
-      0% { opacity: 0; transform: translateY(-10px) scale(0.8); }
-      55% { opacity: 1; transform: translateY(0) scale(1.08); }
-      75% { transform: translateY(6px) scale(0.94); }
-      100% { opacity: 1; transform: translateY(0) scale(1); }
+    .typewriter-prefix {
+      opacity: 0.7;
     }
 
-    @keyframes smileDraw {
-      from { stroke-dashoffset: 260; opacity: 0.15; }
-      to { stroke-dashoffset: 0; opacity: 1; }
+    .typewriter-text {
+      min-height: 1.4em;
+    }
+
+    .typewriter-caret {
+      width: 0.55em;
+      height: 1.1em;
+      background: #f5f5f5;
+      display: inline-block;
+      animation: blinkCaret 1s step-end infinite;
+      margin-left: 0.05em;
+    }
+
+    @keyframes blinkCaret {
+      0%, 60% { opacity: 1; }
+      60.01%, 100% { opacity: 0; }
+    }
+
+    .walker-track {
+      position: relative;
+      width: min(520px, 92vw);
+      height: 140px;
+      overflow: hidden;
+    }
+
+    .walker-track::after {
+      content: "";
+      position: absolute;
+      inset: auto 10% 18px 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    }
+
+    .walker {
+      position: absolute;
+      bottom: 22px;
+      left: -90px;
+      width: 70px;
+      height: 120px;
+      color: #f5f5f5;
+      opacity: 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      transform: translateZ(0);
+    }
+
+    .walker.walking {
+      opacity: 1;
+      animation: walkerMove 4.6s linear forwards;
+    }
+
+    .walker-piece {
+      position: absolute;
+      background: currentColor;
+      border-radius: 999px;
+      transform-origin: center top;
+      filter: drop-shadow(0 0 8px rgba(0,0,0,0.3));
+    }
+
+    .walker-head {
+      width: 28px;
+      height: 28px;
+      top: 0;
+      left: 21px;
+      border-radius: 50%;
+    }
+
+    .walker-torso {
+      width: 26px;
+      height: 48px;
+      top: 26px;
+      left: 22px;
+      border-radius: 14px;
+      box-shadow: 0 18px 0 0 currentColor;
+    }
+
+    .walker-arm {
+      width: 12px;
+      height: 46px;
+      top: 32px;
+      left: 10px;
+      border-radius: 10px;
+      transform-origin: 50% 8px;
+    }
+
+    .walker-arm.right { left: 46px; }
+
+    .walker-leg {
+      width: 14px;
+      height: 54px;
+      top: 72px;
+      left: 18px;
+      border-radius: 12px;
+      transform-origin: 50% 10px;
+    }
+
+    .walker-leg.right { left: 38px; }
+
+    .walker.walking .walker-arm.left,
+    .walker.walking .walker-leg.left {
+      animation: limbSwing 0.9s ease-in-out infinite alternate;
+    }
+
+    .walker.walking .walker-arm.right,
+    .walker.walking .walker-leg.right {
+      animation: limbSwing 0.9s ease-in-out infinite alternate-reverse;
+    }
+
+    @keyframes limbSwing {
+      0% { transform: rotate(-18deg); }
+      100% { transform: rotate(18deg); }
+    }
+
+    @keyframes walkerMove {
+      from { transform: translateX(0); }
+      to { transform: translateX(calc(100% + 180px)); }
     }
 
     @keyframes introReveal {
       0% { --reveal-radius: 0%; }
-      10% { --reveal-radius: 4%; }
-      50% { --reveal-radius: 16%; }
+      25% { --reveal-radius: 8%; }
+      60% { --reveal-radius: 28%; }
       100% { --reveal-radius: 180%; }
-    }
-
-    @keyframes logoFade {
-      from { opacity: 1; transform: scale(1); }
-      to { opacity: 0; transform: scale(0.9); }
-    }
-
-    @keyframes haloFade {
-      from { opacity: 0; transform: translate(-50%, -50%) scale(0.96); }
-      to { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
     }
 
     .cat-btn {
@@ -394,15 +540,34 @@
 
   <!-- INTRO OVERLAY -->
   <div id="intro-overlay" aria-hidden="true">
-    <div class="intro-logo-wrapper">
-      <div class="intro-logo">
-        <div class="intro-eyes">
-          <span class="intro-eye left">X</span>
-          <span class="intro-eye right">X</span>
+    <div class="intro-panel">
+      <span class="intro-badge">hiddenback</span>
+      <p class="intro-title">Выберите язык</p>
+      <p class="intro-desc">Меню уже загружено — нажмите на нужную кнопку, и сайт плавно откроется из центра.</p>
+      <div class="intro-langs">
+        <button class="intro-lang-btn" type="button" data-lang="tr">Türkçe</button>
+        <button class="intro-lang-btn" type="button" data-lang="en">English</button>
+        <button class="intro-lang-btn" type="button" data-lang="ru">Русский</button>
+      </div>
+      <p class="intro-note">Никаких загрузок — просто эффект раскрывающегося круга.</p>
+    </div>
+
+    <div id="intro-sequence" class="hidden" aria-live="polite">
+      <div class="typewriter-line">
+        <span class="typewriter-prefix">Добро пожаловать в</span>
+        <span class="typewriter-text" id="typewriter-text"></span>
+        <span class="typewriter-caret" aria-hidden="true"></span>
+      </div>
+
+      <div class="walker-track" id="walker-track">
+        <div class="walker" id="walker">
+          <span class="walker-piece walker-head"></span>
+          <span class="walker-piece walker-torso"></span>
+          <span class="walker-piece walker-arm left"></span>
+          <span class="walker-piece walker-arm right"></span>
+          <span class="walker-piece walker-leg left"></span>
+          <span class="walker-piece walker-leg right"></span>
         </div>
-        <svg class="intro-smile" viewBox="0 0 120 70" role="presentation">
-          <path d="M15 25 C 35 55, 85 55, 105 25" />
-        </svg>
       </div>
     </div>
   </div>
