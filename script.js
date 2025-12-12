@@ -873,6 +873,30 @@ function initIntroOverlay() {
   });
 }
 
+function launchIntroFlow(lang) {
+  if (!introOverlay || introStarted) return;
+
+  introStarted = true;
+  setLanguage(lang);
+
+  introPanel?.classList.add("intro-panel-hide");
+
+  requestAnimationFrame(() => startReveal());
+}
+
+function initIntroOverlay() {
+  if (!introOverlay) return;
+
+  document.body.classList.add("intro-active");
+
+  languageButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const lang = btn.dataset.lang || "tr";
+      launchIntroFlow(lang);
+    });
+  });
+}
+
 function updateLayout(category) {
   const isHome = category === "hiddenback";
   layoutRoot?.classList.toggle("home-layout", isHome);
