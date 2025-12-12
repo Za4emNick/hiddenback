@@ -3,7 +3,7 @@
 // ─────────────────────────────
 
 const GROUP_TITLES = {
-  kahvalti: { toast: "Tostlar" },
+  kahvalti: { kahvalti: "Kahvaltı", toast: "Tostlar" },
   anayemek: {
     ekmekustu: "Ekmek Üstü",
     bowl: "Bowl",
@@ -665,17 +665,12 @@ ITEMS.push(
 ITEMS.push(
 
   // ─────────── SOĞUK İÇECEKLER ───────────
-  { cat: "icecek", group: "soda", title: "Coca Cola", price: 120, desc: "Zero ve şekersiz seçenekleri ile.", img: "images/items/cola.webp", tags: [] },
-  { cat: "icecek", group: "soda", title: "Fanta", price: 120, desc: "Gazlı portakallı içecek.", img: "images/items/fanta.webp", tags: [] },
-  { cat: "icecek", group: "soda", title: "Sprite", price: 120, desc: "Limon aromalı gazlı içecek.", img: "images/items/sprite.webp", tags: [] },
+  { cat: "icecek", group: "soda", title: "Kola · Fanta · Sprite", price: 120, desc: "Sprite - Kola - Fanta", img: "images/items/cola.webp", tags: [] },
   { cat: "icecek", group: "soda", title: "Fuse Tea", price: 120, desc: "Şeftali, limon, mango, ananas seçenekleri.", img: "images/items/fusetea.webp", tags: [] },
   { cat: "icecek", group: "soda", title: "Cappy", price: 120, desc: "Vişne, şeftali, karışık.", img: "images/items/cappy.webp", tags: [] },
   { cat: "icecek", group: "soda", title: "Burn", price: 160, desc: "Enerji içeceği.", img: "images/items/burn.webp", tags: [] },
   { cat: "icecek", group: "soda", title: "Cam Şişe Su", price: 50, desc: "Doğal kaynak suyu.", img: "images/items/water.webp", tags: [] },
-  { cat: "icecek", group: "soda", title: "Minera Maden Suyu", price: 100, desc: "Doğal maden suyu.", img: "images/items/minera.webp", tags: [] },
-  { cat: "icecek", group: "soda", title: "Minera Limon Aromalı", price: 100, desc: "Limon aromalı maden suyu.", img: "images/items/minera-lemon.webp", tags: [] },
-  { cat: "icecek", group: "soda", title: "Minera Elma Aromalı", price: 100, desc: "Elma aromalı maden suyu.", img: "images/items/minera-apple.webp", tags: [] },
-  { cat: "icecek", group: "soda", title: "Minera Karpuz Çilek", price: 100, desc: "Aromalı maden suyu.", img: "images/items/minera-fruit.webp", tags: [] },
+  { cat: "icecek", group: "soda", title: "Minera Maden Suyu", price: 100, desc: "Klasik, limon aromalı, elma aromalı, karpuz-çilek", img: "images/items/minera.webp", tags: [] },
   { cat: "icecek", group: "soda", title: "Churchill", price: 120, desc: "Limon, tuz ve soda karışımı.", img: "images/items/churchill.webp", tags: [] },
   { cat: "icecek", group: "soda", title: "Ayran", price: 90, desc: "Geleneksel ayran.", img: "images/items/ayran.webp", tags: [] },
   { cat: "icecek", group: "soda", title: "Taze Portakal Suyu", price: 210, desc: "Taze sıkılmış.", img: "images/items/orange-juice.webp", tags: [] },
@@ -760,6 +755,7 @@ const instagramBlock = document.getElementById("instagram-block");
 const layoutRoot = document.getElementById("layout-root");
 
 const modalOverlay = document.getElementById("modal-overlay");
+const modal = document.getElementById("modal");
 const modalImg = document.getElementById("modal-img");
 const modalTitle = document.getElementById("modal-title");
 const modalDesc = document.getElementById("modal-desc");
@@ -837,8 +833,8 @@ function updateMenuArrow() {
 function updateBackToTop() {
   if (!backToTopBtn || !menuSection) return;
 
-  const pastThreshold = window.scrollY > menuSection.offsetTop + 240;
-  const shouldShow = isMobileView() && activeCategory !== "hiddenback" && pastThreshold;
+  const pastThreshold = window.scrollY > menuSection.offsetTop + 120;
+  const shouldShow = activeCategory !== "hiddenback" && pastThreshold;
   backToTopBtn.classList.toggle("hidden", !shouldShow);
 }
 
@@ -1320,17 +1316,23 @@ window.addEventListener("touchend", (event) => {
   }
 });
 
+modal?.addEventListener("click", (event) => event.stopPropagation());
 modalClose?.addEventListener("click", closeModal);
 modalOverlay?.addEventListener("click", (event) => {
-  if (event.target === modalOverlay) closeModal();
+  if (!modal || modal.contains(event.target)) return;
+  closeModal();
 });
 
 backToTopBtn?.addEventListener("click", () => {
   if (!menuSection) return;
 
-  const offset = 72;
-  const top = menuSection.offsetTop - offset;
-  window.scrollTo({ top, behavior: "smooth" });
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+window.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !modalOverlay?.classList.contains("hidden")) {
+    closeModal();
+  }
 });
 
 // Initial render
