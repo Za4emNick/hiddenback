@@ -760,7 +760,6 @@ const instagramBlock = document.getElementById("instagram-block");
 const layoutRoot = document.getElementById("layout-root");
 
 const modalOverlay = document.getElementById("modal-overlay");
-const modal = document.getElementById("modal");
 const modalImg = document.getElementById("modal-img");
 const modalTitle = document.getElementById("modal-title");
 const modalDesc = document.getElementById("modal-desc");
@@ -781,14 +780,6 @@ const mobileDrawerToggle = document.getElementById("mobile-drawer-toggle");
 const mobileDrawer = document.getElementById("mobile-drawer");
 const drawerOverlay = document.getElementById("drawer-overlay");
 const drawerClose = document.getElementById("drawer-close");
-const themeToggleMobile = document.getElementById("theme-toggle");
-const themeToggleDesktop = document.getElementById("theme-toggle-desktop");
-const themeIconDesktop = document.getElementById("theme-toggle-icon");
-const themeLabelDesktop = document.getElementById("theme-toggle-label");
-const themeIconMobile = document.getElementById("theme-toggle-icon-mobile");
-const themeLabelMobile = document.getElementById("theme-toggle-label-mobile");
-const brandLogo = document.getElementById("brand-logo");
-const rootEl = document.documentElement;
 
 const activeFilters = {
   veg: false,
@@ -799,14 +790,6 @@ const activeFilters = {
 
 let activeCategory = "hiddenback";
 let searchTerm = "";
-
-const THEME_STORAGE_KEY = "hb-theme";
-const THEME_ICONS = {
-  light: `<svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M12 4.75a.75.75 0 0 1 .75-.75h.5a.75.75 0 0 1 .75.75V6a.75.75 0 0 1-.75.75h-.5A.75.75 0 0 1 12 6V4.75Zm0 13.25a.75.75 0 0 1 .75.75v1.25a.75.75 0 0 1-.75.75h-.5a.75.75 0 0 1-.75-.75V18a.75.75 0 0 1 .75-.75h.5Zm7-6.75a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-.75.75H18a.75.75 0 0 1-.75-.75v-.5A.75.75 0 0 1 18 11h1Zm-13 0a.75.75 0 0 1 .75.75v.5A.75.75 0 0 1 6 13H4.75A.75.75 0 0 1 4 12.25v-.5A.75.75 0 0 1 4.75 11H6Zm10.66-4.91a.75.75 0 0 1 1.06 0l.35.35a.75.75 0 0 1 0 1.06l-.88.88a.75.75 0 0 1-1.06-1.06l.53-.53ZM7.62 15.44a.75.75 0 0 1 1.06 0l.35.35a.75.75 0 0 1 0 1.06l-.88.88a.75.75 0 1 1-1.06-1.06l.53-.53Zm8.82 1.41a.75.75 0 0 1 0-1.06l.53-.53a.75.75 0 0 1 1.06 0l.88.88a.75.75 0 0 1-1.06 1.06l-.35-.35-.53.53a.75.75 0 0 1-1.06 0ZM8.97 7.44a.75.75 0 0 1 0-1.06l.53-.53a.75.75 0 0 1 1.06 0l.88.88A.75.75 0 1 1 10.38 8.8l-.35-.35-.53.53a.75.75 0 0 1-1.06 0ZM12 8.5A3.5 3.5 0 1 0 12 15.5 3.5 3.5 0 0 0 12 8.5Z" /></svg>`,
-  dark: `<svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M17.75 14.5a6.25 6.25 0 0 1-8.25-8.25c.15-.4-.24-.83-.64-.65A7.75 7.75 0 1 0 18.9 17.14c.18-.4-.25-.79-.65-.64a6.16 6.16 0 0 1-.5.2Z" /></svg>`
-};
-const LOGO_LIGHT_SRC = brandLogo?.dataset.logoLight || "logo-x-x.jpg";
-const LOGO_DARK_SRC = brandLogo?.dataset.logoDark || LOGO_LIGHT_SRC;
 
 const TAG_LABELS = {
   veg: { label: "Vejetaryen", color: "text-emerald-600" },
@@ -859,43 +842,11 @@ function updateBackToTop() {
   backToTopBtn.classList.toggle("hidden", !shouldShow);
 }
 
-function updateThemeButtonState(isDark) {
-  const icon = isDark ? THEME_ICONS.light : THEME_ICONS.dark;
-  const labelDesktop = isDark ? "Açık tema" : "Koyu tema";
-  const labelMobile = isDark ? "Açık" : "Koyu";
-
-  if (themeIconDesktop) themeIconDesktop.innerHTML = icon;
-  if (themeLabelDesktop) themeLabelDesktop.textContent = labelDesktop;
-  if (themeIconMobile) themeIconMobile.innerHTML = icon;
-  if (themeLabelMobile) themeLabelMobile.textContent = labelMobile;
-}
-
-function updateBrandLogo(isDark) {
-  if (brandLogo) {
-    brandLogo.src = isDark ? LOGO_DARK_SRC : LOGO_LIGHT_SRC;
-  }
-}
-
-function applyTheme(theme) {
-  const isDark = theme === "dark";
-  rootEl.classList.toggle("theme-dark", isDark);
-  rootEl.classList.toggle("theme-light", !isDark);
-  updateThemeButtonState(isDark);
-  updateBrandLogo(isDark);
-  localStorage.setItem(THEME_STORAGE_KEY, theme);
-}
-
-function toggleTheme() {
-  const isDark = rootEl.classList.contains("theme-dark");
-  applyTheme(isDark ? "light" : "dark");
-}
-
 function openDrawer() {
   if (!mobileDrawer || !drawerOverlay) return;
   if (!isMobileView()) return;
 
   mobileDrawer.classList.add("open");
-  drawerOverlay.classList.add("is-open");
   drawerOverlay.classList.remove("hidden");
 }
 
@@ -903,7 +854,6 @@ function closeDrawer() {
   if (!mobileDrawer || !drawerOverlay) return;
 
   mobileDrawer.classList.remove("open");
-  drawerOverlay.classList.remove("is-open");
   drawerOverlay.classList.add("hidden");
 }
 
@@ -1084,12 +1034,10 @@ function openModal(item) {
     modalExtra.classList.add("hidden");
   }
 
-  modalOverlay.classList.add("is-open");
   modalOverlay.classList.remove("hidden");
 }
 
 function closeModal() {
-  modalOverlay?.classList.remove("is-open");
   modalOverlay?.classList.add("hidden");
 }
 
@@ -1157,29 +1105,235 @@ window.addEventListener("scroll", () => {
   updateBackToTop();
 });
 
-modalClose?.addEventListener("click", closeModal);
-modalOverlay?.addEventListener("click", (event) => {
-  const clickedOutside = event.target === modalOverlay || (modal && !modal.contains(event.target));
-  if (clickedOutside) closeModal();
+mobileDrawerToggle?.addEventListener("click", () => {
+  if (activeCategory === "hiddenback") {
+    setCategory("kahvalti");
+    menuSection?.scrollIntoView({ behavior: "smooth" });
+  }
+  openDrawer();
 });
 
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && !modalOverlay?.classList.contains("hidden")) {
-    closeModal();
+drawerOverlay?.addEventListener("click", closeDrawer);
+drawerClose?.addEventListener("click", closeDrawer);
+
+window.addEventListener("resize", () => {
+  updateDrawerTrigger();
+  updateMobileTopMenu(activeCategory !== "hiddenback");
+  if (!isMobileView()) {
+    closeDrawer();
+  }
+  updateMenuArrow();
+});
+
+window.addEventListener("scroll", updateMenuArrow);
+
+mobileDrawerToggle?.addEventListener("click", () => {
+  if (activeCategory === "hiddenback") {
+    setCategory("kahvalti");
+    menuSection?.scrollIntoView({ behavior: "smooth" });
+  }
+  openDrawer();
+});
+
+drawerOverlay?.addEventListener("click", closeDrawer);
+drawerClose?.addEventListener("click", closeDrawer);
+
+window.addEventListener("resize", () => {
+  updateDrawerTrigger();
+  updateMobileTopMenu(activeCategory !== "hiddenback");
+  if (!isMobileView()) {
+    closeDrawer();
   }
 });
 
-backToTopBtn?.addEventListener("click", () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
+mobileDrawerToggle?.addEventListener("click", () => {
+  if (activeCategory === "hiddenback") {
+    setCategory("kahvalti");
+    menuSection?.scrollIntoView({ behavior: "smooth" });
+  }
+  openDrawer();
 });
 
-themeToggleMobile?.addEventListener("click", toggleTheme);
-themeToggleDesktop?.addEventListener("click", toggleTheme);
+drawerOverlay?.addEventListener("click", closeDrawer);
+drawerClose?.addEventListener("click", closeDrawer);
+
+window.addEventListener("resize", () => {
+  updateDrawerTrigger();
+  updateMobileTopMenu(activeCategory !== "hiddenback");
+  if (!isMobileView()) {
+    closeDrawer();
+  }
+});
+
+mobileDrawerToggle?.addEventListener("click", () => {
+  if (activeCategory === "hiddenback") {
+    setCategory("kahvalti");
+    menuSection?.scrollIntoView({ behavior: "smooth" });
+  }
+  openDrawer();
+});
+
+drawerOverlay?.addEventListener("click", closeDrawer);
+drawerClose?.addEventListener("click", closeDrawer);
+
+window.addEventListener("resize", () => {
+  updateDrawerTrigger();
+  if (!isMobileView()) {
+    closeDrawer();
+  }
+});
+
+mobileMenuPeek?.addEventListener("click", () => {
+  setCategory("kahvalti");
+  menuSection?.scrollIntoView({ behavior: "smooth" });
+});
+
+window.addEventListener("resize", () => {
+  updateMobileMenuBar();
+  updateMobilePeek();
+});
+
+mobileMenuPeek?.addEventListener("click", () => {
+  setCategory("kahvalti");
+  menuSection?.scrollIntoView({ behavior: "smooth" });
+});
+
+window.addEventListener("resize", () => {
+  updateMobileMenuBar();
+  updateMobilePeek();
+});
+
+mobileMenuPeek?.addEventListener("click", () => {
+  setCategory("kahvalti");
+  menuSection?.scrollIntoView({ behavior: "smooth" });
+});
+
+window.addEventListener("resize", () => {
+  updateMobileMenuBar();
+  updateMobilePeek();
+});
+
+mobileMenuOpen?.addEventListener("click", openMobileDrawer);
+mobileMenuClose?.addEventListener("click", closeMobileDrawer);
+mobileOverlay?.addEventListener("click", closeMobileDrawer);
+mobileDrawerHandle?.addEventListener("click", openMobileDrawer);
+
+window.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && mobileDrawer?.classList.contains("open")) {
+    closeMobileDrawer();
+  }
+});
+
+window.addEventListener("resize", () => {
+  if (!isMobileView()) {
+    closeMobileDrawer();
+  }
+
+  setMobileHandleVisibility();
+});
+
+window.addEventListener("touchstart", (event) => {
+  touchStartX = event.touches[0]?.clientX || 0;
+});
+
+window.addEventListener("touchend", (event) => {
+  const endX = event.changedTouches[0]?.clientX || 0;
+  const delta = endX - touchStartX;
+
+  if (!isMobileView()) return;
+
+  if (delta > 80 && touchStartX < 40) {
+    openMobileDrawer();
+  } else if (delta < -80 && mobileDrawer?.classList.contains("open")) {
+    closeMobileDrawer();
+  }
+});
+
+mobileMenuOpen?.addEventListener("click", openMobileDrawer);
+mobileMenuClose?.addEventListener("click", closeMobileDrawer);
+mobileOverlay?.addEventListener("click", closeMobileDrawer);
+mobileDrawerHandle?.addEventListener("click", openMobileDrawer);
+
+window.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && mobileDrawer?.classList.contains("open")) {
+    closeMobileDrawer();
+  }
+});
+
+window.addEventListener("resize", () => {
+  if (!isMobileView()) {
+    closeMobileDrawer();
+  }
+
+  setMobileHandleVisibility();
+});
+
+window.addEventListener("touchstart", (event) => {
+  touchStartX = event.touches[0]?.clientX || 0;
+});
+
+window.addEventListener("touchend", (event) => {
+  const endX = event.changedTouches[0]?.clientX || 0;
+  const delta = endX - touchStartX;
+
+  if (!isMobileView()) return;
+
+  if (delta > 80 && touchStartX < 40) {
+    openMobileDrawer();
+  } else if (delta < -80 && mobileDrawer?.classList.contains("open")) {
+    closeMobileDrawer();
+  }
+});
+
+mobileMenuOpen?.addEventListener("click", openMobileDrawer);
+mobileMenuClose?.addEventListener("click", closeMobileDrawer);
+mobileOverlay?.addEventListener("click", closeMobileDrawer);
+mobileDrawerHandle?.addEventListener("click", openMobileDrawer);
+
+window.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && mobileDrawer?.classList.contains("open")) {
+    closeMobileDrawer();
+  }
+});
+
+window.addEventListener("resize", () => {
+  if (!isMobileView()) {
+    closeMobileDrawer();
+    mobileDrawerHandle?.classList.remove("hide");
+  }
+});
+
+window.addEventListener("touchstart", (event) => {
+  touchStartX = event.touches[0]?.clientX || 0;
+});
+
+window.addEventListener("touchend", (event) => {
+  const endX = event.changedTouches[0]?.clientX || 0;
+  const delta = endX - touchStartX;
+
+  if (!isMobileView()) return;
+
+  if (delta > 80 && touchStartX < 40) {
+    openMobileDrawer();
+  } else if (delta < -80 && mobileDrawer?.classList.contains("open")) {
+    closeMobileDrawer();
+  }
+});
+
+modalClose?.addEventListener("click", closeModal);
+modalOverlay?.addEventListener("click", (event) => {
+  if (event.target === modalOverlay) closeModal();
+});
+
+backToTopBtn?.addEventListener("click", () => {
+  if (!menuSection) return;
+
+  const offset = 72;
+  const top = menuSection.offsetTop - offset;
+  window.scrollTo({ top, behavior: "smooth" });
+});
 
 // Initial render
 setCategory(activeCategory);
 updateMenuArrow();
 updateBackToTop();
-const initialIsDark = rootEl.classList.contains("theme-dark");
-updateThemeButtonState(initialIsDark);
-updateBrandLogo(initialIsDark);
