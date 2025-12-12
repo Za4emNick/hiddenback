@@ -1,5 +1,5 @@
 // ─────────────────────────────
-//  GROUP TITLES (вывод подзаголовков внутри категорий)
+//  GROUP TITLES (kategoriler içindeki alt başlıkların çıktısı)
 // ─────────────────────────────
 
 const GROUP_TITLES = {
@@ -806,7 +806,7 @@ function setLanguage(lang) {
   selectedLanguage = lang;
   document.documentElement.lang = lang;
   document.documentElement.dataset.lang = lang;
-  // подготовка под будущие языковые файлы
+  // gelecekteki dil dosyaları için hazırlık
 }
 
 function startReveal() {
@@ -822,7 +822,7 @@ function startReveal() {
 
 function runTypewriter(onComplete) {
   const target = introTyped;
-  const message = "добро пожаловать в   h i d d e n b a c k...";
+  const message = "hiddenback'e hoş geldiniz...";
 
   if (!target) {
     onComplete?.();
@@ -858,30 +858,8 @@ function launchIntroFlow(lang) {
   runTypewriter(() => {
     setTimeout(startReveal, 150);
   });
-}
 
-function initIntroOverlay() {
-  if (!introOverlay) return;
-
-  document.body.classList.add("intro-active");
-
-  languageButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const lang = btn.dataset.lang || "tr";
-      launchIntroFlow(lang);
-    });
-  });
-}
-
-function launchIntroFlow(lang) {
-  if (!introOverlay || introStarted) return;
-
-  introStarted = true;
-  setLanguage(lang);
-
-  introPanel?.classList.add("intro-panel-hide");
-
-  requestAnimationFrame(() => startReveal());
+  setTimeout(startReveal, 6000);
 }
 
 function initIntroOverlay() {
