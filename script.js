@@ -781,6 +781,13 @@ const mobileDrawerToggle = document.getElementById("mobile-drawer-toggle");
 const mobileDrawer = document.getElementById("mobile-drawer");
 const drawerOverlay = document.getElementById("drawer-overlay");
 const drawerClose = document.getElementById("drawer-close");
+const themeToggleMobile = document.getElementById("theme-toggle");
+const themeToggleDesktop = document.getElementById("theme-toggle-desktop");
+const themeIconDesktop = document.getElementById("theme-toggle-icon");
+const themeLabelDesktop = document.getElementById("theme-toggle-label");
+const themeIconMobile = document.getElementById("theme-toggle-icon-mobile");
+const themeLabelMobile = document.getElementById("theme-toggle-label-mobile");
+const rootEl = document.documentElement;
 
 const activeFilters = {
   veg: false,
@@ -791,6 +798,8 @@ const activeFilters = {
 
 let activeCategory = "hiddenback";
 let searchTerm = "";
+
+const THEME_STORAGE_KEY = "hb-theme";
 
 const TAG_LABELS = {
   veg: { label: "Vejetaryen", color: "text-emerald-600" },
@@ -841,6 +850,30 @@ function updateBackToTop() {
   const pastThreshold = window.scrollY > menuSection.offsetTop + 240;
   const shouldShow = isMobileView() && activeCategory !== "hiddenback" && pastThreshold;
   backToTopBtn.classList.toggle("hidden", !shouldShow);
+}
+
+function updateThemeButtonState(isDark) {
+  const icon = isDark ? "☀️" : "🌙";
+  const labelDesktop = isDark ? "Açık tema" : "Koyu tema";
+  const labelMobile = isDark ? "Açık" : "Koyu";
+
+  if (themeIconDesktop) themeIconDesktop.textContent = icon;
+  if (themeLabelDesktop) themeLabelDesktop.textContent = labelDesktop;
+  if (themeIconMobile) themeIconMobile.textContent = icon;
+  if (themeLabelMobile) themeLabelMobile.textContent = labelMobile;
+}
+
+function applyTheme(theme) {
+  const isDark = theme === "dark";
+  rootEl.classList.toggle("theme-dark", isDark);
+  rootEl.classList.toggle("theme-light", !isDark);
+  updateThemeButtonState(isDark);
+  localStorage.setItem(THEME_STORAGE_KEY, theme);
+}
+
+function toggleTheme() {
+  const isDark = rootEl.classList.contains("theme-dark");
+  applyTheme(isDark ? "light" : "dark");
 }
 
 function openDrawer() {
@@ -1122,7 +1155,11 @@ backToTopBtn?.addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
+themeToggleMobile?.addEventListener("click", toggleTheme);
+themeToggleDesktop?.addEventListener("click", toggleTheme);
+
 // Initial render
 setCategory(activeCategory);
 updateMenuArrow();
 updateBackToTop();
+updateThemeButtonState(rootEl.classList.contains("theme-dark"));
