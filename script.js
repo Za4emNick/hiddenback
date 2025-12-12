@@ -802,14 +802,21 @@ function startIntro() {
 
   document.body.classList.add("intro-active");
 
+  const revealDelay = 6000;
+  const finishDelay = 10000;
+
+  setTimeout(() => {
+    introOverlay.classList.add("intro-reveal");
+  }, revealDelay);
+
   setTimeout(() => {
     introOverlay.classList.add("intro-finish");
     document.body.classList.remove("intro-active");
 
     setTimeout(() => {
       introOverlay.remove();
-    }, 750);
-  }, 3300);
+    }, 900);
+  }, finishDelay);
 }
 
 function updateLayout(category) {
