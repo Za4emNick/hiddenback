@@ -13,8 +13,7 @@ const GROUP_TITLES = {
     meat: "Et Yemekleri",
     chicken: "Tavuk Yemekleri"
   },
-  burger: {},
-  pizza: {},
+  burgerpizza: {},
   tatli: {},
   kahve: {
     hot: "Sıcak Kahveler",
@@ -411,7 +410,7 @@ ITEMS.push(
 ITEMS.push(
   // ─────────── PİZZALAR ───────────
   {
-    cat: "pizza",
+    cat: "burgerpizza",
     title: "Pizza Margherita",
     price: 320,
     desc: "Mozarella peyniri ve pesto sos ile klasik Margherita.",
@@ -419,7 +418,7 @@ ITEMS.push(
     tags: ["veg", "cheese"]
   },
   {
-    cat: "pizza",
+    cat: "burgerpizza",
     title: "Pizza Karışık",
     price: 340,
     desc: "Mozarella, mısır, zeytin, biber, mantar, salam, sosis, sucuk.",
@@ -427,7 +426,7 @@ ITEMS.push(
     tags: ["cheese"]
   },
   {
-    cat: "pizza",
+    cat: "burgerpizza",
     title: "Pizza Dört Peynir",
     price: 340,
     desc: "Cheddar, gravyer, mozarella ve parmesan peyniri.",
@@ -435,7 +434,7 @@ ITEMS.push(
     tags: ["cheese", "veg"]
   },
   {
-    cat: "pizza",
+    cat: "burgerpizza",
     title: "Pizza BBQ Tavuk",
     price: 340,
     desc: "BBQ tavuk, zeytin, kapya biber ve mozarella.",
@@ -443,7 +442,7 @@ ITEMS.push(
     tags: ["cheese"]
   },
   {
-    cat: "pizza",
+    cat: "burgerpizza",
     title: "Pizza Vegeterian",
     price: 340,
     desc: "Izgara havuç, kabak, mantar, renkli biberler ve mozarella.",
@@ -453,7 +452,7 @@ ITEMS.push(
 
   // ─────────── BURGERLER ───────────
   {
-    cat: "burger",
+    cat: "burgerpizza",
     title: "Klasik Burger",
     price: 340,
     desc: "Dana burger, karamelize soğan, cheddar, marul ve özel sos.",
@@ -461,7 +460,7 @@ ITEMS.push(
     tags: ["cheese"]
   },
   {
-    cat: "burger",
+    cat: "burgerpizza",
     title: "Tavuk Burger",
     price: 320,
     desc: "Izgara tavuk, karamelize soğan, cheddar, marul ve burger sos.",
@@ -469,7 +468,7 @@ ITEMS.push(
     tags: []
   },
   {
-    cat: "burger",
+    cat: "burgerpizza",
     title: "Üç Peynir Burger",
     price: 350,
     desc: "Burger köftesi, üç peynir sos, karamelize soğan ve özel sos.",
@@ -763,6 +762,8 @@ const groupNavButtons = document.getElementById("group-nav-buttons");
 const catButtons = document.querySelectorAll(".cat-btn");
 const filterChips = document.querySelectorAll(".filter-chip");
 const searchDesktop = document.getElementById("search-desktop");
+const mobileTopMenu = document.getElementById("mobile-top-menu");
+const mobileMenuPeek = document.getElementById("mobile-menu-peek");
 
 const activeFilters = {
   veg: false,
@@ -788,6 +789,24 @@ function updateLayout(category) {
   layoutRoot?.classList.toggle("home-layout", isHome);
 }
 
+function isMobileView() {
+  return window.innerWidth < 1024;
+}
+
+function updateMobileMenuBar() {
+  if (!mobileTopMenu) return;
+
+  const shouldShow = isMobileView() && activeCategory !== "hiddenback";
+  mobileTopMenu.classList.toggle("hidden", !shouldShow);
+}
+
+function updateMobilePeek() {
+  if (!mobileMenuPeek) return;
+
+  const shouldShow = isMobileView() && activeCategory === "hiddenback";
+  mobileMenuPeek.classList.toggle("hidden", !shouldShow);
+}
+
 function toggleSections(category) {
   const showMenu = category !== "hiddenback";
 
@@ -799,6 +818,8 @@ function toggleSections(category) {
   }
 
   updateLayout(category);
+  updateMobileMenuBar();
+  updateMobilePeek();
 }
 
 function syncFilterButtons(key, isActive) {
@@ -969,15 +990,19 @@ function closeModal() {
   modalOverlay?.classList.add("hidden");
 }
 
+function setCategory(cat) {
+  if (!cat) return;
+
+  activeCategory = cat;
+  catButtons.forEach((b) => b.classList.toggle("active", b.dataset.cat === cat));
+  toggleSections(cat);
+  renderItems();
+}
+
 catButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
     const { cat } = btn.dataset;
-    if (!cat) return;
-
-    activeCategory = cat;
-    catButtons.forEach((b) => b.classList.toggle("active", b === btn));
-    toggleSections(cat);
-    renderItems();
+    setCategory(cat);
   });
 });
 
@@ -999,11 +1024,20 @@ if (searchDesktop) {
   });
 }
 
+mobileMenuPeek?.addEventListener("click", () => {
+  setCategory("kahvalti");
+  menuSection?.scrollIntoView({ behavior: "smooth" });
+});
+
+window.addEventListener("resize", () => {
+  updateMobileMenuBar();
+  updateMobilePeek();
+});
+
 modalClose?.addEventListener("click", closeModal);
 modalOverlay?.addEventListener("click", (event) => {
   if (event.target === modalOverlay) closeModal();
 });
 
 // Initial render
-toggleSections(activeCategory);
-renderItems();
+setCategory(activeCategory);
