@@ -251,6 +251,20 @@
       background: #fff;
       box-shadow: none;
     }
+
+    #mobile-top-menu .cat-btn.active {
+      background: #111827;
+      color: #ffffff;
+      border-color: #111827;
+      box-shadow: 0 0 0 1px #111827;
+    }
+
+    #back-to-top {
+      width: 2.25rem;
+      height: 2.25rem;
+      line-height: 1;
+      padding: 0.35rem;
+    }
   </style>
 </head>
 
@@ -496,6 +510,15 @@
   </button>
 
   <div id="drawer-overlay" class="hidden lg:hidden fixed inset-0 bg-black/30 backdrop-blur-sm z-30"></div>
+
+  <button
+    id="back-to-top"
+    type="button"
+    class="hidden lg:hidden fixed right-4 bottom-16 z-40 bg-black text-white rounded-full shadow-[0_12px_24px_rgba(0,0,0,0.2)] border border-white/70 text-sm flex items-center justify-center"
+    aria-label="Başa dön"
+  >
+    ↑
+  </button>
 
   <aside
     id="mobile-drawer"

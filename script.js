@@ -771,6 +771,7 @@ const groupNav = document.getElementById("group-nav");
 const groupNavButtons = document.getElementById("group-nav-buttons");
 const mobileTopMenu = document.getElementById("mobile-top-menu");
 const menuArrow = document.getElementById("menu-arrow");
+const backToTopBtn = document.getElementById("back-to-top");
 
 const catButtons = document.querySelectorAll(".cat-btn");
 const filterChips = document.querySelectorAll(".filter-chip");
@@ -833,6 +834,14 @@ function updateMenuArrow() {
   menuArrow.textContent = pastMenu ? "↑" : "↓";
 }
 
+function updateBackToTop() {
+  if (!backToTopBtn || !menuSection) return;
+
+  const pastThreshold = window.scrollY > menuSection.offsetTop + 240;
+  const shouldShow = isMobileView() && activeCategory !== "hiddenback" && pastThreshold;
+  backToTopBtn.classList.toggle("hidden", !shouldShow);
+}
+
 function openDrawer() {
   if (!mobileDrawer || !drawerOverlay) return;
   if (!isMobileView()) return;
@@ -861,6 +870,7 @@ function toggleSections(category) {
   updateLayout(category);
   updateDrawerTrigger();
   updateMobileTopMenu(showMenu);
+  updateBackToTop();
 }
 
 function syncFilterButtons(key, isActive) {
@@ -1038,6 +1048,7 @@ function setCategory(cat) {
   catButtons.forEach((b) => b.classList.toggle("active", b.dataset.cat === cat));
   toggleSections(cat);
   renderItems();
+  updateBackToTop();
 }
 
 catButtons.forEach((btn) => {
@@ -1067,6 +1078,32 @@ if (searchDesktop) {
     renderItems();
   });
 }
+
+mobileDrawerToggle?.addEventListener("click", () => {
+  if (activeCategory === "hiddenback") {
+    setCategory("kahvalti");
+    menuSection?.scrollIntoView({ behavior: "smooth" });
+  }
+  openDrawer();
+});
+
+drawerOverlay?.addEventListener("click", closeDrawer);
+drawerClose?.addEventListener("click", closeDrawer);
+
+window.addEventListener("resize", () => {
+  updateDrawerTrigger();
+  updateMobileTopMenu(activeCategory !== "hiddenback");
+  if (!isMobileView()) {
+    closeDrawer();
+  }
+  updateMenuArrow();
+  updateBackToTop();
+});
+
+window.addEventListener("scroll", () => {
+  updateMenuArrow();
+  updateBackToTop();
+});
 
 mobileDrawerToggle?.addEventListener("click", () => {
   if (activeCategory === "hiddenback") {
@@ -1288,6 +1325,15 @@ modalOverlay?.addEventListener("click", (event) => {
   if (event.target === modalOverlay) closeModal();
 });
 
+backToTopBtn?.addEventListener("click", () => {
+  if (!menuSection) return;
+
+  const offset = 72;
+  const top = menuSection.offsetTop - offset;
+  window.scrollTo({ top, behavior: "smooth" });
+});
+
 // Initial render
 setCategory(activeCategory);
 updateMenuArrow();
+updateBackToTop();
