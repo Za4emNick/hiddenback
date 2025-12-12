@@ -755,6 +755,7 @@ const instagramBlock = document.getElementById("instagram-block");
 const layoutRoot = document.getElementById("layout-root");
 
 const modalOverlay = document.getElementById("modal-overlay");
+const modal = document.getElementById("modal");
 const modalImg = document.getElementById("modal-img");
 const modalTitle = document.getElementById("modal-title");
 const modalDesc = document.getElementById("modal-desc");
@@ -832,8 +833,8 @@ function updateMenuArrow() {
 function updateBackToTop() {
   if (!backToTopBtn || !menuSection) return;
 
-  const pastThreshold = window.scrollY > menuSection.offsetTop + 240;
-  const shouldShow = isMobileView() && activeCategory !== "hiddenback" && pastThreshold;
+  const pastThreshold = window.scrollY > menuSection.offsetTop + 120;
+  const shouldShow = activeCategory !== "hiddenback" && pastThreshold;
   backToTopBtn.classList.toggle("hidden", !shouldShow);
 }
 
@@ -1315,9 +1316,11 @@ window.addEventListener("touchend", (event) => {
   }
 });
 
+modal?.addEventListener("click", (event) => event.stopPropagation());
 modalClose?.addEventListener("click", closeModal);
 modalOverlay?.addEventListener("click", (event) => {
-  if (event.target === modalOverlay) closeModal();
+  if (!modal || modal.contains(event.target)) return;
+  closeModal();
 });
 
 backToTopBtn?.addEventListener("click", () => {
