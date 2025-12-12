@@ -1,10 +1,18 @@
 <!doctype html>
-<html lang="tr">
+<html lang="tr" class="theme-light">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>HiddenBack — Menü</title>
   <meta name="description" content="HiddenBack Cafe — Yalova. Modern, temiz ve kullanışlı online menü.">
+
+  <script>
+    const savedTheme = localStorage.getItem('hb-theme');
+    const isDark = savedTheme === 'dark';
+    const rootEl = document.documentElement;
+    rootEl.classList.toggle('theme-dark', isDark);
+    rootEl.classList.toggle('theme-light', !isDark);
+  </script>
 
   <!-- Tailwind CDN + config -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -31,33 +39,71 @@
   </script>
 
   <style>
+    :root {
+      --hb-bg: #f7f7f7;
+      --hb-card: #ffffff;
+      --hb-border: #e5e5e5;
+      --hb-text: #111827;
+      --hb-muted: #6b7280;
+      --hb-accent: #111827;
+      --hb-subtle: #f3f4f6;
+    }
+
+    .theme-dark {
+      --hb-bg: #050505;
+      --hb-card: #0d0d0d;
+      --hb-border: #1f2937;
+      --hb-text: #f8fafc;
+      --hb-muted: #cbd5e1;
+      --hb-accent: #f8fafc;
+      --hb-subtle: #111827;
+    }
+
     body {
       -webkit-font-smoothing: antialiased;
+      background: var(--hb-bg);
+      color: var(--hb-text);
+      transition: background 0.2s ease, color 0.2s ease;
     }
+
+    h1, h2 {
+      letter-spacing: -0.01em;
+    }
+
+    .bg-hb-bg { background-color: var(--hb-bg) !important; }
+    .bg-white { background-color: var(--hb-card) !important; }
+    .bg-neutral-200 { background-color: #e5e7eb; }
+    .theme-dark .bg-neutral-200 { background-color: #111827 !important; }
+    .border-hb-border { border-color: var(--hb-border) !important; }
+    .text-hb-text { color: var(--hb-text) !important; }
+    .text-hb-muted { color: var(--hb-muted) !important; }
+    .shadow-theme { box-shadow: 0 14px 28px rgba(0, 0, 0, 0.18); }
+
+    .theme-dark .shadow-theme { box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35); }
 
     .cat-btn {
       display: block;
       width: 100%;
       padding: 0.85rem 1rem;
       border-radius: 999px;
-      border: 1px solid #e5e5e5;
+      border: 1px solid var(--hb-border);
       font-size: 1rem;
       text-align: left;
-      background: #ffffff;
+      background: var(--hb-card);
       transition: background 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
       white-space: normal;
       line-height: 1.4;
       min-height: 3.2rem;
     }
     .cat-btn:hover {
-      background: #f3f4f6;
+      background: var(--hb-subtle);
       transform: translateY(-1px);
     }
     .cat-btn.active {
-      background: #000000;
-      color: #ffffff;
-      border-color: #ffffff;
-      box-shadow: 0 0 0 1px #ffffff;
+      background: var(--hb-text);
+      color: var(--hb-card);
+      border-color: var(--hb-card);
+      box-shadow: 0 0 0 1px var(--hb-card);
     }
     .card-fade {
       animation: cardFade 0.25s ease-out;
@@ -70,8 +116,8 @@
     .filter-chip {
       padding: 0.3rem 0.7rem;
       border-radius: 999px;
-      border: 1px solid #e5e5e5;
-      background: #ffffff;
+      border: 1px solid var(--hb-border);
+      background: var(--hb-card);
       font-size: 0.8rem;
       display: inline-flex;
       align-items: center;
@@ -80,13 +126,90 @@
       transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
     }
     .filter-chip:hover {
-      background: #f3f4f6;
+      background: var(--hb-subtle);
       transform: translateY(-1px);
     }
     .filter-chip.active {
-      background: #111827;
-      color: #ffffff;
-      border-color: #111827;
+      background: var(--hb-text);
+      color: var(--hb-card);
+      border-color: var(--hb-text);
+    }
+
+    input[type="text"], input[type="search"] {
+      background: var(--hb-card);
+      color: var(--hb-text);
+      border-color: var(--hb-border);
+      transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+
+    input::placeholder { color: var(--hb-muted); }
+
+    .theme-dark input[type="text"],
+    .theme-dark input[type="search"] {
+      box-shadow: 0 0 0 1px #111827;
+    }
+
+    header {
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .theme-toggle {
+      border: 1px solid var(--hb-border);
+      background: var(--hb-card);
+      color: var(--hb-text);
+      padding: 0.55rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-flex;
+      gap: 0.45rem;
+      align-items: center;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .theme-toggle svg {
+      width: 1em;
+      height: 1em;
+    }
+
+    .theme-toggle:hover {
+      background: var(--hb-subtle);
+      transform: translateY(-1px);
+    }
+
+    #modal { background: var(--hb-card); border: 1px solid var(--hb-border); }
+    #modal-close { color: var(--hb-muted); }
+    #modal-close:hover { color: var(--hb-text); }
+    #modal-desc, #modal-extra { color: var(--hb-muted); }
+
+    #mobile-drawer-toggle {
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+    }
+
+    .theme-dark #mobile-drawer-toggle {
+      background: var(--hb-card);
+      color: var(--hb-text);
+      border-color: var(--hb-border);
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.32);
+    }
+
+    .theme-dark #back-to-top {
+      background: var(--hb-text);
+      color: var(--hb-card);
+      border-color: var(--hb-card);
+    }
+
+    footer a {
+      color: var(--hb-text);
+      font-weight: 700;
+      text-decoration: underline;
+      text-decoration-color: var(--hb-border);
+      transition: color 0.15s ease, text-decoration-color 0.15s ease;
+    }
+
+    footer a:hover {
+      color: var(--hb-accent);
+      text-decoration-color: var(--hb-text);
     }
 
     .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -97,6 +220,23 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.2s ease;
+    }
+
+    /* Ensure overlays are hidden even if utility classes fail to load */
+    #drawer-overlay,
+    #modal-overlay {
+      display: none;
+      pointer-events: none;
+    }
+
+    #drawer-overlay.is-open {
+      display: block;
+      pointer-events: auto;
+    }
+
+    #modal-overlay.is-open {
+      display: flex;
+      pointer-events: auto;
     }
 
     #mobile-drawer-overlay.visible {
@@ -274,15 +414,31 @@
   <header class="bg-white border-b border-hb-border sticky top-0 z-20">
     <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
       <div class="flex items-center gap-2">
-        <img src="logo-x-x.jpg" alt="HiddenBack Logo" class="w-9 h-9">
+        <img id="brand-logo"
+             src="logo-x-x.jpg"
+             data-logo-light="logo-x-x.jpg"
+             data-logo-dark="logo2.jpg"
+             alt="HiddenBack Logo"
+             class="w-9 h-9">
         <div class="flex flex-col leading-tight">
           <span class="font-semibold tracking-wide text-sm">h i d d e n b a c k</span>
           <span class="text-xs text-hb-muted">Yalova • Cafe & Dessert</span>
         </div>
       </div>
 
-      <div class="hidden sm:flex items-center gap-3 text-sm text-hb-muted">
-        <span>Menü</span>
+      <div class="flex items-center gap-2">
+        <button id="theme-toggle" type="button" class="theme-toggle sm:hidden">
+          <span id="theme-toggle-icon-mobile" aria-hidden="true" class="inline-flex"></span>
+          <span id="theme-toggle-label-mobile">Koyu</span>
+        </button>
+
+        <div class="hidden sm:flex items-center gap-3 text-sm text-hb-muted">
+          <span>Menü</span>
+          <button id="theme-toggle-desktop" type="button" class="theme-toggle">
+            <span id="theme-toggle-icon" aria-hidden="true" class="inline-flex"></span>
+            <span id="theme-toggle-label">Koyu tema</span>
+          </button>
+        </div>
       </div>
     </div>
   </header>
@@ -570,6 +726,11 @@
       </button>
     </div>
   </div>
+
+  <footer class="mt-10 pb-14 sm:pb-10 text-center text-[11px] tracking-[0.24em] text-hb-muted">
+    h i d d e n b a c k — Made by
+    <a href="https://bond-dev.vercel.app" target="_blank" rel="noreferrer">Dmitrii Bondarev</a>
+  </footer>
 
   <!-- MODAL -->
   <div id="modal-overlay"
