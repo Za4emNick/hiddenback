@@ -92,6 +92,50 @@
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+    /* Mobile drawer */
+    #mobile-drawer-overlay {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    #mobile-drawer-overlay.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #mobile-cat-drawer {
+      transform: translateY(100%);
+      transition: transform 0.25s ease;
+    }
+
+    #mobile-cat-drawer.open {
+      transform: translateY(0);
+    }
+
+    .cat-btn.dark {
+      background: #050505;
+      border-color: #1f2937;
+      color: #f8fafc;
+      font-weight: 600;
+    }
+
+    .cat-btn.dark:hover {
+      background: #0f0f0f;
+    }
+
+    .cat-btn.dark.active {
+      background: #0b0b0b;
+      color: #ffffff;
+      border-color: #ffffff;
+      box-shadow: inset 0 0 0 1px #ffffff;
+    }
+
+    #mobile-drawer-handle.hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+
     /* Layout switcher for Hakkımızda */
     #layout-root.home-layout {
       grid-template-columns: 1fr;
