@@ -770,6 +770,7 @@ const modalClose = document.getElementById("modal-close");
 const groupNav = document.getElementById("group-nav");
 const groupNavButtons = document.getElementById("group-nav-buttons");
 const mobileTopMenu = document.getElementById("mobile-top-menu");
+const menuArrow = document.getElementById("menu-arrow");
 
 const catButtons = document.querySelectorAll(".cat-btn");
 const filterChips = document.querySelectorAll(".filter-chip");
@@ -819,6 +820,17 @@ function updateMobileTopMenu(showMenu) {
 
   const shouldShow = showMenu && isMobileView();
   mobileTopMenu.classList.toggle("hidden", !shouldShow);
+  if (shouldShow) {
+    updateMenuArrow();
+  }
+}
+
+function updateMenuArrow() {
+  if (!menuArrow || !menuSection) return;
+
+  const threshold = Math.max(0, menuSection.offsetTop - 80);
+  const pastMenu = window.scrollY > threshold;
+  menuArrow.textContent = pastMenu ? "↑" : "↓";
 }
 
 function openDrawer() {
@@ -1073,6 +1085,28 @@ window.addEventListener("resize", () => {
   if (!isMobileView()) {
     closeDrawer();
   }
+  updateMenuArrow();
+});
+
+window.addEventListener("scroll", updateMenuArrow);
+
+mobileDrawerToggle?.addEventListener("click", () => {
+  if (activeCategory === "hiddenback") {
+    setCategory("kahvalti");
+    menuSection?.scrollIntoView({ behavior: "smooth" });
+  }
+  openDrawer();
+});
+
+drawerOverlay?.addEventListener("click", closeDrawer);
+drawerClose?.addEventListener("click", closeDrawer);
+
+window.addEventListener("resize", () => {
+  updateDrawerTrigger();
+  updateMobileTopMenu(activeCategory !== "hiddenback");
+  if (!isMobileView()) {
+    closeDrawer();
+  }
 });
 
 mobileDrawerToggle?.addEventListener("click", () => {
@@ -1256,3 +1290,4 @@ modalOverlay?.addEventListener("click", (event) => {
 
 // Initial render
 setCategory(activeCategory);
+updateMenuArrow();
