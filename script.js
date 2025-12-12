@@ -1075,6 +1075,180 @@ window.addEventListener("resize", () => {
   }
 });
 
+mobileDrawerToggle?.addEventListener("click", () => {
+  if (activeCategory === "hiddenback") {
+    setCategory("kahvalti");
+    menuSection?.scrollIntoView({ behavior: "smooth" });
+  }
+  openDrawer();
+});
+
+drawerOverlay?.addEventListener("click", closeDrawer);
+drawerClose?.addEventListener("click", closeDrawer);
+
+window.addEventListener("resize", () => {
+  updateDrawerTrigger();
+  updateMobileTopMenu(activeCategory !== "hiddenback");
+  if (!isMobileView()) {
+    closeDrawer();
+  }
+});
+
+mobileDrawerToggle?.addEventListener("click", () => {
+  if (activeCategory === "hiddenback") {
+    setCategory("kahvalti");
+    menuSection?.scrollIntoView({ behavior: "smooth" });
+  }
+  openDrawer();
+});
+
+drawerOverlay?.addEventListener("click", closeDrawer);
+drawerClose?.addEventListener("click", closeDrawer);
+
+window.addEventListener("resize", () => {
+  updateDrawerTrigger();
+  if (!isMobileView()) {
+    closeDrawer();
+  }
+});
+
+mobileMenuPeek?.addEventListener("click", () => {
+  setCategory("kahvalti");
+  menuSection?.scrollIntoView({ behavior: "smooth" });
+});
+
+window.addEventListener("resize", () => {
+  updateMobileMenuBar();
+  updateMobilePeek();
+});
+
+mobileMenuPeek?.addEventListener("click", () => {
+  setCategory("kahvalti");
+  menuSection?.scrollIntoView({ behavior: "smooth" });
+});
+
+window.addEventListener("resize", () => {
+  updateMobileMenuBar();
+  updateMobilePeek();
+});
+
+mobileMenuPeek?.addEventListener("click", () => {
+  setCategory("kahvalti");
+  menuSection?.scrollIntoView({ behavior: "smooth" });
+});
+
+window.addEventListener("resize", () => {
+  updateMobileMenuBar();
+  updateMobilePeek();
+});
+
+mobileMenuOpen?.addEventListener("click", openMobileDrawer);
+mobileMenuClose?.addEventListener("click", closeMobileDrawer);
+mobileOverlay?.addEventListener("click", closeMobileDrawer);
+mobileDrawerHandle?.addEventListener("click", openMobileDrawer);
+
+window.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && mobileDrawer?.classList.contains("open")) {
+    closeMobileDrawer();
+  }
+});
+
+window.addEventListener("resize", () => {
+  if (!isMobileView()) {
+    closeMobileDrawer();
+  }
+
+  setMobileHandleVisibility();
+});
+
+window.addEventListener("touchstart", (event) => {
+  touchStartX = event.touches[0]?.clientX || 0;
+});
+
+window.addEventListener("touchend", (event) => {
+  const endX = event.changedTouches[0]?.clientX || 0;
+  const delta = endX - touchStartX;
+
+  if (!isMobileView()) return;
+
+  if (delta > 80 && touchStartX < 40) {
+    openMobileDrawer();
+  } else if (delta < -80 && mobileDrawer?.classList.contains("open")) {
+    closeMobileDrawer();
+  }
+});
+
+mobileMenuOpen?.addEventListener("click", openMobileDrawer);
+mobileMenuClose?.addEventListener("click", closeMobileDrawer);
+mobileOverlay?.addEventListener("click", closeMobileDrawer);
+mobileDrawerHandle?.addEventListener("click", openMobileDrawer);
+
+window.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && mobileDrawer?.classList.contains("open")) {
+    closeMobileDrawer();
+  }
+});
+
+window.addEventListener("resize", () => {
+  if (!isMobileView()) {
+    closeMobileDrawer();
+  }
+
+  setMobileHandleVisibility();
+});
+
+window.addEventListener("touchstart", (event) => {
+  touchStartX = event.touches[0]?.clientX || 0;
+});
+
+window.addEventListener("touchend", (event) => {
+  const endX = event.changedTouches[0]?.clientX || 0;
+  const delta = endX - touchStartX;
+
+  if (!isMobileView()) return;
+
+  if (delta > 80 && touchStartX < 40) {
+    openMobileDrawer();
+  } else if (delta < -80 && mobileDrawer?.classList.contains("open")) {
+    closeMobileDrawer();
+  }
+});
+
+mobileMenuOpen?.addEventListener("click", openMobileDrawer);
+mobileMenuClose?.addEventListener("click", closeMobileDrawer);
+mobileOverlay?.addEventListener("click", closeMobileDrawer);
+mobileDrawerHandle?.addEventListener("click", openMobileDrawer);
+
+window.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && mobileDrawer?.classList.contains("open")) {
+    closeMobileDrawer();
+  }
+});
+
+window.addEventListener("resize", () => {
+  if (!isMobileView()) {
+    closeMobileDrawer();
+    mobileDrawerHandle?.classList.remove("hide");
+  }
+});
+
+window.addEventListener("touchstart", (event) => {
+  touchStartX = event.touches[0]?.clientX || 0;
+});
+
+window.addEventListener("touchend", (event) => {
+  const endX = event.changedTouches[0]?.clientX || 0;
+  const delta = endX - touchStartX;
+
+  if (!isMobileView()) return;
+
+  if (delta > 80 && touchStartX < 40) {
+    openMobileDrawer();
+  } else if (delta < -80 && mobileDrawer?.classList.contains("open")) {
+    closeMobileDrawer();
+  }
+});
+
 modalClose?.addEventListener("click", closeModal);
 modalOverlay?.addEventListener("click", (event) => {
   if (event.target === modalOverlay) closeModal();
