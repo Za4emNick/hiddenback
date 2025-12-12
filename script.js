@@ -831,10 +831,9 @@ function updateMenuArrow() {
 }
 
 function updateBackToTop() {
-  if (!backToTopBtn || !menuSection) return;
+  if (!backToTopBtn) return;
 
-  const pastThreshold = window.scrollY > menuSection.offsetTop + 120;
-  const shouldShow = activeCategory !== "hiddenback" && pastThreshold;
+  const shouldShow = window.scrollY > 200;
   backToTopBtn.classList.toggle("hidden", !shouldShow);
 }
 
@@ -1032,6 +1031,8 @@ function openModal(item) {
 
   modalOverlay.classList.remove("hidden");
 }
+
+const isModalOpen = () => modalOverlay && !modalOverlay.classList.contains("hidden");
 
 function closeModal() {
   modalOverlay?.classList.add("hidden");
@@ -1319,7 +1320,7 @@ window.addEventListener("touchend", (event) => {
 modal?.addEventListener("click", (event) => event.stopPropagation());
 modalClose?.addEventListener("click", closeModal);
 modalOverlay?.addEventListener("click", (event) => {
-  if (!modal || modal.contains(event.target)) return;
+  if (event.target !== modalOverlay) return;
   closeModal();
 });
 
@@ -1330,7 +1331,7 @@ backToTopBtn?.addEventListener("click", () => {
 });
 
 window.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && !modalOverlay?.classList.contains("hidden")) {
+  if (event.key === "Escape" && isModalOpen()) {
     closeModal();
   }
 });
