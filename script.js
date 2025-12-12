@@ -756,10 +756,6 @@ const layoutRoot = document.getElementById("layout-root");
 const introOverlay = document.getElementById("intro-overlay");
 const introPanel = document.querySelector(".intro-panel");
 const languageButtons = document.querySelectorAll(".intro-lang-btn");
-const introSequence = document.getElementById("intro-sequence");
-const typewriterTextEl = document.getElementById("typewriter-text");
-const walkerTrack = document.getElementById("walker-track");
-const walker = document.getElementById("walker");
 
 const modalOverlay = document.getElementById("modal-overlay");
 const modal = document.getElementById("modal");
@@ -817,8 +813,8 @@ function startReveal() {
 
   introOverlay.classList.add("intro-reveal");
 
-  const revealDuration = 3400;
-  const finishDelay = revealDuration + 500;
+  const revealDuration = 1400;
+  const finishDelay = revealDuration + 200;
 
   setTimeout(() => {
     introOverlay.classList.add("intro-finish");
@@ -826,60 +822,19 @@ function startReveal() {
 
     setTimeout(() => {
       introOverlay?.remove();
-    }, 750);
+    }, 600);
   }, finishDelay);
 }
 
-function playTypewriter(text, targetEl, speed = 75) {
-  return new Promise((resolve) => {
-    if (!targetEl) return resolve();
-
-    targetEl.textContent = "";
-    const letters = Array.from(text);
-    let index = 0;
-
-    const tick = () => {
-      targetEl.textContent += letters[index] ?? "";
-      index += 1;
-      if (index < letters.length) {
-        setTimeout(tick, speed);
-      } else {
-        resolve();
-      }
-    };
-
-    tick();
-  });
-}
-
-function startWalkerSequence() {
-  if (!walker || !walkerTrack) {
-    startReveal();
-    return;
-  }
-
-  walker.classList.add("walking");
-  walkerTrack.classList.add("walking");
-  const fallback = setTimeout(() => startReveal(), 5200);
-
-  walker.addEventListener("animationend", () => {
-    clearTimeout(fallback);
-    startReveal();
-  }, { once: true });
-}
-
-async function launchIntroFlow(lang) {
+function launchIntroFlow(lang) {
   if (!introOverlay || introStarted) return;
 
   introStarted = true;
   setLanguage(lang);
 
   introPanel?.classList.add("intro-panel-hide");
-  introSequence?.classList.remove("hidden");
-  requestAnimationFrame(() => introSequence?.classList.add("active"));
 
-  await playTypewriter("h i d d e n b a c k", typewriterTextEl);
-  setTimeout(() => startWalkerSequence(), 250);
+  requestAnimationFrame(() => startReveal());
 }
 
 function initIntroOverlay() {
