@@ -1088,6 +1088,25 @@ drawerClose?.addEventListener("click", closeDrawer);
 
 window.addEventListener("resize", () => {
   updateDrawerTrigger();
+  updateMobileTopMenu(activeCategory !== "hiddenback");
+  if (!isMobileView()) {
+    closeDrawer();
+  }
+});
+
+mobileDrawerToggle?.addEventListener("click", () => {
+  if (activeCategory === "hiddenback") {
+    setCategory("kahvalti");
+    menuSection?.scrollIntoView({ behavior: "smooth" });
+  }
+  openDrawer();
+});
+
+drawerOverlay?.addEventListener("click", closeDrawer);
+drawerClose?.addEventListener("click", closeDrawer);
+
+window.addEventListener("resize", () => {
+  updateDrawerTrigger();
   if (!isMobileView()) {
     closeDrawer();
   }
