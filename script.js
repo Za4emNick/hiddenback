@@ -773,8 +773,10 @@ const groupNavButtons = document.getElementById("group-nav-buttons");
 const catButtons = document.querySelectorAll(".cat-btn");
 const filterChips = document.querySelectorAll(".filter-chip");
 const searchDesktop = document.getElementById("search-desktop");
-const mobileTopMenu = document.getElementById("mobile-top-menu");
-const mobileMenuPeek = document.getElementById("mobile-menu-peek");
+const mobileDrawerToggle = document.getElementById("mobile-drawer-toggle");
+const mobileDrawer = document.getElementById("mobile-drawer");
+const drawerOverlay = document.getElementById("drawer-overlay");
+const drawerClose = document.getElementById("drawer-close");
 
 const activeFilters = {
   veg: false,
@@ -804,18 +806,26 @@ function isMobileView() {
   return window.innerWidth < 1024;
 }
 
-function updateMobileMenuBar() {
-  if (!mobileTopMenu) return;
+function updateDrawerTrigger() {
+  if (!mobileDrawerToggle) return;
 
-  const shouldShow = isMobileView() && activeCategory !== "hiddenback";
-  mobileTopMenu.classList.toggle("hidden", !shouldShow);
+  const shouldShow = isMobileView();
+  mobileDrawerToggle.classList.toggle("hidden", !shouldShow);
 }
 
-function updateMobilePeek() {
-  if (!mobileMenuPeek) return;
+function openDrawer() {
+  if (!mobileDrawer || !drawerOverlay) return;
+  if (!isMobileView()) return;
 
-  const shouldShow = isMobileView() && activeCategory === "hiddenback";
-  mobileMenuPeek.classList.toggle("hidden", !shouldShow);
+  mobileDrawer.classList.add("open");
+  drawerOverlay.classList.remove("hidden");
+}
+
+function closeDrawer() {
+  if (!mobileDrawer || !drawerOverlay) return;
+
+  mobileDrawer.classList.remove("open");
+  drawerOverlay.classList.add("hidden");
 }
 
 function toggleSections(category) {
@@ -829,8 +839,7 @@ function toggleSections(category) {
   }
 
   updateLayout(category);
-  updateMobileMenuBar();
-  updateMobilePeek();
+  updateDrawerTrigger();
 }
 
 function syncFilterButtons(key, isActive) {
@@ -1014,6 +1023,9 @@ catButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
     const { cat } = btn.dataset;
     setCategory(cat);
+    if (isMobileView()) {
+      closeDrawer();
+    }
   });
 });
 
@@ -1034,6 +1046,24 @@ if (searchDesktop) {
     renderItems();
   });
 }
+
+mobileDrawerToggle?.addEventListener("click", () => {
+  if (activeCategory === "hiddenback") {
+    setCategory("kahvalti");
+    menuSection?.scrollIntoView({ behavior: "smooth" });
+  }
+  openDrawer();
+});
+
+drawerOverlay?.addEventListener("click", closeDrawer);
+drawerClose?.addEventListener("click", closeDrawer);
+
+window.addEventListener("resize", () => {
+  updateDrawerTrigger();
+  if (!isMobileView()) {
+    closeDrawer();
+  }
+});
 
 mobileMenuPeek?.addEventListener("click", () => {
   setCategory("kahvalti");
