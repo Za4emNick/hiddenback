@@ -752,11 +752,19 @@ const hiddenbackSection = document.getElementById("hiddenback-section");
 const menuSection = document.getElementById("menu-section");
 const container = document.getElementById("items-container");
 const instagramBlock = document.getElementById("instagram-block");
+const gamesSection = document.getElementById("games-section");
 const layoutRoot = document.getElementById("layout-root");
 const introOverlay = document.getElementById("intro-overlay");
 const introSelection = document.getElementById("intro-selection");
 const introTyped = document.getElementById("intro-typed");
 const languageButtons = document.querySelectorAll(".intro-lang-btn");
+
+const snakeCanvas = document.getElementById("snake-canvas");
+const snakeRestart = document.getElementById("snake-restart");
+const snakeKeys = document.querySelectorAll(".snake-key");
+const snakeScoreEl = document.getElementById("snake-score");
+const snakeBestEl = document.getElementById("snake-best");
+const snakeStatusEl = document.getElementById("snake-status");
 
 const modalOverlay = document.getElementById("modal-overlay");
 const modal = document.getElementById("modal");
@@ -788,6 +796,9 @@ const activeFilters = {
   dessert: false,
 };
 
+const MENU_CATEGORIES = new Set(["kahvalti", "anayemek", "burgerpizza", "tatli", "kahve", "icecek"]);
+const GAME_CATEGORY = "games";
+
 let activeCategory = "hiddenback";
 let searchTerm = "";
 let introStarted = false;
@@ -801,6 +812,223 @@ const TAG_LABELS = {
 };
 
 const formatPrice = (price) => (typeof price === "number" ? `${price}₺` : "" );
+
+// ─────────────────────────────
+//  GAMES: SNAKE
+// ─────────────────────────────
+
+const snakeState = {
+  gridSize: 18,
+  tile: 20,
+  speed: 140,
+  playing: false,
+  snake: [],
+  direction: { x: 1, y: 0 },
+  nextDirection: { x: 1, y: 0 },
+  food: { x: 8, y: 8 },
+  score: 0,
+  best: 0,
+};
+
+let snakeCtx = null;
+let snakeLoop = null;
+let snakeReady = false;
+
+const DIR_MAP = {
+  up: { x: 0, y: -1 },
+  down: { x: 0, y: 1 },
+  left: { x: -1, y: 0 },
+  right: { x: 1, y: 0 },
+};
+
+function loadSnakeBest() {
+  const saved = Number(localStorage.getItem("hb_snake_best")) || 0;
+  snakeState.best = saved;
+  updateSnakeHUD();
+}
+
+function saveSnakeBest() {
+  localStorage.setItem("hb_snake_best", String(snakeState.best));
+}
+
+function updateSnakeHUD(status = "") {
+  if (snakeScoreEl) snakeScoreEl.textContent = snakeState.score;
+  if (snakeBestEl) snakeBestEl.textContent = snakeState.best;
+  if (snakeStatusEl && status) snakeStatusEl.textContent = status;
+}
+
+function resetSnakeState() {
+  snakeState.snake = [
+    { x: 6, y: 9 },
+    { x: 5, y: 9 },
+    { x: 4, y: 9 },
+  ];
+  snakeState.direction = { x: 1, y: 0 };
+  snakeState.nextDirection = { x: 1, y: 0 };
+  snakeState.food = { x: 10, y: 9 };
+  snakeState.score = 0;
+  snakeState.speed = 140;
+  updateSnakeHUD("Hazır");
+  drawSnake();
+}
+
+function clearSnakeLoop() {
+  if (snakeLoop) {
+    clearTimeout(snakeLoop);
+    snakeLoop = null;
+  }
+}
+
+function startSnakeGame() {
+  if (!snakeCtx) return;
+
+  clearSnakeLoop();
+  snakeState.playing = true;
+  resetSnakeState();
+  updateSnakeHUD("Başladı");
+  scheduleSnakeTick();
+}
+
+function stopSnakeGame(message = "Durdu") {
+  snakeState.playing = false;
+  clearSnakeLoop();
+  updateSnakeHUD(message);
+}
+
+function scheduleSnakeTick() {
+  clearSnakeLoop();
+  snakeLoop = setTimeout(stepSnake, snakeState.speed);
+}
+
+function stepSnake() {
+  if (!snakeState.playing) return;
+
+  snakeState.direction = snakeState.nextDirection;
+  const head = { ...snakeState.snake[0] };
+  head.x += snakeState.direction.x;
+  head.y += snakeState.direction.y;
+
+  if (hitWall(head) || hitSelf(head)) {
+    stopSnakeGame("Oyun bitti");
+    return;
+  }
+
+  snakeState.snake.unshift(head);
+
+  if (head.x === snakeState.food.x && head.y === snakeState.food.y) {
+    snakeState.score += 1;
+    snakeState.speed = Math.max(70, snakeState.speed - 3);
+    placeFood();
+    if (snakeState.score > snakeState.best) {
+      snakeState.best = snakeState.score;
+      saveSnakeBest();
+    }
+  } else {
+    snakeState.snake.pop();
+  }
+
+  updateSnakeHUD("Oynanıyor");
+  drawSnake();
+  scheduleSnakeTick();
+}
+
+function hitWall(point) {
+  return (
+    point.x < 0 ||
+    point.y < 0 ||
+    point.x >= snakeState.gridSize ||
+    point.y >= snakeState.gridSize
+  );
+}
+
+function hitSelf(point) {
+  return snakeState.snake.some((p) => p.x === point.x && p.y === point.y);
+}
+
+function placeFood() {
+  const openTiles = [];
+  for (let y = 0; y < snakeState.gridSize; y += 1) {
+    for (let x = 0; x < snakeState.gridSize; x += 1) {
+      if (!snakeState.snake.some((p) => p.x === x && p.y === y)) {
+        openTiles.push({ x, y });
+      }
+    }
+  }
+
+  if (!openTiles.length) return;
+  snakeState.food = openTiles[Math.floor(Math.random() * openTiles.length)];
+}
+
+function drawSnake() {
+  if (!snakeCtx || !snakeCanvas) return;
+
+  snakeCtx.fillStyle = "#050505";
+  snakeCtx.fillRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+
+  // Food
+  snakeCtx.fillStyle = "#f97316";
+  snakeCtx.fillRect(
+    snakeState.food.x * snakeState.tile,
+    snakeState.food.y * snakeState.tile,
+    snakeState.tile,
+    snakeState.tile
+  );
+
+  // Snake body
+  snakeCtx.fillStyle = "#10b981";
+  snakeState.snake.forEach((part, index) => {
+    const color = index === 0 ? "#22d3ee" : "#10b981";
+    snakeCtx.fillStyle = color;
+    snakeCtx.fillRect(
+      part.x * snakeState.tile,
+      part.y * snakeState.tile,
+      snakeState.tile - 1,
+      snakeState.tile - 1
+    );
+  });
+}
+
+function queueDirection(dirKey) {
+  const next = DIR_MAP[dirKey];
+  if (!next) return;
+
+  const { x, y } = next;
+  if (snakeState.direction.x === -x && snakeState.direction.y === -y) return;
+  snakeState.nextDirection = next;
+}
+
+function bindSnakeControls() {
+  if (snakeRestart) {
+    snakeRestart.addEventListener("click", () => {
+      startSnakeGame();
+    });
+  }
+
+  snakeKeys.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const dir = btn.dataset.dir;
+      queueDirection(dir);
+    });
+  });
+
+  window.addEventListener("keydown", (event) => {
+    const key = event.key.toLowerCase();
+    if (["w", "arrowup"].includes(key)) queueDirection("up");
+    if (["s", "arrowdown"].includes(key)) queueDirection("down");
+    if (["a", "arrowleft"].includes(key)) queueDirection("left");
+    if (["d", "arrowright"].includes(key)) queueDirection("right");
+  });
+}
+
+function initSnake() {
+  if (!snakeCanvas || snakeReady) return;
+
+  snakeCtx = snakeCanvas.getContext("2d");
+  snakeReady = true;
+  loadSnakeBest();
+  bindSnakeControls();
+  resetSnakeState();
+}
 
 function setLanguage(lang) {
   selectedLanguage = lang;
@@ -932,13 +1160,23 @@ function closeDrawer() {
 }
 
 function toggleSections(category) {
-  const showMenu = category !== "hiddenback";
+  const showHome = category === "hiddenback";
+  const showGame = category === GAME_CATEGORY;
+  const showMenu = MENU_CATEGORIES.has(category);
 
-  hiddenbackSection?.classList.toggle("hidden", showMenu);
-  instagramBlock?.classList.toggle("hidden", showMenu);
+  hiddenbackSection?.classList.toggle("hidden", !showHome);
+  instagramBlock?.classList.toggle("hidden", !showHome);
+  gamesSection?.classList.toggle("hidden", !showGame);
   menuSection?.classList.toggle("hidden", !showMenu);
+
   if (!showMenu) {
     renderGroupNav([]);
+  }
+
+  if (showGame) {
+    initSnake();
+  } else {
+    stopSnakeGame("Durdu");
   }
 
   updateLayout(category);
@@ -1043,6 +1281,11 @@ function createCard(item) {
 function renderItems() {
   if (!container) return;
 
+  if (!MENU_CATEGORIES.has(activeCategory)) {
+    container.innerHTML = "";
+    return;
+  }
+
   container.innerHTML = "";
   const groupTitles = GROUP_TITLES[activeCategory] || {};
   const addedGroup = new Set();
@@ -1123,7 +1366,12 @@ function setCategory(cat) {
   activeCategory = cat;
   catButtons.forEach((b) => b.classList.toggle("active", b.dataset.cat === cat));
   toggleSections(cat);
-  renderItems();
+
+  if (MENU_CATEGORIES.has(cat)) {
+    renderItems();
+  } else if (container) {
+    container.innerHTML = "";
+  }
   updateBackToTop();
 }
 
