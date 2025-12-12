@@ -754,7 +754,8 @@ const container = document.getElementById("items-container");
 const instagramBlock = document.getElementById("instagram-block");
 const layoutRoot = document.getElementById("layout-root");
 const introOverlay = document.getElementById("intro-overlay");
-const introPanel = document.querySelector(".intro-panel");
+const introSelection = document.getElementById("intro-selection");
+const introTyped = document.getElementById("intro-typed");
 const languageButtons = document.querySelectorAll(".intro-lang-btn");
 
 const modalOverlay = document.getElementById("modal-overlay");
@@ -812,18 +813,64 @@ function startReveal() {
   if (!introOverlay || introOverlay.classList.contains("intro-reveal")) return;
 
   introOverlay.classList.add("intro-reveal");
-
-  const revealDuration = 1400;
-  const finishDelay = revealDuration + 200;
+  document.body.classList.remove("intro-active");
 
   setTimeout(() => {
-    introOverlay.classList.add("intro-finish");
-    document.body.classList.remove("intro-active");
+    introOverlay?.remove();
+  }, 650);
+}
 
-    setTimeout(() => {
-      introOverlay?.remove();
-    }, 600);
-  }, finishDelay);
+function runTypewriter(onComplete) {
+  const target = introTyped;
+  const message = "добро пожаловать в   h i d d e n b a c k...";
+
+  if (!target) {
+    onComplete?.();
+    return;
+  }
+
+  target.classList.remove("hidden");
+  target.textContent = "";
+
+  let index = 0;
+  const typeStep = () => {
+    if (index <= message.length) {
+      target.textContent = message.slice(0, index);
+      index += 1;
+      setTimeout(typeStep, 70);
+    } else {
+      target.classList.remove("intro-type-cursor");
+      onComplete?.();
+    }
+  };
+
+  typeStep();
+}
+
+function launchIntroFlow(lang) {
+  if (!introOverlay || introStarted) return;
+
+  introStarted = true;
+  setLanguage(lang);
+
+  introSelection?.classList.add("hidden");
+
+  runTypewriter(() => {
+    setTimeout(startReveal, 150);
+  });
+}
+
+function initIntroOverlay() {
+  if (!introOverlay) return;
+
+  document.body.classList.add("intro-active");
+
+  languageButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const lang = btn.dataset.lang || "tr";
+      launchIntroFlow(lang);
+    });
+  });
 }
 
 function launchIntroFlow(lang) {

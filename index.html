@@ -49,23 +49,15 @@
       align-items: center;
       justify-content: center;
       z-index: 50;
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      transition: opacity 0.45s ease, background-color 0.45s ease, transform 0.45s ease;
       overflow: hidden;
     }
 
-    #intro-overlay.intro-finish {
-      opacity: 0;
-      transform: scale(1.02);
-      pointer-events: none;
-    }
-
     #intro-overlay.intro-reveal {
-      animation: fadeToWhite 1.4s ease forwards;
-    }
-
-    #intro-overlay.intro-reveal .intro-panel {
       opacity: 0;
-      transform: translateY(10px);
+      background-color: #f7f7f7;
+      transform: scale(1.01);
+      pointer-events: none;
     }
 
     .intro-panel {
@@ -136,17 +128,24 @@
       transform: translateY(-1px);
     }
 
-    .intro-note {
-      font-size: 0.85rem;
-      color: #9ca3af;
-      letter-spacing: 0.01em;
+    .intro-type {
+      font-family: "SFMono-Regular", "Consolas", "Menlo", monospace;
+      font-size: clamp(1rem, 3vw, 1.15rem);
+      letter-spacing: 0.08em;
+      color: #f5f5f5;
+      min-height: 2.4rem;
+      text-align: center;
+      white-space: pre;
     }
 
-    /* Intro sequence */
-    @keyframes fadeToWhite {
-      0% { background-color: #050505; }
-      50% { background-color: #f7f7f7; }
-      100% { background-color: #f7f7f7; opacity: 0; }
+    .intro-type-cursor::after {
+      content: "|";
+      animation: blink 1s step-start infinite;
+      margin-left: 4px;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
     }
 
     .cat-btn {
@@ -387,15 +386,17 @@
   <!-- INTRO OVERLAY -->
   <div id="intro-overlay" aria-hidden="true">
     <div class="intro-panel">
-      <span class="intro-badge">hiddenback</span>
-      <p class="intro-title">Выберите язык</p>
-      <p class="intro-desc">Меню уже загружено — выберите язык, и страница плавно проявится.</p>
-      <div class="intro-langs">
-        <button class="intro-lang-btn" type="button" data-lang="tr">Türkçe</button>
-        <button class="intro-lang-btn" type="button" data-lang="en">English</button>
-        <button class="intro-lang-btn" type="button" data-lang="ru">Русский</button>
+      <span class="intro-badge">h i d d e n b a c k</span>
+      <p class="intro-title">Выберите Язык</p>
+      <div id="intro-selection" class="w-full flex flex-col gap-3 items-center">
+        <p class="intro-desc">Турче Инглиш Русский</p>
+        <div class="intro-langs">
+          <button class="intro-lang-btn" type="button" data-lang="tr">Турче</button>
+          <button class="intro-lang-btn" type="button" data-lang="en">Инглиш</button>
+          <button class="intro-lang-btn" type="button" data-lang="ru">Русский</button>
+        </div>
       </div>
-      <p class="intro-note">Никаких загрузок — просто лёгкий переход из темноты.</p>
+      <p id="intro-typed" class="intro-type intro-type-cursor hidden"></p>
     </div>
   </div>
 
