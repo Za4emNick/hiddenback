@@ -754,6 +754,7 @@ const container = document.getElementById("items-container");
 const instagramBlock = document.getElementById("instagram-block");
 const layoutRoot = document.getElementById("layout-root");
 const introOverlay = document.getElementById("intro-overlay");
+const languageButtons = document.querySelectorAll(".intro-lang-btn");
 
 const modalOverlay = document.getElementById("modal-overlay");
 const modal = document.getElementById("modal");
@@ -787,6 +788,7 @@ const activeFilters = {
 
 let activeCategory = "hiddenback";
 let searchTerm = "";
+let introStarted = false;
 
 const TAG_LABELS = {
   veg: { label: "Vejetaryen", color: "text-emerald-600" },
@@ -798,25 +800,36 @@ const TAG_LABELS = {
 const formatPrice = (price) => (typeof price === "number" ? `${price}₺` : "" );
 
 function startIntro() {
-  if (!introOverlay) return;
+  if (!introOverlay || introStarted) return;
 
-  document.body.classList.add("intro-active");
+  introStarted = true;
+  introOverlay.classList.add("intro-reveal");
 
-  const revealDelay = 6000;
-  const finishDelay = 10000;
-
-  setTimeout(() => {
-    introOverlay.classList.add("intro-reveal");
-  }, revealDelay);
+  const revealDuration = 3400;
+  const finishDelay = revealDuration + 500;
 
   setTimeout(() => {
     introOverlay.classList.add("intro-finish");
     document.body.classList.remove("intro-active");
 
     setTimeout(() => {
-      introOverlay.remove();
-    }, 900);
+      introOverlay?.remove();
+    }, 750);
   }, finishDelay);
+}
+
+function initIntroOverlay() {
+  if (!introOverlay) return;
+
+  document.body.classList.add("intro-active");
+
+  languageButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const lang = btn.dataset.lang || "tr";
+      document.documentElement.lang = lang;
+      startIntro();
+    });
+  });
 }
 
 function updateLayout(category) {
@@ -1144,7 +1157,7 @@ window.addEventListener("keydown", (event) => {
   }
 });
 
-startIntro();
+initIntroOverlay();
 // Initial render
 setCategory(activeCategory);
 updateMenuArrow();
