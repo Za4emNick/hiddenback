@@ -792,6 +792,7 @@ const drawerClose = document.getElementById("drawer-close");
 const headerQuickButtons = document.querySelectorAll(".header-quick-btn");
 const mobileFooterButtons = document.querySelectorAll("#mobile-footer-nav .footer-nav-btn");
 const mobileFooterNav = document.getElementById("mobile-footer-nav");
+const gamesMenuFab = document.getElementById("games-menu-fab");
 
 const activeFilters = {
   veg: false,
@@ -1082,6 +1083,11 @@ function playTypeSound() {
 function runTypewriter(onComplete) {
   const target = introTyped;
   const message = "Welcome to   h i d d e n b a c k...";
+  const finalMarkup = `
+    <span class="intro-chip intro-chip-dark">Welcome to</span>
+    <span class="intro-chip intro-chip-light">h i d d e n b a c k...</span>
+    <img src="logo-x-x.jpg" alt="HiddenBack Logo" class="intro-logo" />
+  `;
 
   if (!target) {
     onComplete?.();
@@ -1101,6 +1107,7 @@ function runTypewriter(onComplete) {
       }
       setTimeout(typeStep, 95);
     } else {
+      target.innerHTML = finalMarkup;
       target.classList.remove("intro-type-cursor");
       onComplete?.();
     }
@@ -1208,8 +1215,7 @@ function goToMenuCategory() {
   searchTerm = "";
   if (searchDesktop) searchDesktop.value = "";
 
-  setCategory("kahvalti");
-  renderItems();
+  setCategory("kahvalti"); // this triggers renderItems() internally
   menuSection?.scrollIntoView({ behavior: "smooth" });
 }
 
@@ -1508,6 +1514,7 @@ headerQuickButtons.forEach((btn) => {
       gamesSection?.scrollIntoView({ behavior: "smooth" });
     } else if (destination === "menu") {
       goToMenuCategory();
+      if (isMobileView()) openDrawer();
     }
   });
 });
@@ -1524,6 +1531,7 @@ mobileFooterButtons.forEach((btn) => {
       gamesSection?.scrollIntoView({ behavior: "smooth" });
     } else if (destination === "menu") {
       goToMenuCategory();
+      if (isMobileView()) openDrawer();
     }
   });
 });
