@@ -789,8 +789,8 @@ const mobileDrawerToggle = document.getElementById("mobile-drawer-toggle");
 const mobileDrawer = document.getElementById("mobile-drawer");
 const drawerOverlay = document.getElementById("drawer-overlay");
 const drawerClose = document.getElementById("drawer-close");
-const gamesMenuFab = document.getElementById("games-menu-fab");
 const headerQuickButtons = document.querySelectorAll(".header-quick-btn");
+const mobileFooterButtons = document.querySelectorAll("#mobile-footer-nav .footer-nav-btn");
 
 const activeFilters = {
   veg: false,
@@ -1053,7 +1053,7 @@ function startReveal() {
 
 function runTypewriter(onComplete) {
   const target = introTyped;
-  const message = "Добро пожаловать в hiddenback...";
+  const message = "Добро пожаловать в h i d d e n b a c k";
 
   if (!target) {
     onComplete?.();
@@ -1431,11 +1431,23 @@ mobileDrawerToggle?.addEventListener("click", () => {
   openDrawer();
 });
 
-gamesMenuFab?.addEventListener("click", () => {
-  goToMenuCategory();
+headerQuickButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const destination = btn.dataset.nav;
+
+    if (destination === "hiddenback") {
+      setCategory("hiddenback");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (destination === "games") {
+      setCategory(GAME_CATEGORY);
+      gamesSection?.scrollIntoView({ behavior: "smooth" });
+    } else if (destination === "menu") {
+      goToMenuCategory();
+    }
+  });
 });
 
-headerQuickButtons.forEach((btn) => {
+mobileFooterButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
     const destination = btn.dataset.nav;
 
@@ -1456,7 +1468,7 @@ drawerClose?.addEventListener("click", closeDrawer);
 
 window.addEventListener("resize", () => {
   updateDrawerTrigger();
-  updateMobileTopMenu(activeCategory !== "hiddenback");
+  updateMobileTopMenu(MENU_CATEGORIES.has(activeCategory));
   if (!isMobileView()) {
     closeDrawer();
   }
