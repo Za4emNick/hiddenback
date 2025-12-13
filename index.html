@@ -128,6 +128,15 @@
       transform: translateY(-1px);
     }
 
+    .intro-lang-btn .intro-flag {
+      font-size: 1.05rem;
+      line-height: 1;
+    }
+
+    .intro-lang-btn span + span {
+      margin-left: 8px;
+    }
+
     .intro-type {
       font-family: "SFMono-Regular", "Consolas", "Menlo", monospace;
       font-size: clamp(1rem, 3vw, 1.15rem);
@@ -135,7 +144,9 @@
       color: #f5f5f5;
       min-height: 2.4rem;
       text-align: center;
+      max-width: min(520px, 90%);
       white-space: pre;
+      margin: 0 auto;
     }
 
     .intro-type-cursor::after {
@@ -420,6 +431,64 @@
       line-height: 1;
       padding: 0.35rem;
     }
+
+    .header-quick-links {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .header-quick-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.4rem 0.65rem;
+      border-radius: 999px;
+      border: 1px solid #e5e5e5;
+      background: #ffffff;
+      color: #111827;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+
+    .header-quick-btn:hover,
+    .header-quick-btn:focus-visible {
+      outline: none;
+      transform: translateY(-1px);
+      border-color: #d1d5db;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
+    }
+
+    .header-quick-btn .icon {
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    #games-menu-fab {
+      position: fixed;
+      right: 1rem;
+      bottom: 1rem;
+      z-index: 45;
+      padding: 0.75rem 1rem;
+      border-radius: 999px;
+      border: 1px solid #e5e5e5;
+      background: #ffffff;
+      color: #111827;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-weight: 700;
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    #games-menu-fab:hover,
+    #games-menu-fab:focus-visible {
+      outline: none;
+      transform: translateY(-1px);
+      box-shadow: 0 20px 36px rgba(0, 0, 0, 0.16);
+    }
   </style>
 </head>
 
@@ -427,19 +496,28 @@
 
   <!-- INTRO OVERLAY -->
   <div id="intro-overlay" aria-hidden="true">
-    <div class="intro-panel">
-      <span class="intro-badge">h i d d e n b a c k</span>
+    <div class="intro-panel" id="intro-panel">
+      <span class="intro-badge">Хиденбек</span>
       <p class="intro-title">Dili Seçin</p>
       <div id="intro-selection" class="w-full flex flex-col gap-3 items-center">
-        <p class="intro-desc">Türkçe İngilizce Rusça</p>
         <div class="intro-langs">
-          <button class="intro-lang-btn" type="button" data-lang="tr">Türkçe</button>
-          <button class="intro-lang-btn" type="button" data-lang="en">İngilizce</button>
-          <button class="intro-lang-btn" type="button" data-lang="ru">Rusça</button>
+          <button class="intro-lang-btn" type="button" data-lang="tr">
+            <span class="intro-flag" aria-hidden="true">🇹🇷</span>
+            <span>Türkçe</span>
+          </button>
+          <button class="intro-lang-btn" type="button" data-lang="en">
+            <span class="intro-flag" aria-hidden="true">🇬🇧</span>
+            <span>English</span>
+          </button>
+          <button class="intro-lang-btn" type="button" data-lang="ru">
+            <span class="intro-flag" aria-hidden="true">🇷🇺</span>
+            <span>Русский</span>
+          </button>
         </div>
       </div>
-      <p id="intro-typed" class="intro-type intro-type-cursor hidden"></p>
     </div>
+
+    <p id="intro-typed" class="intro-type intro-type-cursor hidden"></p>
   </div>
 
   <!-- HEADER -->
@@ -453,8 +531,21 @@
         </div>
       </div>
 
-      <div class="hidden sm:flex items-center gap-3 text-sm text-hb-muted">
-        <span>Menü</span>
+      <div class="hidden sm:flex items-center">
+        <div class="header-quick-links">
+          <button class="header-quick-btn" type="button" data-nav="hiddenback">
+            <span class="icon" aria-hidden="true">🏠</span>
+            <span>Hakkımızda</span>
+          </button>
+          <button class="header-quick-btn" type="button" data-nav="games">
+            <span class="icon" aria-hidden="true">🎮</span>
+            <span>Games</span>
+          </button>
+          <button class="header-quick-btn" type="button" data-nav="menu">
+            <span class="icon" aria-hidden="true">☰</span>
+            <span>Menü</span>
+          </button>
+        </div>
       </div>
     </div>
   </header>
@@ -736,6 +827,16 @@ u; skoru
       </section>
     </section>
   </main>
+
+  <button
+    id="games-menu-fab"
+    type="button"
+    class="hidden"
+    aria-label="Menüye dön"
+  >
+    <span class="icon" aria-hidden="true">☰</span>
+    <span>Menüye dön</span>
+  </button>
 
   <button
     id="mobile-drawer-toggle"
