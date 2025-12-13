@@ -755,6 +755,7 @@ const instagramBlock = document.getElementById("instagram-block");
 const gamesSection = document.getElementById("games-section");
 const layoutRoot = document.getElementById("layout-root");
 const introOverlay = document.getElementById("intro-overlay");
+const introPanel = document.getElementById("intro-panel");
 const introSelection = document.getElementById("intro-selection");
 const introTyped = document.getElementById("intro-typed");
 const languageButtons = document.querySelectorAll(".intro-lang-btn");
@@ -788,6 +789,8 @@ const mobileDrawerToggle = document.getElementById("mobile-drawer-toggle");
 const mobileDrawer = document.getElementById("mobile-drawer");
 const drawerOverlay = document.getElementById("drawer-overlay");
 const drawerClose = document.getElementById("drawer-close");
+const headerQuickButtons = document.querySelectorAll(".header-quick-btn");
+const mobileFooterButtons = document.querySelectorAll("#mobile-footer-nav .footer-nav-btn");
 
 const activeFilters = {
   veg: false,
@@ -1050,7 +1053,7 @@ function startReveal() {
 
 function runTypewriter(onComplete) {
   const target = introTyped;
-  const message = "hiddenback'e hoş geldiniz...";
+  const message = "Добро пожаловать в h i d d e n b a c k";
 
   if (!target) {
     onComplete?.();
@@ -1083,9 +1086,14 @@ function launchIntroFlow(lang) {
 
   introSelection?.classList.add("hidden");
 
-  runTypewriter(() => {
-    setTimeout(startReveal, 150);
-  });
+  introPanel?.classList.add("intro-panel-hide");
+  setTimeout(() => introPanel?.classList.add("hidden"), 260);
+
+  setTimeout(() => {
+    runTypewriter(() => {
+      setTimeout(startReveal, 150);
+    });
+  }, 200);
 
   setTimeout(startReveal, 6000);
 }
@@ -1135,6 +1143,11 @@ function updateMenuArrow() {
   const threshold = Math.max(0, menuSection.offsetTop - 80);
   const pastMenu = window.scrollY > threshold;
   menuArrow.textContent = pastMenu ? "↑" : "↓";
+}
+
+function goToMenuCategory() {
+  setCategory("kahvalti");
+  menuSection?.scrollIntoView({ behavior: "smooth" });
 }
 
 function updateBackToTop() {
@@ -1405,10 +1418,41 @@ if (searchDesktop) {
 
 mobileDrawerToggle?.addEventListener("click", () => {
   if (activeCategory === "hiddenback") {
-    setCategory("kahvalti");
-    menuSection?.scrollIntoView({ behavior: "smooth" });
+    goToMenuCategory();
   }
   openDrawer();
+});
+
+headerQuickButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const destination = btn.dataset.nav;
+
+    if (destination === "hiddenback") {
+      setCategory("hiddenback");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (destination === "games") {
+      setCategory(GAME_CATEGORY);
+      gamesSection?.scrollIntoView({ behavior: "smooth" });
+    } else if (destination === "menu") {
+      goToMenuCategory();
+    }
+  });
+});
+
+mobileFooterButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const destination = btn.dataset.nav;
+
+    if (destination === "hiddenback") {
+      setCategory("hiddenback");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (destination === "games") {
+      setCategory(GAME_CATEGORY);
+      gamesSection?.scrollIntoView({ behavior: "smooth" });
+    } else if (destination === "menu") {
+      goToMenuCategory();
+    }
+  });
 });
 
 drawerOverlay?.addEventListener("click", closeDrawer);
@@ -1416,7 +1460,7 @@ drawerClose?.addEventListener("click", closeDrawer);
 
 window.addEventListener("resize", () => {
   updateDrawerTrigger();
-  updateMobileTopMenu(activeCategory !== "hiddenback");
+  updateMobileTopMenu(MENU_CATEGORIES.has(activeCategory));
   if (!isMobileView()) {
     closeDrawer();
   }
