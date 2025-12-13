@@ -520,7 +520,8 @@
     }
 
     body.intro-active #mobile-drawer-toggle,
-    body.intro-active #mobile-footer-nav {
+    body.intro-active #mobile-footer-nav,
+    body.intro-active header {
       display: none !important;
     }
   </style>
@@ -532,12 +533,12 @@
   <div id="intro-overlay" aria-hidden="true">
     <div class="intro-panel" id="intro-panel">
       <span class="intro-badge">h i d d e n b a c k</span>
-      <p class="intro-title">Dili secin</p>
+      <p class="intro-title">Dili seçin</p>
       <div id="intro-selection" class="w-full flex flex-col gap-3 items-center">
         <div class="intro-langs">
           <button class="intro-lang-btn" type="button" data-lang="tr">
             <span class="intro-flag" aria-hidden="true">🇹🇷</span>
-            <span>Turcke</span>
+            <span>Türkçe</span>
           </button>
           <button class="intro-lang-btn" type="button" data-lang="en">
             <span class="intro-flag" aria-hidden="true">🇬🇧</span>
@@ -549,7 +550,7 @@
           </button>
           <button class="intro-lang-btn" type="button" data-lang="ar">
             <span class="intro-flag" aria-hidden="true">🇦🇪</span>
-            <span>Арабский</span>
+            <span>العربية</span>
           </button>
         </div>
       </div>
@@ -578,10 +579,6 @@
           <button class="header-quick-btn" type="button" data-nav="games">
             <span class="icon" aria-hidden="true">🎮</span>
             <span>Games</span>
-          </button>
-          <button class="header-quick-btn" type="button" data-nav="menu">
-            <span class="icon" aria-hidden="true">☰</span>
-            <span>Menü</span>
           </button>
         </div>
       </div>

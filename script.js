@@ -791,6 +791,7 @@ const drawerOverlay = document.getElementById("drawer-overlay");
 const drawerClose = document.getElementById("drawer-close");
 const headerQuickButtons = document.querySelectorAll(".header-quick-btn");
 const mobileFooterButtons = document.querySelectorAll("#mobile-footer-nav .footer-nav-btn");
+const mobileFooterNav = document.getElementById("mobile-footer-nav");
 
 const activeFilters = {
   veg: false,
@@ -806,6 +807,7 @@ let activeCategory = "hiddenback";
 let searchTerm = "";
 let introStarted = false;
 let selectedLanguage = document.documentElement.lang || "tr";
+let typeSoundCtx = null;
 
 const TAG_LABELS = {
   veg: { label: "Vejetaryen", color: "text-emerald-600" },
@@ -1051,9 +1053,35 @@ function startReveal() {
   }, 650);
 }
 
+function playTypeSound() {
+  try {
+    if (!typeSoundCtx) {
+      typeSoundCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    const duration = 0.07;
+    const now = typeSoundCtx.currentTime;
+    const oscillator = typeSoundCtx.createOscillator();
+    const gainNode = typeSoundCtx.createGain();
+
+    oscillator.type = "square";
+    oscillator.frequency.value = 920;
+    gainNode.gain.setValueAtTime(0.04, now);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+    oscillator.connect(gainNode);
+    gainNode.connect(typeSoundCtx.destination);
+
+    oscillator.start(now);
+    oscillator.stop(now + duration);
+  } catch (error) {
+    // sessizce geç
+  }
+}
+
 function runTypewriter(onComplete) {
   const target = introTyped;
-  const message = "Добро пожаловать в h i d d e n b a c k";
+  const message = "Добро пожаловать в  h i d d e n b a c k...";
 
   if (!target) {
     onComplete?.();
@@ -1068,7 +1096,10 @@ function runTypewriter(onComplete) {
     if (index <= message.length) {
       target.textContent = message.slice(0, index);
       index += 1;
-      setTimeout(typeStep, 70);
+      if (message.charAt(index - 1).trim()) {
+        playTypeSound();
+      }
+      setTimeout(typeStep, 95);
     } else {
       target.classList.remove("intro-type-cursor");
       onComplete?.();
@@ -1145,8 +1176,28 @@ function updateMenuArrow() {
   menuArrow.textContent = pastMenu ? "↑" : "↓";
 }
 
+function updateFooterNav(category) {
+  if (!mobileFooterNav) return;
+
+  const inMenu = MENU_CATEGORIES.has(category);
+
+  mobileFooterButtons.forEach((btn) => {
+    const isMenuBtn = btn.dataset.nav === "menu";
+    btn.classList.toggle("hidden", inMenu && !isMenuBtn);
+  });
+}
+
+function updateHeaderQuickLinks(category) {
+  const inMenu = MENU_CATEGORIES.has(category);
+
+  headerQuickButtons.forEach((btn) => {
+    btn.classList.toggle("hidden", inMenu);
+  });
+}
+
 function goToMenuCategory() {
   setCategory("kahvalti");
+  renderItems();
   menuSection?.scrollIntoView({ behavior: "smooth" });
 }
 
@@ -1387,6 +1438,8 @@ function setCategory(cat) {
   activeCategory = cat;
   catButtons.forEach((b) => b.classList.toggle("active", b.dataset.cat === cat));
   toggleSections(cat);
+  updateFooterNav(cat);
+  updateHeaderQuickLinks(cat);
 
   if (MENU_CATEGORIES.has(cat)) {
     renderItems();
