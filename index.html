@@ -498,7 +498,8 @@
     }
 
     .header-quick-btn .icon,
-    #mobile-footer-nav .icon {
+    #mobile-footer-nav .icon,
+    #desktop-footer-nav .icon {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -506,7 +507,8 @@
     }
 
     .header-quick-btn .icon svg,
-    #mobile-footer-nav .icon svg {
+    #mobile-footer-nav .icon svg,
+    #desktop-footer-nav .icon svg {
       width: 1.05rem;
       height: 1.05rem;
       stroke-width: 1.8;
@@ -522,7 +524,7 @@
       justify-content: center;
     }
 
-    #mobile-footer-nav .footer-nav-inner {
+    .footer-nav-inner {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
@@ -533,7 +535,7 @@
       box-shadow: 0 14px 28px rgba(0, 0, 0, 0.12);
     }
 
-    #mobile-footer-nav .footer-nav-btn {
+    .footer-nav-btn {
       display: inline-flex;
       align-items: center;
       gap: 0.25rem;
@@ -548,12 +550,23 @@
       transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
     }
 
-    #mobile-footer-nav .footer-nav-btn:hover,
-    #mobile-footer-nav .footer-nav-btn:focus-visible {
+    .footer-nav-btn:hover,
+    .footer-nav-btn:focus-visible {
       outline: none;
       transform: translateY(-1px);
       background: #f3f4f6;
       box-shadow: 0 10px 18px rgba(0, 0, 0, 0.08);
+    }
+
+    #desktop-footer-nav {
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      #desktop-footer-nav {
+        display: flex;
+        justify-content: flex-end;
+      }
     }
 
     @media (max-width: 1023px) {
@@ -865,9 +878,42 @@ u; skoru
         </div>
 
         <section id="controls-wrapper" class="flex flex-col gap-2 mb-1">
-          <div class="relative flex-1">
-            <input id="search-desktop" type="text" placeholder="Menüde ara..."
-                   class="w-full text-sm border border-hb-border rounded-full px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-gray-300">
+          <div class="flex flex-col md:flex-row md:items-center md:gap-4">
+            <div class="relative flex-1">
+              <input id="search-desktop" type="text" placeholder="Menüde ara..."
+                     class="w-full text-sm border border-hb-border rounded-full px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-gray-300">
+            </div>
+
+            <nav id="desktop-footer-nav" aria-label="Hızlı gezinme">
+              <div class="footer-nav-inner">
+                <button class="footer-nav-btn" type="button" data-nav="hiddenback">
+                  <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="9" />
+                      <path d="M12 11.5v4" />
+                      <path d="M12 8.5h.01" />
+                    </svg>
+                  </span>
+                  <span>Hakkımızda</span>
+                </button>
+                <button class="footer-nav-btn" type="button" data-nav="menu">
+                  <span class="icon" aria-hidden="true">☰</span>
+                  <span>Menü</span>
+                </button>
+                <button class="footer-nav-btn" type="button" data-nav="games">
+                  <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M6.5 9h11a3 3 0 0 1 2.96 3.5l-.3 1.5a3 3 0 0 1-2.94 2.4H6.78a3 3 0 0 1-2.94-2.4l-.3-1.5A3 3 0 0 1 6.5 9Z" />
+                      <path d="M9 12H7" />
+                      <path d="M8 11v2" />
+                      <circle cx="16" cy="12" r="0.9" />
+                      <circle cx="18" cy="10.5" r="0.9" />
+                    </svg>
+                  </span>
+                  <span>Games</span>
+                </button>
+              </div>
+            </nav>
           </div>
 
           <div class="flex items-center gap-2 text-xs overflow-x-auto no-scrollbar py-1">
