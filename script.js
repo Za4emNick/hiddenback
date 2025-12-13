@@ -1220,6 +1220,13 @@ function updateBackToTop() {
   backToTopBtn.classList.toggle("hidden", !shouldShow);
 }
 
+function updateGamesFab() {
+  if (!gamesMenuFab) return;
+
+  const shouldShow = activeCategory === GAME_CATEGORY;
+  gamesMenuFab.classList.toggle("hidden", !shouldShow);
+}
+
 function openDrawer() {
   if (!mobileDrawer || !drawerOverlay) return;
   if (!isMobileView()) return;
@@ -1258,6 +1265,7 @@ function toggleSections(category) {
   updateLayout(category);
   updateDrawerTrigger();
   updateMobileTopMenu(showMenu);
+  updateGamesFab();
   updateBackToTop();
 }
 
