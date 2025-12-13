@@ -1081,7 +1081,7 @@ function playTypeSound() {
 
 function runTypewriter(onComplete) {
   const target = introTyped;
-  const message = "Добро пожаловать в  h i d d e n b a c k...";
+  const message = "Welcome to   h i d d e n b a c k...";
 
   if (!target) {
     onComplete?.();
@@ -1154,7 +1154,7 @@ function isMobileView() {
 function updateDrawerTrigger() {
   if (!mobileDrawerToggle) return;
 
-  const shouldShow = isMobileView() && activeCategory === "hiddenback";
+  const shouldShow = isMobileView() && MENU_CATEGORIES.has(activeCategory);
   mobileDrawerToggle.classList.toggle("hidden", !shouldShow);
 }
 
@@ -1179,11 +1179,15 @@ function updateMenuArrow() {
 function updateFooterNav(category) {
   if (!mobileFooterNav) return;
 
-  const inMenu = MENU_CATEGORIES.has(category);
-
   mobileFooterButtons.forEach((btn) => {
-    const isMenuBtn = btn.dataset.nav === "menu";
-    btn.classList.toggle("hidden", inMenu && !isMenuBtn);
+    const isActive =
+      (btn.dataset.nav === "hiddenback" && category === "hiddenback") ||
+      (btn.dataset.nav === "games" && category === GAME_CATEGORY) ||
+      (btn.dataset.nav === "menu" && MENU_CATEGORIES.has(category));
+
+    btn.classList.toggle("ring-2", isActive);
+    btn.classList.toggle("ring-black", isActive);
+    btn.classList.toggle("ring-offset-2", isActive);
   });
 }
 
@@ -1196,6 +1200,14 @@ function updateHeaderQuickLinks(category) {
 }
 
 function goToMenuCategory() {
+  Object.keys(activeFilters).forEach((key) => {
+    activeFilters[key] = false;
+    syncFilterButtons(key, false);
+  });
+
+  searchTerm = "";
+  if (searchDesktop) searchDesktop.value = "";
+
   setCategory("kahvalti");
   renderItems();
   menuSection?.scrollIntoView({ behavior: "smooth" });
