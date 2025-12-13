@@ -791,7 +791,8 @@ const drawerOverlay = document.getElementById("drawer-overlay");
 const drawerClose = document.getElementById("drawer-close");
 const headerQuickButtons = document.querySelectorAll(".header-quick-btn");
 const mobileFooterButtons = document.querySelectorAll("#mobile-footer-nav .footer-nav-btn");
-const mobileFooterNav = document.getElementById("mobile-footer-nav");
+const desktopFooterButtons = document.querySelectorAll("#desktop-footer-nav .footer-nav-btn");
+const gamesMenuFab = document.getElementById("games-menu-fab");
 
 const activeFilters = {
   veg: false,
@@ -1081,7 +1082,10 @@ function playTypeSound() {
 
 function runTypewriter(onComplete) {
   const target = introTyped;
-  const message = "Welcome to   h i d d e n b a c k...";
+  const messages = [
+    { selector: ".intro-typed-welcome", text: "Welcome to" },
+    { selector: ".intro-typed-name", text: "h i d d e n b a c k..." },
+  ];
 
   if (!target) {
     onComplete?.();
@@ -1089,24 +1093,61 @@ function runTypewriter(onComplete) {
   }
 
   target.classList.remove("hidden");
-  target.textContent = "";
+  target.classList.remove("intro-type-cursor");
+  target.innerHTML = `
+    <span class="intro-chip intro-chip-dark">
+      <span class="intro-type-cursor intro-typed-welcome"></span>
+    </span>
+    <span class="intro-chip intro-chip-light">
+      <span class="intro-typed-name"></span>
+    </span>
+    <img src="logo-x-x.jpg" alt="HiddenBack Logo" class="intro-logo hidden intro-type-logo" />
+  `;
 
-  let index = 0;
-  const typeStep = () => {
-    if (index <= message.length) {
-      target.textContent = message.slice(0, index);
-      index += 1;
-      if (message.charAt(index - 1).trim()) {
+  const logoEl = target.querySelector(".intro-type-logo");
+  const spans = messages.map((msg) => target.querySelector(msg.selector));
+
+  if (spans.some((span) => !span)) {
+    onComplete?.();
+    return;
+  }
+
+  let segmentIndex = 0;
+  let charIndex = 0;
+
+  const typeNext = () => {
+    const current = messages[segmentIndex];
+    const span = spans[segmentIndex];
+    if (!current || !span) {
+      onComplete?.();
+      return;
+    }
+
+    if (charIndex <= current.text.length) {
+      span.textContent = current.text.slice(0, charIndex);
+      charIndex += 1;
+      const justTyped = current.text.charAt(charIndex - 1);
+      if (justTyped && justTyped.trim()) {
         playTypeSound();
       }
-      setTimeout(typeStep, 95);
+      setTimeout(typeNext, 90);
     } else {
-      target.classList.remove("intro-type-cursor");
-      onComplete?.();
+      span.classList.remove("intro-type-cursor");
+      segmentIndex += 1;
+      charIndex = 0;
+
+      const nextSpan = spans[segmentIndex];
+      if (nextSpan) {
+        nextSpan.classList.add("intro-type-cursor");
+        setTimeout(typeNext, 120);
+      } else {
+        logoEl?.classList.remove("hidden");
+        setTimeout(() => onComplete?.(), 650);
+      }
     }
   };
 
-  typeStep();
+  typeNext();
 }
 
 function launchIntroFlow(lang) {
@@ -1122,7 +1163,7 @@ function launchIntroFlow(lang) {
 
   setTimeout(() => {
     runTypewriter(() => {
-      setTimeout(startReveal, 150);
+      setTimeout(startReveal, 300);
     });
   }, 200);
 
@@ -1177,17 +1218,19 @@ function updateMenuArrow() {
 }
 
 function updateFooterNav(category) {
-  if (!mobileFooterNav) return;
+  const buttonSets = [mobileFooterButtons, desktopFooterButtons];
 
-  mobileFooterButtons.forEach((btn) => {
-    const isActive =
-      (btn.dataset.nav === "hiddenback" && category === "hiddenback") ||
-      (btn.dataset.nav === "games" && category === GAME_CATEGORY) ||
-      (btn.dataset.nav === "menu" && MENU_CATEGORIES.has(category));
+  buttonSets.forEach((set) => {
+    set.forEach((btn) => {
+      const isActive =
+        (btn.dataset.nav === "hiddenback" && category === "hiddenback") ||
+        (btn.dataset.nav === "games" && category === GAME_CATEGORY) ||
+        (btn.dataset.nav === "menu" && MENU_CATEGORIES.has(category));
 
-    btn.classList.toggle("ring-2", isActive);
-    btn.classList.toggle("ring-black", isActive);
-    btn.classList.toggle("ring-offset-2", isActive);
+      btn.classList.toggle("ring-2", isActive);
+      btn.classList.toggle("ring-black", isActive);
+      btn.classList.toggle("ring-offset-2", isActive);
+    });
   });
 }
 
@@ -1208,8 +1251,7 @@ function goToMenuCategory() {
   searchTerm = "";
   if (searchDesktop) searchDesktop.value = "";
 
-  setCategory("kahvalti");
-  renderItems();
+  setCategory("kahvalti"); // this triggers renderItems() internally
   menuSection?.scrollIntoView({ behavior: "smooth" });
 }
 
@@ -1497,35 +1539,24 @@ mobileDrawerToggle?.addEventListener("click", () => {
 });
 
 headerQuickButtons.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const destination = btn.dataset.nav;
-
-    if (destination === "hiddenback") {
-      setCategory("hiddenback");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    } else if (destination === "games") {
-      setCategory(GAME_CATEGORY);
-      gamesSection?.scrollIntoView({ behavior: "smooth" });
-    } else if (destination === "menu") {
-      goToMenuCategory();
-    }
-  });
+  btn.addEventListener("click", () => handleNav(btn.dataset.nav));
 });
 
-mobileFooterButtons.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const destination = btn.dataset.nav;
+function handleNav(destination) {
+  if (destination === "hiddenback") {
+    setCategory("hiddenback");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  } else if (destination === "games") {
+    setCategory(GAME_CATEGORY);
+    gamesSection?.scrollIntoView({ behavior: "smooth" });
+  } else if (destination === "menu") {
+    goToMenuCategory();
+    if (isMobileView()) openDrawer();
+  }
+}
 
-    if (destination === "hiddenback") {
-      setCategory("hiddenback");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    } else if (destination === "games") {
-      setCategory(GAME_CATEGORY);
-      gamesSection?.scrollIntoView({ behavior: "smooth" });
-    } else if (destination === "menu") {
-      goToMenuCategory();
-    }
-  });
+[...mobileFooterButtons, ...desktopFooterButtons].forEach((btn) => {
+  btn.addEventListener("click", () => handleNav(btn.dataset.nav));
 });
 
 drawerOverlay?.addEventListener("click", closeDrawer);
