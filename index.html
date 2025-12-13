@@ -146,12 +146,50 @@
       max-width: min(520px, 90%);
       white-space: pre;
       margin: 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
     }
 
     .intro-type-cursor::after {
       content: "|";
       animation: blink 1s step-start infinite;
       margin-left: 4px;
+    }
+
+    .intro-chip {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0.35rem 0.85rem;
+      font-weight: 700;
+      gap: 8px;
+      letter-spacing: 0.06em;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .intro-chip-dark {
+      background: #000000;
+      color: #ffffff;
+      border-color: #111111;
+    }
+
+    .intro-chip-light {
+      background: #ffffff;
+      color: #111111;
+      border-color: #e5e5e5;
+    }
+
+    .intro-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      object-fit: cover;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+      background: #ffffff;
+      border: 1px solid #e5e5e5;
     }
 
     @keyframes blink {
@@ -459,9 +497,19 @@
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
     }
 
-    .header-quick-btn .icon {
-      font-size: 1rem;
+    .header-quick-btn .icon,
+    #mobile-footer-nav .icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       line-height: 1;
+    }
+
+    .header-quick-btn .icon svg,
+    #mobile-footer-nav .icon svg {
+      width: 1.05rem;
+      height: 1.05rem;
+      stroke-width: 1.8;
     }
 
     #mobile-footer-nav {
@@ -506,11 +554,6 @@
       transform: translateY(-1px);
       background: #f3f4f6;
       box-shadow: 0 10px 18px rgba(0, 0, 0, 0.08);
-    }
-
-    #mobile-footer-nav .icon {
-      font-size: 1.05rem;
-      line-height: 1;
     }
 
     @media (max-width: 1023px) {
@@ -573,11 +616,25 @@
       <div class="hidden sm:flex items-center">
         <div class="header-quick-links">
           <button class="header-quick-btn" type="button" data-nav="hiddenback">
-            <span class="icon" aria-hidden="true">🏠</span>
+            <span class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 11.5v4" />
+                <path d="M12 8.5h.01" />
+              </svg>
+            </span>
             <span>Hakkımızda</span>
           </button>
           <button class="header-quick-btn" type="button" data-nav="games">
-            <span class="icon" aria-hidden="true">🎮</span>
+            <span class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6.5 9h11a3 3 0 0 1 2.96 3.5l-.3 1.5a3 3 0 0 1-2.94 2.4H6.78a3 3 0 0 1-2.94-2.4l-.3-1.5A3 3 0 0 1 6.5 9Z" />
+                <path d="M9 12H7" />
+                <path d="M8 11v2" />
+                <circle cx="16" cy="12" r="0.9" />
+                <circle cx="18" cy="10.5" r="0.9" />
+              </svg>
+            </span>
             <span>Games</span>
           </button>
         </div>
@@ -733,10 +790,6 @@
               <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-hb-muted mb-1">Games • hiddenback</p>
               <h2 class="text-2xl font-semibold text-hb-text">Yılan Oyunu</h2>
             </div>
-            <button id="snake-restart" type="button"
-                    class="px-4 py-2 rounded-full border border-hb-border text-sm font-semibold bg-black text-white">
-              Başlat / Sıfırla
-            </button>
           </div>
 
           <p class="text-sm text-hb-muted leading-relaxed">
@@ -781,6 +834,10 @@ u; skoru
                 <button class="snake-key" data-dir="down" aria-label="Aşağı">↓</button>
                 <span></span>
               </div>
+              <button id="snake-restart" type="button"
+                      class="px-4 py-2 rounded-full border border-hb-border text-sm font-semibold bg-black text-white">
+                Başlat / Sıfırla
+              </button>
               <p class="text-xs text-hb-muted text-center">
                 Mobilde yön tuşlarını, masaüstünde ok/WASD tuşlarını kullanabilirsiniz.
               </p>
@@ -869,16 +926,6 @@ u; skoru
     <span>Menüye dön</span>
   </button>
 
-  <button
-    id="mobile-drawer-toggle"
-    type="button"
-    class="lg:hidden fixed right-4 bottom-6 z-50 bg-white text-hb-text px-3 py-2.5 rounded-full shadow-[0_14px_28px_rgba(0,0,0,0.18)] text-xs font-semibold tracking-wide border border-hb-border flex items-center gap-1.5"
-    aria-label="Menü"
-  >
-    <span class="text-base">☰</span>
-    <span>Menü</span>
-  </button>
-
   <div id="drawer-overlay" class="hidden lg:hidden fixed inset-0 bg-black/30 backdrop-blur-sm z-30"></div>
 
   <button
@@ -943,7 +990,13 @@ u; skoru
   <nav id="mobile-footer-nav" class="md:hidden" aria-label="Hızlı gezinme">
     <div class="footer-nav-inner">
       <button class="footer-nav-btn" type="button" data-nav="hiddenback">
-        <span class="icon" aria-hidden="true">🏠</span>
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 11.5v4" />
+            <path d="M12 8.5h.01" />
+          </svg>
+        </span>
         <span>Hakkımızda</span>
       </button>
       <button class="footer-nav-btn" type="button" data-nav="menu">
@@ -951,7 +1004,15 @@ u; skoru
         <span>Menü</span>
       </button>
       <button class="footer-nav-btn" type="button" data-nav="games">
-        <span class="icon" aria-hidden="true">🎮</span>
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6.5 9h11a3 3 0 0 1 2.96 3.5l-.3 1.5a3 3 0 0 1-2.94 2.4H6.78a3 3 0 0 1-2.94-2.4l-.3-1.5A3 3 0 0 1 6.5 9Z" />
+            <path d="M9 12H7" />
+            <path d="M8 11v2" />
+            <circle cx="16" cy="12" r="0.9" />
+            <circle cx="18" cy="10.5" r="0.9" />
+          </svg>
+        </span>
         <span>Games</span>
       </button>
     </div>
