@@ -519,7 +519,7 @@ function runTypewriter(onComplete) {
   const target = introTyped;
   const messages = [
     { selector: ".intro-typed-welcome", text: "Welcome to" },
-    { selector: ".intro-typed-name", text: "h i d d e n b a c k..." },
+    { selector: ".intro-typed-name", text: "h i d d e n b a c k" },
   ];
 
   if (!target) {
