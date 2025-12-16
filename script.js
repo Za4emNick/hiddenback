@@ -191,8 +191,6 @@ const gamesSection = document.getElementById("games-section");
 const layoutRoot = document.getElementById("layout-root");
 const introOverlay = document.getElementById("intro-overlay");
 const introPanel = document.getElementById("intro-panel");
-const introSelection = document.getElementById("intro-selection");
-const introTyped = document.getElementById("intro-typed");
 const languageButtons = document.querySelectorAll(".intro-lang-btn");
 
 const snakeCanvas = document.getElementById("snake-canvas");
@@ -201,6 +199,15 @@ const snakeKeys = document.querySelectorAll(".snake-key");
 const snakeScoreEl = document.getElementById("snake-score");
 const snakeBestEl = document.getElementById("snake-best");
 const snakeStatusEl = document.getElementById("snake-status");
+
+const gameTabButtons = document.querySelectorAll(".game-tab-btn");
+const gamePanels = document.querySelectorAll(".game-panel");
+const tttCells = document.querySelectorAll(".ttt-cell");
+const tttStatus = document.getElementById("ttt-status");
+const tttReset = document.getElementById("ttt-reset");
+const checkersBoardEl = document.getElementById("checkers-board");
+const checkersStatusEl = document.getElementById("checkers-status");
+const checkersReset = document.getElementById("checkers-reset");
 
 const modalOverlay = document.getElementById("modal-overlay");
 const modal = document.getElementById("modal");
@@ -227,7 +234,6 @@ const drawerClose = document.getElementById("drawer-close");
 const headerQuickButtons = document.querySelectorAll(".header-quick-btn");
 const mobileFooterButtons = document.querySelectorAll("#mobile-footer-nav .footer-nav-btn");
 const desktopFooterButtons = document.querySelectorAll("#desktop-footer-nav .footer-nav-btn");
-const gamesMenuFab = document.getElementById("games-menu-fab");
 
 const activeFilters = {
   veg: false,
@@ -240,10 +246,10 @@ const MENU_CATEGORIES = new Set(["kahvalti", "bowl", "lezzetler", "tatli", "matc
 const GAME_CATEGORY = "games";
 
 let activeCategory = "hiddenback";
+let activeGame = "snake";
 let searchTerm = "";
 let introStarted = false;
 let selectedLanguage = document.documentElement.lang || "tr";
-let typeSoundCtx = null;
 
 const TAG_LABELS = {
   veg: { label: "Vejetaryen", color: "text-emerald-600" },
@@ -274,6 +280,17 @@ const snakeState = {
 let snakeCtx = null;
 let snakeLoop = null;
 let snakeReady = false;
+
+let tttBoard = Array(9).fill(null);
+let tttCurrent = "X";
+let tttFinished = false;
+
+const CHECKERS_SIZE = 8;
+let checkersBoard = [];
+let checkersCurrent = "r";
+let checkersSelected = null;
+let checkersMoves = [];
+let checkersFinished = false;
 
 const DIR_MAP = {
   up: { x: 0, y: -1 },
@@ -471,118 +488,239 @@ function initSnake() {
   resetSnakeState();
 }
 
+// ─────────────────────────────
+//  GAMES: TIC TAC TOE
+// ─────────────────────────────
+
+function updateTttStatus(message) {
+  if (tttStatus) tttStatus.textContent = message;
+}
+
+function resetTtt() {
+  tttBoard = Array(9).fill(null);
+  tttCurrent = "X";
+  tttFinished = false;
+  updateTttStatus("Sıra: X");
+
+  tttCells.forEach((cell) => {
+    cell.textContent = "";
+    cell.classList.remove("filled");
+  });
+}
+
+function checkTttWinner() {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+
+  for (const [a, b, c] of lines) {
+    if (tttBoard[a] && tttBoard[a] === tttBoard[b] && tttBoard[a] === tttBoard[c]) {
+      return tttBoard[a];
+    }
+  }
+
+  if (tttBoard.every(Boolean)) return "draw";
+  return null;
+}
+
+function handleTttClick(index) {
+  if (tttFinished || tttBoard[index]) return;
+
+  tttBoard[index] = tttCurrent;
+  const cell = tttCells[index];
+  if (cell) {
+    cell.textContent = tttCurrent;
+    cell.classList.add("filled");
+  }
+
+  const winner = checkTttWinner();
+  if (winner === "draw") {
+    tttFinished = true;
+    updateTttStatus("Berabere! Yeniden deneyin.");
+    return;
+  }
+
+  if (winner) {
+    tttFinished = true;
+    updateTttStatus(`${winner} kazandı!`);
+    return;
+  }
+
+  tttCurrent = tttCurrent === "X" ? "O" : "X";
+  updateTttStatus(`Sıra: ${tttCurrent}`);
+}
+
+// ─────────────────────────────
+//  GAMES: CHECKERS
+// ─────────────────────────────
+
+function buildInitialCheckersBoard() {
+  const board = Array.from({ length: CHECKERS_SIZE }, () => Array(CHECKERS_SIZE).fill(null));
+
+  for (let y = 0; y < CHECKERS_SIZE; y += 1) {
+    for (let x = 0; x < CHECKERS_SIZE; x += 1) {
+      if ((x + y) % 2 === 0) continue;
+
+      if (y < 3) board[y][x] = "b";
+      if (y > 4) board[y][x] = "r";
+    }
+  }
+
+  return board;
+}
+
+function updateCheckersStatus(message) {
+  if (checkersStatusEl) checkersStatusEl.textContent = message;
+}
+
+function resetCheckers() {
+  checkersBoard = buildInitialCheckersBoard();
+  checkersCurrent = "r";
+  checkersSelected = null;
+  checkersMoves = [];
+  checkersFinished = false;
+  updateCheckersStatus("Sıra: Kırmızı");
+  renderCheckersBoard();
+}
+
+function isCurrentPlayerPiece(piece) {
+  if (!piece) return false;
+  return piece.toLowerCase() === checkersCurrent;
+}
+
+function isOpponentPiece(piece) {
+  if (!piece) return false;
+  return piece.toLowerCase() !== checkersCurrent;
+}
+
+function getPieceDirections(piece) {
+  const isKing = piece === piece.toUpperCase();
+  if (isKing) return [1, -1];
+  return piece.toLowerCase() === "r" ? [-1] : [1];
+}
+
+function collectMoves(x, y) {
+  const piece = checkersBoard[y][x];
+  if (!piece || !isCurrentPlayerPiece(piece)) return [];
+
+  const dirs = getPieceDirections(piece);
+  const moves = [];
+
+  dirs.forEach((dy) => {
+    [-1, 1].forEach((dx) => {
+      const nx = x + dx;
+      const ny = y + dy;
+      if (nx < 0 || nx >= CHECKERS_SIZE || ny < 0 || ny >= CHECKERS_SIZE) return;
+
+      if (!checkersBoard[ny][nx]) {
+        moves.push({ x: nx, y: ny, capture: false });
+        return;
+      }
+
+      const jumpX = x + dx * 2;
+      const jumpY = y + dy * 2;
+      if (
+        jumpX >= 0 &&
+        jumpX < CHECKERS_SIZE &&
+        jumpY >= 0 &&
+        jumpY < CHECKERS_SIZE &&
+        !checkersBoard[jumpY][jumpX] &&
+        isOpponentPiece(checkersBoard[ny][nx])
+      ) {
+        moves.push({ x: jumpX, y: jumpY, capture: true, captured: { x: nx, y: ny } });
+      }
+    });
+  });
+
+  return moves;
+}
+
+function maybeCrown(piece, y) {
+  if (piece === "r" && y === 0) return "R";
+  if (piece === "b" && y === CHECKERS_SIZE - 1) return "B";
+  return piece;
+}
+
+function moveCheckersPiece(targetX, targetY) {
+  if (!checkersSelected) return;
+
+  const { x, y } = checkersSelected;
+  const piece = checkersBoard[y][x];
+  const move = checkersMoves.find((m) => m.x === targetX && m.y === targetY);
+  if (!move || !piece) return;
+
+  checkersBoard[y][x] = null;
+  checkersBoard[targetY][targetX] = maybeCrown(piece, targetY);
+
+  if (move.capture && move.captured) {
+    checkersBoard[move.captured.y][move.captured.x] = null;
+  }
+
+  checkersSelected = null;
+  checkersMoves = [];
+  checkersCurrent = checkersCurrent === "r" ? "b" : "r";
+
+  const flat = checkersBoard.flat();
+  const redLeft = flat.some((p) => p && p.toLowerCase() === "r");
+  const blackLeft = flat.some((p) => p && p.toLowerCase() === "b");
+
+  if (!redLeft || !blackLeft) {
+    checkersFinished = true;
+    updateCheckersStatus(`${redLeft ? "Kırmızı" : "Siyah"} kazandı!`);
+  } else {
+    updateCheckersStatus(`Sıra: ${checkersCurrent === "r" ? "Kırmızı" : "Siyah"}`);
+  }
+
+  renderCheckersBoard();
+}
+
+function renderCheckersBoard() {
+  if (!checkersBoardEl) return;
+
+  checkersBoardEl.innerHTML = "";
+
+  for (let y = 0; y < CHECKERS_SIZE; y += 1) {
+    for (let x = 0; x < CHECKERS_SIZE; x += 1) {
+      const cell = document.createElement("button");
+      cell.className = "checker-cell";
+      cell.dataset.x = String(x);
+      cell.dataset.y = String(y);
+      if ((x + y) % 2 === 1) cell.classList.add("dark");
+
+      const piece = checkersBoard[y][x];
+      if (piece) {
+        const span = document.createElement("span");
+        const isRed = piece.toLowerCase() === "r";
+        span.className = `checker-piece ${isRed ? "red" : "black"}`;
+        span.textContent = piece === piece.toUpperCase() ? "♛" : "●";
+        cell.appendChild(span);
+      }
+
+      if (checkersSelected && checkersSelected.x === x && checkersSelected.y === y) {
+        cell.classList.add("selected");
+      }
+
+      if (checkersMoves.some((m) => m.x === x && m.y === y)) {
+        cell.classList.add("move-target");
+      }
+
+      checkersBoardEl.appendChild(cell);
+    }
+  }
+}
+
 function setLanguage(lang) {
   selectedLanguage = lang;
   document.documentElement.lang = lang;
   document.documentElement.dataset.lang = lang;
   // gelecekteki dil dosyaları için hazırlık
-}
-
-function startReveal() {
-  if (!introOverlay || introOverlay.classList.contains("intro-reveal")) return;
-
-  introOverlay.classList.add("intro-reveal");
-  document.body.classList.remove("intro-active");
-
-  setTimeout(() => {
-    introOverlay?.remove();
-  }, 650);
-}
-
-function playTypeSound() {
-  try {
-    if (!typeSoundCtx) {
-      typeSoundCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-
-    const duration = 0.07;
-    const now = typeSoundCtx.currentTime;
-    const oscillator = typeSoundCtx.createOscillator();
-    const gainNode = typeSoundCtx.createGain();
-
-    oscillator.type = "square";
-    oscillator.frequency.value = 920;
-    gainNode.gain.setValueAtTime(0.04, now);
-    gainNode.gain.exponentialRampToValueAtTime(0.001, now + duration);
-
-    oscillator.connect(gainNode);
-    gainNode.connect(typeSoundCtx.destination);
-
-    oscillator.start(now);
-    oscillator.stop(now + duration);
-  } catch (error) {
-    // sessizce geç
-  }
-}
-
-function runTypewriter(onComplete) {
-  const target = introTyped;
-  const messages = [
-    { selector: ".intro-typed-welcome", text: "Welcome to" },
-    { selector: ".intro-typed-name", text: "h i d d e n b a c k" },
-  ];
-
-  if (!target) {
-    onComplete?.();
-    return;
-  }
-
-  target.classList.remove("hidden");
-  target.classList.remove("intro-type-cursor");
-  target.innerHTML = `
-    <span class="intro-chip intro-chip-dark">
-      <span class="intro-type-cursor intro-typed-welcome"></span>
-    </span>
-    <span class="intro-chip intro-chip-light">
-      <span class="intro-typed-name"></span>
-    </span>
-    <img src="logo-x-x.jpg" alt="HiddenBack Logo" class="intro-logo hidden intro-type-logo" />
-  `;
-
-  const logoEl = target.querySelector(".intro-type-logo");
-  const spans = messages.map((msg) => target.querySelector(msg.selector));
-
-  if (spans.some((span) => !span)) {
-    onComplete?.();
-    return;
-  }
-
-  let segmentIndex = 0;
-  let charIndex = 0;
-
-  const typeNext = () => {
-    const current = messages[segmentIndex];
-    const span = spans[segmentIndex];
-    if (!current || !span) {
-      onComplete?.();
-      return;
-    }
-
-    if (charIndex <= current.text.length) {
-      span.textContent = current.text.slice(0, charIndex);
-      charIndex += 1;
-      const justTyped = current.text.charAt(charIndex - 1);
-      if (justTyped && justTyped.trim()) {
-        playTypeSound();
-      }
-      setTimeout(typeNext, 90);
-    } else {
-      span.classList.remove("intro-type-cursor");
-      segmentIndex += 1;
-      charIndex = 0;
-
-      const nextSpan = spans[segmentIndex];
-      if (nextSpan) {
-        nextSpan.classList.add("intro-type-cursor");
-        setTimeout(typeNext, 120);
-      } else {
-        logoEl?.classList.remove("hidden");
-        setTimeout(() => onComplete?.(), 650);
-      }
-    }
-  };
-
-  typeNext();
 }
 
 function launchIntroFlow(lang) {
@@ -591,18 +729,14 @@ function launchIntroFlow(lang) {
   introStarted = true;
   setLanguage(lang);
 
-  introSelection?.classList.add("hidden");
-
   introPanel?.classList.add("intro-panel-hide");
-  setTimeout(() => introPanel?.classList.add("hidden"), 260);
+
+  introOverlay.classList.add("intro-reveal");
+  document.body.classList.remove("intro-active");
 
   setTimeout(() => {
-    runTypewriter(() => {
-      setTimeout(startReveal, 300);
-    });
-  }, 200);
-
-  setTimeout(startReveal, 6000);
+    introOverlay?.remove();
+  }, 400);
 }
 
 function initIntroOverlay() {
@@ -697,11 +831,30 @@ function updateBackToTop() {
   backToTopBtn.classList.toggle("hidden", !shouldShow);
 }
 
-function updateGamesFab() {
-  if (!gamesMenuFab) return;
+function setActiveGame(game) {
+  activeGame = game;
 
-  const shouldShow = activeCategory === GAME_CATEGORY;
-  gamesMenuFab.classList.toggle("hidden", !shouldShow);
+  gameTabButtons.forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.game === game);
+  });
+
+  gamePanels.forEach((panel) => {
+    panel.classList.toggle("hidden", panel.dataset.game !== game);
+  });
+
+  if (game === "snake") {
+    initSnake();
+  } else {
+    stopSnakeGame("Durdu");
+  }
+
+  if (game === "tictactoe") {
+    resetTtt();
+  }
+
+  if (game === "checkers") {
+    resetCheckers();
+  }
 }
 
 function openDrawer() {
@@ -734,7 +887,7 @@ function toggleSections(category) {
   }
 
   if (showGame) {
-    initSnake();
+    setActiveGame(activeGame || "snake");
   } else {
     stopSnakeGame("Durdu");
   }
@@ -742,7 +895,6 @@ function toggleSections(category) {
   updateLayout(category);
   updateDrawerTrigger();
   updateMobileTopMenu(showMenu);
-  updateGamesFab();
   updateBackToTop();
 }
 
@@ -946,6 +1098,48 @@ catButtons.forEach((btn) => {
       closeDrawer();
     }
   });
+});
+
+gameTabButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const { game } = btn.dataset;
+    setActiveGame(game || "snake");
+  });
+});
+
+tttCells.forEach((cell) => {
+  cell.addEventListener("click", () => {
+    const index = Number(cell.dataset.index);
+    handleTttClick(index);
+  });
+});
+
+tttReset?.addEventListener("click", resetTtt);
+
+checkersReset?.addEventListener("click", resetCheckers);
+
+checkersBoardEl?.addEventListener("click", (event) => {
+  const target = event.target.closest(".checker-cell");
+  if (!target || checkersFinished) return;
+
+  const x = Number(target.dataset.x);
+  const y = Number(target.dataset.y);
+  const piece = checkersBoard[y][x];
+
+  if (checkersSelected && checkersMoves.some((m) => m.x === x && m.y === y)) {
+    moveCheckersPiece(x, y);
+    return;
+  }
+
+  if (piece && isCurrentPlayerPiece(piece)) {
+    checkersSelected = { x, y };
+    checkersMoves = collectMoves(x, y);
+  } else {
+    checkersSelected = null;
+    checkersMoves = [];
+  }
+
+  renderCheckersBoard();
 });
 
 filterChips.forEach((chip) => {
