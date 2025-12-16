@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>HiddenBack — Menü</title>
-  <meta name="description" content="HiddenBack Cafe — Yalova. Modern, temiz ve kullanışlı online menü.">
+  <title data-i18n="metaTitle">HiddenBack — Menü</title>
+  <meta id="meta-description" name="description" content="HiddenBack Cafe — Yalova. Modern, temiz ve kullanışlı online menü.">
 
   <!-- Tailwind CDN + config -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -704,7 +704,7 @@
   <div id="intro-overlay" aria-hidden="true">
     <div class="intro-panel" id="intro-panel">
       <span class="intro-badge">h i d d e n b a c k</span>
-      <p class="intro-title">Dili secin</p>
+      <p class="intro-title" data-i18n="introTitle">Dili seçin</p>
       <div class="w-full flex flex-col gap-3 items-center">
         <div class="intro-langs">
           <button class="intro-lang-btn" type="button" data-lang="tr">
@@ -718,10 +718,6 @@
           <button class="intro-lang-btn" type="button" data-lang="ru">
             <span class="intro-flag" aria-hidden="true">🇷🇺</span>
             <span>Русский</span>
-          </button>
-          <button class="intro-lang-btn" type="button" data-lang="ar">
-            <span class="intro-flag" aria-hidden="true">🇦🇪</span>
-            <span>العربية</span>
           </button>
         </div>
       </div>
@@ -749,7 +745,7 @@
                 <path d="M12 8.5h.01" />
               </svg>
             </span>
-            <span>Hakkımızda</span>
+            <span data-i18n="navAbout">Hakkımızda</span>
           </button>
           <button class="header-quick-btn" type="button" data-nav="games">
             <span class="icon" aria-hidden="true">
@@ -761,7 +757,7 @@
                 <circle cx="18" cy="10.5" r="0.9" />
               </svg>
             </span>
-            <span>Games</span>
+            <span data-i18n="navGames">Games</span>
           </button>
         </div>
       </div>
@@ -777,11 +773,11 @@
               <path d="M12 8.5h.01" />
             </svg>
           </span>
-          <span>Hakkımızda</span>
+          <span data-i18n="navAbout">Hakkımızda</span>
         </button>
         <button class="footer-nav-btn" type="button" data-nav="menu">
           <span class="icon" aria-hidden="true">☰</span>
-          <span>Menü</span>
+          <span data-i18n="navMenu">Menü</span>
         </button>
         <button class="footer-nav-btn" type="button" data-nav="games">
           <span class="icon" aria-hidden="true">
@@ -793,7 +789,7 @@
               <circle cx="18" cy="10.5" r="0.9" />
             </svg>
           </span>
-          <span>Games</span>
+          <span data-i18n="navGames">Games</span>
         </button>
       </div>
     </nav>
@@ -834,16 +830,20 @@
                 h i d d e n b a c k • YALOVA
               </p>
               <h1 class="text-2xl sm:text-3xl font-semibold mb-3 text-hb-text">
-                Şehrin tam merkezinde, gözlerden uzakta saklanan eski bir kafe.
+                <span data-i18n="heroHeadline">Şehrin tam merkezinde, gözlerden uzakta saklanan eski bir kafe.</span>
               </h1>
               <p class="text-sm text-hb-muted leading-relaxed mb-3">
-                hiddenback, Yalova’nın kalbinde, keşfedilmeyi bekleyen gizli bir nokta.
-                Amacımız; iyi kahveyi, ev yapımı tatlıları ve sıcak bir atmosferi tek bir yerde buluşturmak.
-                Sabah kahvaltısından akşam kahvesine kadar, her saat burada kendi ritmine sahip.
+                <span data-i18n="heroBody1">
+                  hiddenback, Yalova’nın kalbinde, keşfedilmeyi bekleyen gizli bir nokta.
+                  Amacımız; iyi kahveyi, ev yapımı tatlıları ve sıcak bir atmosferi tek bir yerde buluşturmak.
+                  Sabah kahvaltısından akşam kahvesine kadar, her saat burada kendi ritmine sahip.
+                </span>
               </p>
               <p class="text-sm text-hb-muted leading-relaxed">
-                Burada menü, sadece bir yemek listesi değil — misafirlerimizin anılarının bir parçası.
-                Aşağıda hiddenback’in atmosferini, hikâyesini ve detaylarını daha yakından keşfedebilirsin.
+                <span data-i18n="heroBody2">
+                  Burada menü, sadece bir yemek listesi değil — misafirlerimizin anılarının bir parçası.
+                  Aşağıda hiddenback’in atmosferini, hikâyesini ve detaylarını daha yakından keşfedebilirsin.
+                </span>
               </p>
             </div>
               <div class="order-1 md:order-2">
@@ -864,15 +864,17 @@
             </div>
             <div class="md:w-1/2 flex flex-col justify-center">
               <h2 class="text-lg font-semibold mb-2">
-                Publika • Yalova’da modern bir buluşma noktası
+                <span data-i18n="article1Title">Publika • Yalova’da modern bir buluşma noktası</span>
               </h2>
               <p class="text-sm text-hb-muted leading-relaxed">
-                Zamanla hiddenback, Yalova’nın kalbinde modern ve samimi bir buluşma noktası haline geliyor.
-                Aynı masada öğrenciler, yazılımcılar, bankacılar, avukatlar ve yaratıcı insanlar bir araya geliyor;
-                hem çalışmak hem de arkadaşlarla sakin bir akşam geçirmek isteyen herkes burada buluşuyor.
-                hiddenback’te her misafir kendi ritmini bulur: yolda hızlı bir espresso, dizüstü bilgisayar eşliğinde sakin bir filtre kahve molası
-                ya da akşam buluşmasına eşlik eden bir tatlı.
-                Tüm kahvelerin detaylı açıklamalarını ve kafein seviyelerini online menümüzde bulabilirsin.
+                <span data-i18n="article1Body">
+                  Zamanla hiddenback, Yalova’nın kalbinde modern ve samimi bir buluşma noktası haline geliyor.
+                  Aynı masada öğrenciler, yazılımcılar, bankacılar, avukatlar ve yaratıcı insanlar bir araya geliyor;
+                  hem çalışmak hem de arkadaşlarla sakin bir akşam geçirmek isteyen herkes burada buluşuyor.
+                  hiddenback’te her misafir kendi ritmini bulur: yolda hızlı bir espresso, dizüstü bilgisayar eşliğinde sakin bir filtre kahve molası
+                  ya da akşam buluşmasına eşlik eden bir tatlı.
+                  Tüm kahvelerin detaylı açıklamalarını ve kafein seviyelerini online menümüzde bulabilirsin.
+                </span>
               </p>
             </div>
           </article>
@@ -883,8 +885,8 @@
               <img src="gallery/dessert-1.png" alt="HiddenBack Desserts">
             </div>
             <div class="md:w-1/2 md:order-1 flex flex-col justify-center">
-              <h2 class="text-lg font-semibold mb-2">Tatlı Vitrini • Günlük hazırlanan tatlılar</h2>
-              <p class="text-sm text-hb-muted leading-relaxed">
+              <h2 class="text-lg font-semibold mb-2" data-i18n="article2Title">Tatlı Vitrini • Günlük hazırlanan tatlılar</h2>
+              <p class="text-sm text-hb-muted leading-relaxed" data-i18n="article2Body">
                 Cheesecake, brownie, tart ve waffle çeşitlerimiz her gün taze hazırlanıyor.
                 Tatlılar, kahveyle uyumlu olacak şekilde tasarlandı — online menüde hem içerikleri
                 hem de fiyatları rahatça inceleyebilirsin.
@@ -898,8 +900,8 @@
               <img src="gallery/interior-2.png" alt="HiddenBack Atmosphere">
             </div>
             <div class="md:w-1/2 flex flex-col justify-center">
-              <h2 class="text-lg font-semibold mb-2">Atmosfer • Sessiz köşeler ve sıcak ışıklar</h2>
-              <p class="text-sm text-hb-muted leading-relaxed">
+              <h2 class="text-lg font-semibold mb-2" data-i18n="article3Title">Atmosfer • Sessiz köşeler ve sıcak ışıklar</h2>
+              <p class="text-sm text-hb-muted leading-relaxed" data-i18n="article3Body">
                 hiddenback, hem bilgisayarla çalışanlar hem de arkadaşlarla sohbet edenler için tasarlandı.
                 Loş ışık, rahat oturma alanları ve sakin müzik — tüm bunlar menüyle beraber deneyimin doğal bir parçası.
               </p>
@@ -917,11 +919,11 @@
             <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-hb-muted mb-1">
               Instagram • @hiddenbackk
             </p>
-            <h2 class="text-lg font-semibold">Canlıdan kareler</h2>
+            <h2 class="text-lg font-semibold" data-i18n="instagramTitle">Canlıdan kareler</h2>
           </div>
           <a href="https://www.instagram.com/hiddenbackk/" target="_blank"
              class="hidden sm:inline-flex text-xs px-3 py-1.5 rounded-full border border-hb-border">
-            Instagram'a git
+            <span data-i18n="instagramButton">Instagram'a git</span>
           </a>
         </div>
 
@@ -932,7 +934,7 @@
 
         <a href="https://www.instagram.com/hiddenbackk/" target="_blank"
            class="sm:hidden inline-flex text-xs px-3 py-1.5 rounded-full border border-hb-border">
-          Instagram'a git
+          <span data-i18n="instagramButton">Instagram'a git</span>
         </a>
       </div>
 
@@ -942,26 +944,26 @@
           <div class="flex items-start justify-between gap-3 flex-wrap">
             <div>
               <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-hb-muted mb-1">Games • hiddenback</p>
-              <h2 class="text-2xl font-semibold text-hb-text">Oyununu seç ve oyna</h2>
+              <h2 class="text-2xl font-semibold text-hb-text" data-i18n="gamesHeading">Oyununu seç ve oyna</h2>
             </div>
           </div>
 
           <div class="game-select-grid">
             <button class="game-tab-btn active" data-game="snake">
               <span class="icon" aria-hidden="true">🟢</span>
-              <span>Yılan Oyunu</span>
+              <span data-i18n="snakeTab">Yılan Oyunu</span>
             </button>
             <button class="game-tab-btn" data-game="tictactoe">
               <span class="icon" aria-hidden="true">❌</span>
-              <span>Çapraz &amp; Sıfır</span>
+              <span data-i18n="tttTab">Çapraz &amp; Sıfır</span>
             </button>
             <button class="game-tab-btn" data-game="checkers">
               <span class="icon" aria-hidden="true">♟️</span>
-              <span>Dama</span>
+              <span data-i18n="checkersTab">Dama</span>
             </button>
           </div>
 
-          <p class="text-sm text-hb-muted leading-relaxed">
+          <p class="text-sm text-hb-muted leading-relaxed" data-i18n="gamesIntro">
             Games sekmesinden artık üç oyuna erişebilirsin. Dilediğin oyunu yukarıdan seç, kuralları oku ve hemen oynamaya başla.
           </p>
 
@@ -970,21 +972,21 @@
               <div class="flex flex-col gap-3">
                 <div class="flex items-center gap-3 text-sm">
                   <div class="px-3 py-2 rounded-xl bg-gray-100 border border-hb-border">
-                    Skor: <span id="snake-score" class="font-semibold">0</span>
+                    <span data-i18n="snakeScore">Skor</span>: <span id="snake-score" class="font-semibold">0</span>
                   </div>
                   <div class="px-3 py-2 rounded-xl bg-gray-100 border border-hb-border">
-                    Rekor: <span id="snake-best" class="font-semibold">0</span>
+                    <span data-i18n="snakeBest">Rekor</span>: <span id="snake-best" class="font-semibold">0</span>
                   </div>
                   <div class="px-3 py-2 rounded-xl bg-gray-100 border border-hb-border">
-                    Durum: <span id="snake-status" class="font-semibold">Hazır</span>
+                    <span data-i18n="snakeStatus">Durum</span>: <span id="snake-status" class="font-semibold">Hazır</span>
                   </div>
                 </div>
                 <div class="rounded-2xl border border-hb-border bg-gray-50 p-3">
-                  <p class="text-sm font-semibold mb-2">İpucu</p>
+                  <p class="text-sm font-semibold mb-2" data-i18n="snakeTipTitle">İpucu</p>
                   <ul class="text-sm text-hb-muted list-disc list-inside space-y-1">
-                    <li>Önce bir dil seç, sonra "Games"e geçip oyunu başlat.</li>
-                    <li>Hız yavaş başlar; her elma ile biraz artar.</li>
-                    <li>Telefon için butonlar büyük, dokunmatik gecikme yok.</li>
+                    <li data-i18n="snakeTip1">Önce bir dil seç, sonra "Games"e geçip oyunu başlat.</li>
+                    <li data-i18n="snakeTip2">Hız yavaş başlar; her elma ile biraz artar.</li>
+                    <li data-i18n="snakeTip3">Telefon için butonlar büyük, dokunmatik gecikme yok.</li>
                   </ul>
                 </div>
               </div>
@@ -1005,31 +1007,31 @@
               </div>
             </div>
 
-            <div class="flex flex-col items-center gap-2 pt-1">
-              <button id="snake-restart" type="button"
-                      class="px-5 py-2 rounded-full border border-hb-border text-sm font-semibold bg-black text-white shadow-sm">
-                Başlat / Sıfırla
-              </button>
-              <p class="text-xs text-hb-muted text-center">
-                Mobilde yön tuşlarını, masaüstünde ok/WASD tuşlarını kullanabilirsiniz.
-              </p>
-            </div>
-          </section>
+              <div class="flex flex-col items-center gap-2 pt-1">
+                <button id="snake-restart" type="button"
+                        class="px-5 py-2 rounded-full border border-hb-border text-sm font-semibold bg-black text-white shadow-sm">
+                <span data-i18n="snakeRestart">Başlat / Sıfırla</span>
+                </button>
+                <p class="text-xs text-hb-muted text-center">
+                <span data-i18n="snakeControls">Mobilde yön tuşlarını, masaüstünde ok/WASD tuşlarını kullanabilirsiniz.</span>
+                </p>
+              </div>
+            </section>
 
           <section class="game-panel hidden" data-game="tictactoe">
             <div class="grid md:grid-cols-[1.05fr_0.95fr] gap-5 items-start">
               <div class="rounded-2xl border border-hb-border bg-gray-50 p-4 flex flex-col gap-2">
-                <h3 class="text-lg font-semibold">Kurallar</h3>
-                <p class="text-sm text-hb-muted leading-relaxed">
+                <h3 class="text-lg font-semibold" data-i18n="tttRulesTitle">Kurallar</h3>
+                <p class="text-sm text-hb-muted leading-relaxed" data-i18n="tttRules1">
                   Çapraz &amp; Sıfır oyununda amaç, 3x3 karede yatay, dikey veya çapraz olarak kendi sembolünü dizmek. Sıra değişiyor:
                   X başlar, ardından O gelir.
                 </p>
-                <p class="text-sm text-hb-muted leading-relaxed">
+                <p class="text-sm text-hb-muted leading-relaxed" data-i18n="tttRules2">
                   Telefon ya da masaüstünde karelere dokunarak/klikleyerek oynayabilirsin. Berabere kalırsan yeniden başlat tuşu hemen burada.
                 </p>
                 <div class="flex items-center gap-3 pt-1">
                   <button id="ttt-reset" type="button" class="px-4 py-2 rounded-full border border-hb-border bg-white text-sm font-semibold">
-                    Yeniden Başlat
+                    <span data-i18n="tttReset">Yeniden Başlat</span>
                   </button>
                   <span id="ttt-status" class="text-sm font-semibold text-hb-text">Sıra: X</span>
                 </div>
@@ -1052,18 +1054,18 @@
           <section class="game-panel hidden" data-game="checkers">
             <div class="grid md:grid-cols-[1.05fr_0.95fr] gap-5 items-start">
               <div class="rounded-2xl border border-hb-border bg-gray-50 p-4 flex flex-col gap-2">
-                <h3 class="text-lg font-semibold">Kurallar</h3>
-                <p class="text-sm text-hb-muted leading-relaxed">
+                <h3 class="text-lg font-semibold" data-i18n="checkersRulesTitle">Kurallar</h3>
+                <p class="text-sm text-hb-muted leading-relaxed" data-i18n="checkersRules1">
                   Dama 8x8 tahtada oynanır. Kırmızı taşlar yukarı, siyah taşlar aşağı doğru çapraz hareket eder. İleriye çapraz bir kare
                   gidebilir veya rakip taşın üzerinden atlayarak hamle yapabilirler.
                 </p>
-                <p class="text-sm text-hb-muted leading-relaxed">
+                <p class="text-sm text-hb-muted leading-relaxed" data-i18n="checkersRules2">
                   Taşın varacağı kare boş olmalı. Son sıraya ulaşan taş dama olur ve her yöne gidebilir. Sıra değiştikçe durum
                   aşağıda gösterilir.
                 </p>
                 <div class="flex items-center gap-3 pt-1 flex-wrap">
                   <button id="checkers-reset" type="button" class="px-4 py-2 rounded-full border border-hb-border bg-white text-sm font-semibold">
-                    Yeni Oyun
+                    <span data-i18n="checkersReset">Yeni Oyun</span>
                   </button>
                   <span id="checkers-status" class="text-sm font-semibold text-hb-text">Sıra: Kırmızı</span>
                 </div>
@@ -1071,7 +1073,7 @@
 
               <div class="checkers-wrapper">
                 <div id="checkers-board" class="checkers-board" aria-label="Dama tahtası"></div>
-                <p class="text-xs text-hb-muted text-center mt-2">Taşına dokun, geçerli hamleler vurgulanır.</p>
+                <p class="text-xs text-hb-muted text-center mt-2" data-i18n="checkersHint">Taşına dokun, geçerli hamleler vurgulanır.</p>
               </div>
             </div>
           </section>
@@ -1084,7 +1086,7 @@
         <!-- SEARCH + FILTERS (desktop) -->
         <div id="mobile-top-menu" class="lg:hidden hidden">
           <div class="menu-bar-inner">
-            <span class="menu-label">Menü <span class="arrow" id="menu-arrow">↓</span></span>
+            <span class="menu-label"><span data-i18n="navMenu">Menü</span> <span class="arrow" id="menu-arrow">↓</span></span>
             <div class="menu-rows">
               <button class="cat-btn" data-cat="kahvalti">KAHVALTI</button>
               <button class="cat-btn" data-cat="bowl">BOWL</button>
@@ -1100,7 +1102,7 @@
         <section id="controls-wrapper" class="flex flex-col gap-2 mb-1">
           <div class="flex flex-col md:flex-row md:items-center md:gap-4">
             <div class="relative flex-1">
-              <input id="search-desktop" type="text" placeholder="Menüde ara..."
+              <input id="search-desktop" type="text" placeholder="Menüde ara..." data-i18n-placeholder="searchPlaceholder"
                      class="w-full text-sm border border-hb-border rounded-full px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-gray-300">
             </div>
 
@@ -1114,11 +1116,11 @@
                       <path d="M12 8.5h.01" />
                     </svg>
                   </span>
-                  <span>Hakkımızda</span>
+                  <span data-i18n="navAbout">Hakkımızda</span>
                 </button>
                 <button class="footer-nav-btn" type="button" data-nav="menu">
                   <span class="icon" aria-hidden="true">☰</span>
-                  <span>Menü</span>
+                  <span data-i18n="navMenu">Menü</span>
                 </button>
                 <button class="footer-nav-btn" type="button" data-nav="games">
                   <span class="icon" aria-hidden="true">
@@ -1130,7 +1132,7 @@
                       <circle cx="18" cy="10.5" r="0.9" />
                     </svg>
                   </span>
-                  <span>Games</span>
+                  <span data-i18n="navGames">Games</span>
                 </button>
               </div>
             </nav>
@@ -1138,34 +1140,34 @@
 
           <div class="flex items-center gap-2 text-xs overflow-x-auto no-scrollbar py-1">
             <span class="text-[11px] text-hb-muted uppercase tracking-[0.18em] pl-1 shrink-0">
-              Filtreler
+              <span data-i18n="filters">Filtreler</span>
             </span>
 
             <div class="flex flex-nowrap gap-2">
               <button class="filter-chip" data-filter="veg">
                 <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                <span>Vejetaryen</span>
+                <span data-i18n="filterVeg">Vejetaryen</span>
               </button>
 
               <button class="filter-chip" data-filter="spicy">
                 <span class="inline-block w-1.5 h-1.5 rounded-full bg-red-500"></span>
-                <span>Acılı</span>
+                <span data-i18n="filterSpicy">Acılı</span>
               </button>
 
               <button class="filter-chip" data-filter="cheese">
                 <span class="inline-block w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                <span>Peynirli</span>
+                <span data-i18n="filterCheese">Peynirli</span>
               </button>
 
               <button class="filter-chip" data-filter="dessert">
                 <span class="inline-block w-1.5 h-1.5 rounded-full bg-pink-400"></span>
-                <span>Tatlı</span>
+                <span data-i18n="filterDessert">Tatlı</span>
               </button>
             </div>
           </div>
           <section id="group-nav" class="hidden flex items-center gap-2 text-xs overflow-x-auto no-scrollbar py-1">
             <span class="text-[11px] text-hb-muted uppercase tracking-[0.18em] pl-1 shrink-0">
-              Bölümler
+              <span data-i18n="groups">Bölümler</span>
             </span>
 
             <div id="group-nav-buttons" class="flex flex-nowrap gap-2"></div>
@@ -1224,22 +1226,22 @@
     <div class="flex flex-nowrap gap-2 py-2 text-xs overflow-x-auto no-scrollbar">
       <button class="filter-chip" data-filter="veg">
         <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-        <span>Vejetaryen</span>
+        <span data-i18n="filterVeg">Vejetaryen</span>
       </button>
 
       <button class="filter-chip" data-filter="spicy">
         <span class="inline-block w-1.5 h-1.5 rounded-full bg-red-500"></span>
-        <span>Acılı</span>
+        <span data-i18n="filterSpicy">Acılı</span>
       </button>
 
       <button class="filter-chip" data-filter="cheese">
         <span class="inline-block w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-        <span>Peynirli</span>
+        <span data-i18n="filterCheese">Peynirli</span>
       </button>
 
       <button class="filter-chip" data-filter="dessert">
         <span class="inline-block w-1.5 h-1.5 rounded-full bg-pink-400"></span>
-        <span>Tatlı</span>
+        <span data-i18n="filterDessert">Tatlı</span>
       </button>
     </div>
   </div>
