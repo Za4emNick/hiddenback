@@ -1242,7 +1242,7 @@ function createCard(item) {
         <h3 class="text-base font-semibold leading-tight">${item.title}</h3>
         <span class="text-sm font-semibold">${formatPrice(item.price)}</span>
       </div>
-      <p class="text-sm text-hb-muted leading-relaxed">${item.desc || ""}</p>
+      <p class="text-[15px] font-medium text-hb-muted leading-relaxed">${item.desc || ""}</p>
       ${caffeineLine}
       <div class="flex flex-wrap gap-2 text-[11px] text-hb-muted">
         ${(item.tags || [])
