@@ -107,11 +107,19 @@ function translateGroupTitle(cat, group) {
 
 async function fetchTranslations(lang) {
   try {
-    const response = await fetch(`locales/${lang}.json`);
-    if (!response.ok) return {};
-    return await response.json();
+    const response = await fetch(`/locales/${lang}.json`, { cache: "no-store" });
+    if (!response.ok) {
+      console.error(`Translation request failed for ${lang}: ${response.status} ${response.statusText}`);
+      return {};
+    }
+    try {
+      return await response.json();
+    } catch (parseError) {
+      console.error("Translation parse failed", parseError);
+      return {};
+    }
   } catch (error) {
-    console.warn("Translation load failed", error);
+    console.error("Translation load failed", error);
     return {};
   }
 }
@@ -150,8 +158,8 @@ async function applyLanguage(lang) {
   applyStaticTranslations();
   renderItems();
   updateSnakeHUD();
-  updateTttStatus(tttStatusState.key, tttStatusState.vars);
-  updateCheckersStatus(checkersStatusState.key, checkersStatusState.vars);
+  renderTttStatus();
+  updateCheckersStatus();
   localStorage.setItem("hb-lang", currentLang);
 }
 
