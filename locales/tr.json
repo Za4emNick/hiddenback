@@ -1,0 +1,522 @@
+{
+  "metaTitle": "HiddenBack — Menü",
+  "metaDescription": "HiddenBack Cafe — Yalova. Modern, temiz ve kullanışlı online menü.",
+  "introTitle": "Dili seçin",
+  "langTurkish": "Türkçe",
+  "langEnglish": "English",
+  "langRussian": "Русский",
+  "navMenu": "Menü",
+  "catKahvalti": "KAHVALTI",
+  "catBowl": "BOWL",
+  "catLezzetler": "LEZZETLER",
+  "catTatli": "TATLILAR",
+  "catMatcha": "MATCHA",
+  "catSoguk": "SOĞUK İÇECEK",
+  "catSicak": "SICAK İÇECEK",
+  "ui": {
+    "snakeReadyStatus": "Hazır",
+    "snakeStartedStatus": "Başladı",
+    "snakeStoppedStatus": "Durdu",
+    "snakeGameOverStatus": "Oyun bitti",
+    "snakePlayingStatus": "Oynanıyor",
+    "filterVeg": "Vejetaryen",
+    "filterSpicy": "Acılı",
+    "filterCheese": "Peynirli",
+    "filterDessert": "Tatlı",
+    "filtersLabel": "Filtreler",
+    "checkerRed": "Kırmızı",
+    "checkerBlack": "Siyah"
+  },
+  "groups": {
+    "kahvalti": {},
+    "bowl": {
+      "smoothie": "Smoothie Bowl",
+      "savory": "Bowl"
+    },
+    "lezzetler": {},
+    "tatli": {},
+    "matcha": {},
+    "soguk": {
+      "sogukicecek": "Soğuk İçecekler",
+      "coldcoffee": "Soğuk Kahveler",
+      "milkshake": "Milkshake",
+      "frozen": "Frozen",
+      "kokteyl": "Alkolsüz Kokteyller"
+    },
+    "sicak": {
+      "sicakicecek": "Sıcak İçecekler",
+      "kahve": "Kahveler",
+      "dunya": "Dünya Çayları"
+    }
+  },
+  "menu": {
+    "affogato": {
+      "title": "Affogato",
+      "desc": "Espresso ve dondurma ile affogato."
+    },
+    "americano": {
+      "title": "Americano",
+      "desc": "Espresso ve sıcak su."
+    },
+    "ayran": {
+      "title": "Ayran",
+      "desc": "Serinletici ayran."
+    },
+    "balli_fincan_sut": {
+      "title": "Ballı Fincan Süt",
+      "desc": "Bal ile sıcak süt."
+    },
+    "bowl": {
+      "title": "Acaí Bowl",
+      "desc": "Acai özü, muz, böğürtlen, frambuaz ve granola."
+    },
+    "bowl1": {
+      "title": "Berry Bowl",
+      "desc": "Süzme yoğurt, bal, granola ve çilek."
+    },
+    "bowl2": {
+      "title": "Basmatı Bowl",
+      "desc": "Izgara tavuk göğsü, basmati pilavı, brokoli, havuç, Akdeniz yeşilliği ve zeytinyağı."
+    },
+    "bowl3": {
+      "title": "Vegan Bowl",
+      "desc": "Kavrulmuş nohut, mantar, avokado, bebek turp, Akdeniz yeşilliği, havuç ve zeytinyağı."
+    },
+    "bowl4": {
+      "title": "Ton Balıklı Bowl",
+      "desc": "Esmer pirinç, ton balığı, brokoli, havuç, Akdeniz yeşilliği, zeytinyağı ve salatalık turşusu."
+    },
+    "bowl5": {
+      "title": "Köfte Grill Bowl",
+      "desc": "Basmati pilavı, ızgara köfte, köz biber, lahana turşusu, Akdeniz yeşilliği, havuç ve zeytinyağı."
+    },
+    "bowl6": {
+      "title": "Makarna Bowl",
+      "desc": "Burgu makarna, yoğurt, salatalık turşusu, mısır, Meksika fasulyesi, Akdeniz yeşilliği, havuç ve zeytinyağı."
+    },
+    "bowl7": {
+      "title": "Acı Tatlı Sos Tavuk Bowl",
+      "desc": "Arpa şehriye, acı tatlı soslu tavuk göğsü, brokoli, Akdeniz yeşilliği, havuç ve zeytinyağı."
+    },
+    "bowl8": {
+      "title": "Fresh Bowl",
+      "desc": "Kinoa, avokado, çilek, havuç, Akdeniz yeşilliği ve zeytinyağı."
+    },
+    "brownie_cookie_2_adet": {
+      "title": "Brownie Cookie (2 Adet)",
+      "desc": "İki adet brownie cookie."
+    },
+    "brownie_pasta": {
+      "title": "Brownie Pasta",
+      "desc": "İki dilim brownie arasında pasta kreması ve çilek dilimleri."
+    },
+    "burn": {
+      "title": "Burn",
+      "desc": "Enerji içeceği."
+    },
+    "burritos_tavuk_durum": {
+      "title": "Burritos Tavuk Dürüm",
+      "desc": "Tortilla ekmeğinde tavuk dilimleri, burritos sos, renkli biberler, mantar, mısır, cheddar peyniri, patates kızartması ve Akdeniz yeşilliği."
+    },
+    "cafe_latte": {
+      "title": "Cafe Latte",
+      "desc": "Klasik latte."
+    },
+    "cam_sise_su": {
+      "title": "Cam Şişe Su",
+      "desc": "Cam şişede su."
+    },
+    "cappuccino": {
+      "title": "Cappuccino",
+      "desc": "Espresso ve süt köpüğü."
+    },
+    "cappy": {
+      "title": "Cappy",
+      "desc": "Vişne, şeftali ve karışık meyve seçenekleriyle."
+    },
+    "caramel_frappe": {
+      "title": "Caramel Frappe",
+      "desc": "Karamelli frappe."
+    },
+    "caramel_macchiato": {
+      "title": "Caramel Macchiato",
+      "desc": "Karamelli macchiato."
+    },
+    "cevizli_brownie": {
+      "title": "Cevizli Brownie",
+      "desc": "Ceviz parçalarıyla brownie."
+    },
+    "cheesecake": {
+      "title": "Cheesecake",
+      "desc": "Frambuaz, yaban mersini, limon, lotus veya süt reçeli seçenekleriyle cheesecake."
+    },
+    "chocolate_frappe": {
+      "title": "Chocolate Frappe",
+      "desc": "Çikolatalı frappe."
+    },
+    "chocolate_mousse": {
+      "title": "Chocolate Mousse",
+      "desc": "Çikolatalı mus, böğürtlen ve çilek ile servis edilir."
+    },
+    "churchill": {
+      "title": "Churchill",
+      "desc": "Ferahlık veren karışım."
+    },
+    "cikolata_dolgulu_tart": {
+      "title": "Çikolata Dolgulu Tart",
+      "desc": "Yoğun çikolata dolgulu tart."
+    },
+    "cikolatali_sufle": {
+      "title": "Çikolatalı Sufle",
+      "desc": "Sıcak çikolatalı sufle."
+    },
+    "cirpilmis_yumurta": {
+      "title": "Çırpılmış Yumurta",
+      "desc": "Çırpılmış yumurta, beyaz peynir ve ekşi maya ekmek."
+    },
+    "citir_tavuk": {
+      "title": "Çıtır Tavuk",
+      "desc": "Panelenmiş jülyen tavuk dilimleri, sweet chili sos, sezar sos ve patates kızartması."
+    },
+    "coca_cola": {
+      "title": "Coca Cola / Fanta / Sprite",
+      "desc": "Coca Cola, Fanta veya Sprite seçenekleri."
+    },
+    "cookie_latte": {
+      "title": "Cookie Latte",
+      "desc": "Kurabiye aromalı sıcak latte."
+    },
+    "cool_lime_yeni": {
+      "title": "Cool Lime (Yeni)",
+      "desc": "Ferahlatıcı cool lime."
+    },
+    "cortado": {
+      "title": "Cortado",
+      "desc": "Espresso ve az süt."
+    },
+    "damla_cikolatali_cevizli_kurabiye": {
+      "title": "Damla Çikolatalı Cevizli Kurabiye",
+      "desc": "Üç adet kurabiye ile servis edilir."
+    },
+    "dana_jambon_tost": {
+      "title": "Dana Jambon Tost",
+      "desc": "Taze kaşar peyniri, dana jambon, patates kızartması ve Akdeniz yeşillikleri."
+    },
+    "demleme_cay": {
+      "title": "Demleme Çay",
+      "desc": "Taze demlenmiş çay."
+    },
+    "demleme_cay_fincan": {
+      "title": "Demleme Çay (Fincan)",
+      "desc": "Fincanda demleme çay."
+    },
+    "double_espresso": {
+      "title": "Double Espresso",
+      "desc": "Çift shot espresso."
+    },
+    "ekmek_ustu": {
+      "title": "Ekmek Üstü",
+      "desc": "Ekşi maya ekmek üstü krem peynir, çırpılmış yumurta ve avokado."
+    },
+    "ekmek_ustu_yumurta_ve_avokado": {
+      "title": "Ekmek Üstü Yumurta & Avokado",
+      "desc": "Ekşi maya ekmek üstü taze peynir, çırpılmış yumurta, avokado ve mini smoothie bowl."
+    },
+    "ekstra_surup": {
+      "title": "Ekstra Şurup",
+      "desc": "Kahve şurupları."
+    },
+    "espresso": {
+      "title": "Espresso",
+      "desc": "Yoğun espresso shot."
+    },
+    "espresso_shot": {
+      "title": "Espresso Shot",
+      "desc": "Tek shot espresso."
+    },
+    "fettucine_alfredo": {
+      "title": "Fettucine Alfredo",
+      "desc": "Sotelenmiş tavuk dilimleri, fettuccine makarna, mantar, renkli biberler, pesto sos, krema ve parmesan peyniri."
+    },
+    "filtre_kahve": {
+      "title": "Filtre Kahve",
+      "desc": "Klasik filtre kahve."
+    },
+    "fincan_sut": {
+      "title": "Fincan Süt",
+      "desc": "Sıcak süt."
+    },
+    "flat_white": {
+      "title": "Flat White",
+      "desc": "Yoğun kahveli flat white."
+    },
+    "frozen_bogurtlen": {
+      "title": "Frozen Böğürtlen",
+      "desc": "Böğürtlenli frozen."
+    },
+    "frozen_cilek": {
+      "title": "Frozen Çilek",
+      "desc": "Çilekli frozen."
+    },
+    "frozen_karpuz": {
+      "title": "Frozen Karpuz",
+      "desc": "Karpuzlu frozen."
+    },
+    "fuse_tea": {
+      "title": "Fuse Tea",
+      "desc": "Şeftali, limon, mango ve ananas seçenekleriyle."
+    },
+    "hidden_bowl": {
+      "title": "Hidden Bowl",
+      "desc": "Pastacı kreması, lotus kırıkları, damla çikolata, pirinç patlakları, çilek, muz ve çikolata sosu."
+    },
+    "hidden_dream": {
+      "title": "Hidden Dream",
+      "desc": "Oreo tabanı, hidden krema, akışkan çikolata ve fındık parçaları."
+    },
+    "ice_americano": {
+      "title": "Ice Americano",
+      "desc": "Serinletici buzlu Americano."
+    },
+    "ice_caramel_macchiato": {
+      "title": "Ice Caramel Macchiato",
+      "desc": "Buzlu karamelli macchiato."
+    },
+    "ice_cortado": {
+      "title": "Ice Cortado",
+      "desc": "Buzlu cortado."
+    },
+    "ice_flat_white": {
+      "title": "Ice Flat White",
+      "desc": "Buzlu flat white."
+    },
+    "ice_latte": {
+      "title": "Ice Latte",
+      "desc": "Buzlu latte."
+    },
+    "ice_latte_findik": {
+      "title": "Ice Latte Fındık",
+      "desc": "Fındık aromalı buzlu latte."
+    },
+    "ice_latte_karamel": {
+      "title": "Ice Latte Karamel",
+      "desc": "Karamelli buzlu latte."
+    },
+    "ice_latte_vanilya": {
+      "title": "Ice Latte Vanilya",
+      "desc": "Vanilyalı buzlu latte."
+    },
+    "ice_matcha_latte": {
+      "title": "Ice Matcha Latte",
+      "desc": "Buzlu matcha latte."
+    },
+    "ice_mocha": {
+      "title": "Ice Mocha",
+      "desc": "Buzlu mocha."
+    },
+    "ice_pumpkin_latte_yeni": {
+      "title": "Ice Pumpkin Latte (Yeni)",
+      "desc": "Balkabaklı buzlu latte."
+    },
+    "ice_spanish_latte": {
+      "title": "Ice Spanish Latte",
+      "desc": "Tatlı soğuk Spanish latte."
+    },
+    "ice_white_mocha": {
+      "title": "Ice White Mocha",
+      "desc": "Buzlu beyaz çikolatalı mocha."
+    },
+    "ihlamur_ve_melisa": {
+      "title": "Ihlamur & Melisa",
+      "desc": "Kış aylarının vazgeçilmez bitki çayı."
+    },
+    "jasmine": {
+      "title": "Jasmine",
+      "desc": "Yasemin çiçeği aromalı Çin çayı."
+    },
+    "kori_soslu_tavuk": {
+      "title": "Köri Soslu Tavuk",
+      "desc": "Köri soslu tavuk, mantar, renkli biberler, basmati pilav ve Akdeniz yeşillikleri."
+    },
+    "kruvasan": {
+      "title": "Kruvasan",
+      "desc": "Tereyağlı kruvasan tatlı servisi."
+    },
+    "kruvasan_bowl": {
+      "title": "Kruvasan Bowl",
+      "desc": "Tereyağlı kruvasan yanında çırpılmış yumurta, avokado ve mini smoothie bowl."
+    },
+    "kruvasan_cikolata_ve_cilek": {
+      "title": "Kruvasan Çikolata & Çilek",
+      "desc": "Çikolata ve çilekle tatlandırılmış kruvasan."
+    },
+    "latte_macchiato": {
+      "title": "Latte Macchiato",
+      "desc": "Süt ve espresso katmanları."
+    },
+    "magnolia": {
+      "title": "Magnolia",
+      "desc": "Çilek, muz, çikolata, oreo veya karışık seçenekli magnolia."
+    },
+    "matcha_latte": {
+      "title": "Matcha Latte",
+      "desc": "Klasik sıcak matcha latte."
+    },
+    "menemen": {
+      "title": "Menemen",
+      "desc": "Yaz domatesiyle menemen, beyaz peynir ve ekşi maya ekmek."
+    },
+    "meyveli_cikolatali_brownie": {
+      "title": "Meyveli Çikolatalı Brownie",
+      "desc": "Brownie parçaları, lotus kırığı, damla çikolata, çilek, muz ve çikolata sosu."
+    },
+    "milkshake_cikolata": {
+      "title": "Milkshake Çikolata",
+      "desc": "Çikolatalı milkshake."
+    },
+    "milkshake_cilek": {
+      "title": "Milkshake Çilek",
+      "desc": "Çilekli milkshake."
+    },
+    "milkshake_muz": {
+      "title": "Milkshake Muz",
+      "desc": "Muzlu milkshake."
+    },
+    "milkshake_oreo": {
+      "title": "Milkshake Oreo",
+      "desc": "Oreo parçalı milkshake."
+    },
+    "minera_maden_suyu": {
+      "title": "Minera Maden Suyu Çeşitleri",
+      "desc": "Doğal, limon, elma veya karpuz-çilek aromalı seçenekler."
+    },
+    "mini_kahvalti": {
+      "title": "Mini Kahvaltı",
+      "desc": "Göz yumurta, beyaz peynir, mini smoothie bowl, zeytinler, domates, salatalık, patates kızartması, ekşi maya ekmek ve çay."
+    },
+    "mocha": {
+      "title": "Mocha",
+      "desc": "Çikolatalı mocha."
+    },
+    "mojito": {
+      "title": "Mojito",
+      "desc": "Mojito şurubu, esmer şeker, limon suyu, sprite, maden suyu ve taze nane."
+    },
+    "omlet": {
+      "title": "Omlet",
+      "desc": "Taze otlu, sebzeli veya peynirli omlet; yanında yeşil salata ve ekşi maya ekmek."
+    },
+    "orange_mango_matcha": {
+      "title": "Orange Mango Matcha",
+      "desc": "Portakal ve mango ile matcha."
+    },
+    "pancake": {
+      "title": "Pancake",
+      "desc": "Üç adet pancake, böğürtlen, çilek, muz ve çikolatayla."
+    },
+    "patates_tava": {
+      "title": "Patates Tava",
+      "desc": "Klasik kızarmış patates."
+    },
+    "profiterol": {
+      "title": "Profiterol",
+      "desc": "Profiterol topları, pastacı kreması, çikolata ve Antep fıstığı parçacıkları."
+    },
+    "pumpkin_latte_yeni": {
+      "title": "Pumpkin Latte (Yeni)",
+      "desc": "Balkabaklı latte."
+    },
+    "purple_rain": {
+      "title": "Purple Rain",
+      "desc": "Ananas suyu, böğürtlen şurubu, passion fruit ve turunç aroması."
+    },
+    "red_forest": {
+      "title": "Red Forest",
+      "desc": "Çilek, ahududu ve böğürtlen aromalı çay."
+    },
+    "redbull": {
+      "title": "Redbull",
+      "desc": "Enerji içeceği."
+    },
+    "sahlep": {
+      "title": "Sahlep",
+      "desc": "Kışın vazgeçilmezi sahlep."
+    },
+    "san_sebastian_cheesecake": {
+      "title": "San Sebastian Cheesecake",
+      "desc": "Karamelize yüzeyli San Sebastian cheesecake."
+    },
+    "sandvic": {
+      "title": "Sandviç",
+      "desc": "Ekşi maya ekmek, cheddar, taze kaşar, krem peynir, dana jambon, haşlanmış yumurta ve lolorosso."
+    },
+    "sekersiz_hurmali_i_ncirli_kek": {
+      "title": "Şekersiz Hurmalı İncirli Kek",
+      "desc": "Şekersiz hurmalı ve incirli kek."
+    },
+    "sex_on_the_beach": {
+      "title": "Sex on The Beach",
+      "desc": "Şeftali şurubu, ananas suyu, taze portakal suyu ve grenadin."
+    },
+    "sicak_cikolata": {
+      "title": "Sıcak Çikolata",
+      "desc": "Yoğun sıcak çikolata."
+    },
+    "strawberry_matcha": {
+      "title": "Strawberry Matcha",
+      "desc": "Çilek aromalı matcha."
+    },
+    "sutlu_filtre_kahve": {
+      "title": "Sütlü Filtre Kahve",
+      "desc": "Süt eklenmiş filtre kahve."
+    },
+    "tart": {
+      "title": "Tart",
+      "desc": "Orman meyveli veya çikolata dolgulu tart."
+    },
+    "tatli_ve_tuzlu_ekmek_ustu": {
+      "title": "Tatlı & Tuzlu Ekmek Üstü",
+      "desc": "Bir dilim krem peynirli, dana jambonlu ve göz yumurtalı; diğer dilim çikolata, muz ve böğürtlenli."
+    },
+    "tavuklu_sezar_salata": {
+      "title": "Tavuklu Sezar Salata",
+      "desc": "Izgara tavuk göğsü, taze göbek marul, domates, kruton, sezar sos ve mısır."
+    },
+    "tavuklu_tost": {
+      "title": "Tavuklu Tost",
+      "desc": "Ekşi maya ekmek, kremalı tavuk, patates kızartması ve akdeniz yeşillikleri"
+    },
+    "taze_portakal_suyu": {
+      "title": "Taze Portakal Suyu",
+      "desc": "Taze sıkılmış portakal suyu."
+    },
+    "tiramisu": {
+      "title": "Tiramisu",
+      "desc": "Klasik mascarpone kremalı tiramisu."
+    },
+    "turk_kahvesi": {
+      "title": "Türk Kahvesi",
+      "desc": "Klasik Türk kahvesi."
+    },
+    "turk_kahvesi_double": {
+      "title": "Türk Kahvesi (Double)",
+      "desc": "Çift porsiyon Türk kahvesi."
+    },
+    "waffle": {
+      "title": "Waffle",
+      "desc": "Muz, çilek, yer fıstığı eklenebilir; hamur tarçın içerir."
+    },
+    "white_chocolate_mocha": {
+      "title": "White Chocolate Mocha",
+      "desc": "Beyaz çikolatalı mocha."
+    },
+    "yesil_cay": {
+      "title": "Yeşil Çay",
+      "desc": "Yumuşak içimli yeşil çay."
+    },
+    "yesil_salata": {
+      "title": "Yeşil Salata",
+      "desc": "Taze göbek marul, lolorosso, havuç, turp, salatalık, domates ve beyaz peynir."
+    }
+  }
+}
