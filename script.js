@@ -133,8 +133,14 @@ function hideIntroOverlay(instant = false) {
 }
 
 async function applyLanguage(lang) {
-  currentLang = SUPPORTED_LANGS.includes(lang) ? lang : DEFAULT_LANG;
-  translations = await fetchTranslations(currentLang);
+  const targetLang = SUPPORTED_LANGS.includes(lang) ? lang : DEFAULT_LANG;
+  const loadedTranslations = await fetchTranslations(targetLang);
+
+  currentLang = targetLang;
+  translations = loadedTranslations && Object.keys(loadedTranslations).length
+    ? loadedTranslations
+    : {};
+
   document.documentElement.lang = currentLang;
   refreshUiText();
   applyStaticTranslations();
@@ -1367,8 +1373,17 @@ window.addEventListener("keydown", (event) => {
 
 document.querySelectorAll(".intro-lang-btn").forEach((btn) => {
   btn.addEventListener("click", async () => {
-    await applyLanguage(btn.dataset.lang);
-    hideIntroOverlay();
+    try {
+      await applyLanguage(btn.dataset.lang);
+    } catch (error) {
+      console.warn("Language apply failed, using defaults", error);
+      currentLang = DEFAULT_LANG;
+      translations = {};
+      applyStaticTranslations();
+      renderItems();
+    } finally {
+      hideIntroOverlay();
+    }
   });
 });
 
