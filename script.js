@@ -22,7 +22,7 @@ const GROUP_TITLES = {
   }
 };
 
-const TEXT = {
+const DEFAULT_TEXT = {
   snakeReadyStatus: "Hazır",
   snakeStartedStatus: "Başladı",
   snakeStoppedStatus: "Durdu",
@@ -36,6 +36,124 @@ const TEXT = {
   checkerRed: "Kırmızı",
   checkerBlack: "Siyah",
 };
+
+let uiText = { ...DEFAULT_TEXT };
+
+const SUPPORTED_LANGS = ["tr", "en", "ru"];
+const DEFAULT_LANG = "tr";
+let currentLang = DEFAULT_LANG;
+let translations = {};
+
+function getItemId(item) {
+  if (item.id) return item.id;
+  if (item.img) {
+    const last = item.img.split("/").pop() || "";
+    return last.replace(/\.\w+$/, "");
+  }
+  return item.title?.toLowerCase().replace(/[^a-z0-9]+/gi, "_") || "";
+}
+
+function refreshUiText() {
+  const incoming = translations.ui || translations.text || {};
+  uiText = { ...DEFAULT_TEXT, ...incoming };
+  snakeStatusText = uiText.snakeReadyStatus;
+  checkersStatusState = { key: "checkersTurn", vars: { player: uiText.checkerRed } };
+}
+
+function resolveTranslation(key) {
+  if (!key) return "";
+  if (translations.ui && key in translations.ui) return translations.ui[key];
+  if (key in translations) return translations[key];
+  return "";
+}
+
+function applyStaticTranslations() {
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    const key = el.dataset.i18n;
+    if (!el.dataset.defaultText) el.dataset.defaultText = el.textContent?.trim() || "";
+    const translated = resolveTranslation(key);
+    el.textContent = translated || el.dataset.defaultText;
+  });
+
+  document.querySelectorAll("[data-i18n-content]").forEach((el) => {
+    const key = el.dataset.i18nContent;
+    if (!el.dataset.defaultContent) el.dataset.defaultContent = el.getAttribute("content") || "";
+    const translated = resolveTranslation(key);
+    el.setAttribute("content", translated || el.dataset.defaultContent);
+  });
+
+  const titleEl = document.querySelector("title[data-i18n]");
+  if (titleEl) document.title = titleEl.textContent;
+}
+
+function translateMenuItem(item) {
+  const itemId = getItemId(item);
+  const menuEntry = translations.menu?.[itemId] || {};
+  return {
+    ...item,
+    id: itemId,
+    title: menuEntry.title || item.title,
+    desc: menuEntry.desc || item.desc,
+  };
+}
+
+function translateGroupTitle(cat, group) {
+  return translations.groups?.[cat]?.[group] || (GROUP_TITLES[cat] || {})[group] || group;
+}
+
+async function fetchTranslations(lang) {
+  try {
+    const response = await fetch(`locales/${lang}.json`);
+    if (!response.ok) return {};
+    return await response.json();
+  } catch (error) {
+    console.warn("Translation load failed", error);
+    return {};
+  }
+}
+
+function showIntroOverlay() {
+  document.body.classList.add("intro-active");
+  const overlay = document.getElementById("intro-overlay");
+  if (overlay) overlay.removeAttribute("hidden");
+}
+
+function hideIntroOverlay(instant = false) {
+  const overlay = document.getElementById("intro-overlay");
+  const panel = document.getElementById("intro-panel");
+  document.body.classList.remove("intro-active");
+  if (!overlay) return;
+  if (instant) {
+    overlay.setAttribute("hidden", "hidden");
+    return;
+  }
+  overlay.classList.add("intro-reveal");
+  panel?.classList.add("intro-panel-hide");
+  setTimeout(() => overlay.setAttribute("hidden", "hidden"), 450);
+}
+
+async function applyLanguage(lang) {
+  currentLang = SUPPORTED_LANGS.includes(lang) ? lang : DEFAULT_LANG;
+  translations = await fetchTranslations(currentLang);
+  document.documentElement.lang = currentLang;
+  refreshUiText();
+  applyStaticTranslations();
+  renderItems();
+  updateSnakeHUD();
+  updateTttStatus(tttStatusState.key, tttStatusState.vars);
+  updateCheckersStatus(checkersStatusState.key, checkersStatusState.vars);
+  localStorage.setItem("hb-lang", currentLang);
+}
+
+async function initLanguage() {
+  const saved = localStorage.getItem("hb-lang");
+  await applyLanguage(saved || DEFAULT_LANG);
+  if (saved) {
+    hideIntroOverlay(true);
+  } else {
+    showIntroOverlay();
+  }
+}
 
 const itemImg = (name) => `images/items/${name}.webp`;
 
@@ -255,11 +373,13 @@ const GAME_CATEGORY = "games";
 let activeCategory = "hiddenback";
 let activeGame = "snake";
 let searchTerm = "";
-let snakeStatusText = TEXT.snakeReadyStatus;
+let snakeStatusText = uiText.snakeReadyStatus;
 let tttStatusState = { key: "tttTurn", vars: { player: "X" } };
-let checkersStatusState = { key: "checkersTurn", vars: { player: TEXT.checkerRed } };
+let checkersStatusState = { key: "checkersTurn", vars: { player: uiText.checkerRed } };
 
 function formatTttStatus(key, vars = {}) {
+  const templates = translations.games?.tictactoe || translations.games?.ttt || {};
+  if (typeof templates[key] === "string") return templates[key].replace("{player}", vars.player || "");
   if (key === "tttTurn") return `Sıra: ${vars.player}`;
   if (key === "tttDraw") return "Berabere! Yeniden deneyin.";
   if (key === "tttWin") return `${vars.player} kazandı!`;
@@ -267,25 +387,27 @@ function formatTttStatus(key, vars = {}) {
 }
 
 function formatCheckersStatus(key, vars = {}) {
+  const templates = translations.games?.checkers || {};
+  if (typeof templates[key] === "string") return templates[key].replace("{player}", vars.player || "");
   if (key === "checkersTurn") return `Sıra: ${vars.player}`;
   if (key === "checkersWin") return `${vars.player} kazandı!`;
   return "";
 }
 
-const TAG_LABELS = {
-  veg: { label: TEXT.filterVeg, color: "text-emerald-600" },
-  spicy: { label: TEXT.filterSpicy, color: "text-red-600" },
-  cheese: { label: TEXT.filterCheese, color: "text-amber-600" },
-  dessert: { label: TEXT.filterDessert, color: "text-pink-600" },
-};
+const getTagLabels = () => ({
+  veg: { label: uiText.filterVeg, color: "text-emerald-600" },
+  spicy: { label: uiText.filterSpicy, color: "text-red-600" },
+  cheese: { label: uiText.filterCheese, color: "text-amber-600" },
+  dessert: { label: uiText.filterDessert, color: "text-pink-600" },
+});
 
-const SNAKE_STATUS_TEXT = {
-  snakeReadyStatus: TEXT.snakeReadyStatus,
-  snakeStartedStatus: TEXT.snakeStartedStatus,
-  snakeStoppedStatus: TEXT.snakeStoppedStatus,
-  snakeGameOverStatus: TEXT.snakeGameOverStatus,
-  snakePlayingStatus: TEXT.snakePlayingStatus,
-};
+const getSnakeStatusText = () => ({
+  snakeReadyStatus: uiText.snakeReadyStatus,
+  snakeStartedStatus: uiText.snakeStartedStatus,
+  snakeStoppedStatus: uiText.snakeStoppedStatus,
+  snakeGameOverStatus: uiText.snakeGameOverStatus,
+  snakePlayingStatus: uiText.snakePlayingStatus,
+});
 
 const formatPrice = (price) => (typeof price === "number" ? `${price}₺` : "" );
 
@@ -339,7 +461,7 @@ function saveSnakeBest() {
 }
 
 function updateSnakeHUD(statusKey = "") {
-  if (statusKey) snakeStatusText = SNAKE_STATUS_TEXT[statusKey] || statusKey;
+  if (statusKey) snakeStatusText = getSnakeStatusText()[statusKey] || statusKey;
   if (snakeScoreEl) snakeScoreEl.textContent = snakeState.score;
   if (snakeBestEl) snakeBestEl.textContent = snakeState.best;
   if (snakeStatusEl) snakeStatusEl.textContent = snakeStatusText;
@@ -614,7 +736,7 @@ function buildInitialCheckersBoard() {
 function updateCheckersStatus() {
   const isTurn = (checkersStatusState.key || "checkersTurn") === "checkersTurn";
   const vars = isTurn
-    ? { player: checkersCurrent === "r" ? TEXT.checkerRed : TEXT.checkerBlack }
+    ? { player: checkersCurrent === "r" ? uiText.checkerRed : uiText.checkerBlack }
     : checkersStatusState.vars;
   checkersStatusState = { key: checkersStatusState.key || "checkersTurn", vars };
   if (checkersStatusEl) checkersStatusEl.textContent = formatCheckersStatus(checkersStatusState.key, checkersStatusState.vars);
@@ -626,7 +748,7 @@ function resetCheckers() {
   checkersSelected = null;
   checkersMoves = [];
   checkersFinished = false;
-  checkersStatusState = { key: "checkersTurn", vars: { player: TEXT.checkerRed } };
+  checkersStatusState = { key: "checkersTurn", vars: { player: uiText.checkerRed } };
   updateCheckersStatus();
   renderCheckersBoard();
 }
@@ -716,12 +838,12 @@ function moveCheckersPiece(targetX, targetY) {
     checkersFinished = true;
     checkersStatusState = {
       key: "checkersWin",
-      vars: { player: redLeft ? TEXT.checkerRed : TEXT.checkerBlack },
+      vars: { player: redLeft ? uiText.checkerRed : uiText.checkerBlack },
     };
   } else {
     checkersStatusState = {
       key: "checkersTurn",
-      vars: { player: checkersCurrent === "r" ? TEXT.checkerRed : TEXT.checkerBlack },
+      vars: { player: checkersCurrent === "r" ? uiText.checkerRed : uiText.checkerBlack },
     };
   }
 
@@ -857,7 +979,7 @@ function setActiveGame(game) {
   if (game === "snake") {
     initSnake();
   } else {
-    stopSnakeGame("Durdu");
+    stopSnakeGame("snakeStoppedStatus");
   }
 
   if (game === "tictactoe") {
@@ -901,7 +1023,7 @@ function toggleSections(category) {
   if (showGame) {
     setActiveGame(activeGame || "snake");
   } else {
-    stopSnakeGame("Durdu");
+    stopSnakeGame("snakeStoppedStatus");
   }
 
   updateLayout(category);
@@ -918,9 +1040,10 @@ function syncFilterButtons(key, isActive) {
 
 function applyFilters(item) {
   const term = searchTerm.trim().toLowerCase();
+  const translated = translateMenuItem(item);
   const matchesSearch = term
-    ? (item.title && item.title.toLowerCase().includes(term)) ||
-      (item.desc && item.desc.toLowerCase().includes(term))
+    ? (translated.title && translated.title.toLowerCase().includes(term)) ||
+      (translated.desc && translated.desc.toLowerCase().includes(term))
     : true;
 
   const activeKeys = Object.entries(activeFilters)
@@ -960,7 +1083,7 @@ function renderGroupNav(groups) {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "filter-chip";
-    btn.textContent = titles[group];
+    btn.textContent = translateGroupTitle(activeCategory, group);
     btn.addEventListener("click", () => scrollToGroup(group));
     groupNavButtons.appendChild(btn);
   });
@@ -969,6 +1092,8 @@ function renderGroupNav(groups) {
 }
 
 function createCard(item) {
+  const translated = translateMenuItem(item);
+  const tagLabels = getTagLabels();
   const card = document.createElement("article");
   card.className = "bg-white border border-hb-border rounded-2xl p-4 sm:p-5 flex flex-col gap-3 shadow-[0_6px_18px_rgba(0,0,0,0.04)] card-fade";
 
@@ -979,19 +1104,19 @@ function createCard(item) {
 
   card.innerHTML = `
     <div class="rounded-xl overflow-hidden bg-neutral-200 aspect-[4/3]">
-      <img src="${item.img}" alt="${item.title}" class="w-full h-full object-cover">
+      <img src="${item.img}" alt="${translated.title}" class="w-full h-full object-cover">
     </div>
     <div class="flex flex-col gap-2">
       <div class="flex items-start justify-between gap-2">
-        <h3 class="text-base font-semibold leading-tight">${item.title}</h3>
+        <h3 class="text-base font-semibold leading-tight">${translated.title}</h3>
         <span class="text-sm font-semibold">${formatPrice(item.price)}</span>
       </div>
-      <p class="text-xs font-normal text-hb-muted leading-relaxed">${item.desc || ""}</p>
+      <p class="text-xs font-normal text-hb-muted leading-relaxed">${translated.desc || ""}</p>
       ${caffeineLine}
       <div class="flex flex-wrap gap-2 text-[11px] text-hb-muted">
         ${(item.tags || [])
           .map((tag) => {
-            const meta = TAG_LABELS[tag];
+            const meta = tagLabels[tag];
             return meta ? `<span class="px-2 py-0.5 rounded-full bg-gray-100 ${meta.color}">${meta.label}</span>` : "";
           })
           .join("")}
@@ -1019,7 +1144,7 @@ function renderItems() {
   ITEMS.filter((item) => item.cat === activeCategory)
     .filter(applyFilters)
     .forEach((item) => {
-      const groupTitle = groupTitles[item.group];
+      const groupTitle = translateGroupTitle(activeCategory, item.group);
       if (groupTitle && !addedGroup.has(item.group)) {
         const heading = document.createElement("h3");
         heading.className =
@@ -1048,15 +1173,18 @@ function renderItems() {
 function openModal(item) {
   if (!modalOverlay) return;
 
-  modalImg.src = item.img;
-  modalImg.alt = item.title;
-  modalTitle.textContent = item.title;
-  modalDesc.textContent = item.desc || "";
-  modalPrice.textContent = formatPrice(item.price);
+  const translated = translateMenuItem(item);
+  const tagLabels = getTagLabels();
+
+  modalImg.src = translated.img;
+  modalImg.alt = translated.title;
+  modalTitle.textContent = translated.title;
+  modalDesc.textContent = translated.desc || "";
+  modalPrice.textContent = formatPrice(translated.price);
 
   const activeKeys = Object.entries(activeFilters)
     .filter(([, value]) => value)
-    .map(([key]) => (TAG_LABELS[key] ? TAG_LABELS[key].label : null))
+    .map(([key]) => (tagLabels[key] ? tagLabels[key].label : null))
     .filter(Boolean);
 
   const extraParts = [];
@@ -1066,7 +1194,7 @@ function openModal(item) {
   }
 
   if (activeKeys.length) {
-    extraParts.push(`${TEXT.filtersLabel}: ${activeKeys.join(", ")}`);
+    extraParts.push(`${uiText.filtersLabel}: ${activeKeys.join(", ")}`);
   }
 
   if (extraParts.length) {
@@ -1237,7 +1365,16 @@ window.addEventListener("keydown", (event) => {
   }
 });
 
-// Initial render
-setCategory(activeCategory);
-updateMenuArrow();
-updateBackToTop();
+document.querySelectorAll(".intro-lang-btn").forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    await applyLanguage(btn.dataset.lang);
+    hideIntroOverlay();
+  });
+});
+
+(async () => {
+  await initLanguage();
+  setCategory(activeCategory);
+  updateMenuArrow();
+  updateBackToTop();
+})();

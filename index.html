@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>HiddenBack — Menü</title>
-  <meta id="meta-description" name="description" content="HiddenBack Cafe — Yalova. Modern, temiz ve kullanışlı online menü.">
+  <title data-i18n="metaTitle">HiddenBack — Menü</title>
+  <meta id="meta-description" name="description" data-i18n-content="metaDescription" content="HiddenBack Cafe — Yalova. Modern, temiz ve kullanışlı online menü.">
 
   <!-- Tailwind CDN + config -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -37,6 +37,107 @@
 
     body {
       -webkit-font-smoothing: antialiased;
+    }
+
+    /* Intro overlay */
+    body.intro-active {
+      overflow: hidden;
+    }
+
+    #intro-overlay {
+      position: fixed;
+      inset: 0;
+      background-color: #050505;
+      color: #f5f5f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      transition: opacity 0.45s ease, background-color 0.45s ease, transform 0.45s ease;
+      overflow: hidden;
+    }
+
+    #intro-overlay.intro-reveal {
+      opacity: 0;
+      background-color: #f7f7f7;
+      transform: scale(1.01);
+      pointer-events: none;
+    }
+
+    .intro-panel {
+      width: min(90%, 440px);
+      background: rgba(10, 10, 10, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: clamp(20px, 4vw, 28px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      backdrop-filter: blur(6px);
+    }
+
+    .intro-panel-hide {
+      opacity: 0;
+      transform: translateY(12px) scale(0.98);
+      pointer-events: none;
+    }
+
+    .intro-badge {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: #a5a5a5;
+    }
+
+    .intro-title {
+      font-size: clamp(1.05rem, 3vw, 1.3rem);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .intro-desc {
+      color: #c5c5c5;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .intro-langs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 6px 0 4px;
+    }
+
+    .intro-lang-btn {
+      padding: 0.75rem 1.15rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: #0f0f0f;
+      color: #f7f7f7;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+    }
+
+    .intro-lang-btn:hover,
+    .intro-lang-btn:focus-visible {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.4);
+      background: #141414;
+      transform: translateY(-1px);
+    }
+
+    .intro-lang-btn .intro-flag {
+      font-size: 1.05rem;
+      line-height: 1;
+    }
+
+    .intro-lang-btn span + span {
+      margin-left: 8px;
     }
 
     input,
@@ -594,6 +695,30 @@
 
   <body class="bg-hb-bg text-hb-text font-sans pb-10 md:pb-6">
 
+  <!-- INTRO OVERLAY -->
+  <div id="intro-overlay" aria-hidden="true" hidden>
+    <div class="intro-panel" id="intro-panel">
+      <span class="intro-badge">h i d d e n b a c k</span>
+      <p class="intro-title" data-i18n="introTitle">Dili seçin</p>
+      <div class="w-full flex flex-col gap-3 items-center">
+        <div class="intro-langs">
+          <button class="intro-lang-btn" type="button" data-lang="tr">
+            <span class="intro-flag" aria-hidden="true">🇹🇷</span>
+            <span data-i18n="langTurkish">Türkçe</span>
+          </button>
+          <button class="intro-lang-btn" type="button" data-lang="en">
+            <span class="intro-flag" aria-hidden="true">🇬🇧</span>
+            <span data-i18n="langEnglish">English</span>
+          </button>
+          <button class="intro-lang-btn" type="button" data-lang="ru">
+            <span class="intro-flag" aria-hidden="true">🇷🇺</span>
+            <span data-i18n="langRussian">Русский</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- HEADER -->
   <header class="bg-white border-b border-hb-border sticky top-0 z-20">
     <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
@@ -628,6 +753,16 @@
               </svg>
             </span>
             <span>Games</span>
+          </button>
+          <button class="header-quick-btn" type="button" data-nav="menu">
+            <span class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 8h16" />
+                <path d="M4 12h16" />
+                <path d="M4 16h16" />
+              </svg>
+            </span>
+            <span data-i18n="navMenu">Menü</span>
           </button>
         </div>
       </div>
@@ -672,16 +807,16 @@
     <aside class="w-full hidden lg:block" id="cat-panel">
       <div class="bg-white border border-hb-border rounded-2xl p-3 sm:p-4 flex flex-col gap-3 md:gap-2 sticky top-20" id="cat-panel-inner">
         <p class="text-[11px] sm:text-xs font-medium text-hb-muted uppercase tracking-[0.18em] pl-1 mb-1" id="cat-panel-label">
-          Menü
+          <span data-i18n="navMenu">Menü</span>
         </p>
         <div class="flex flex-col gap-2" id="cat-buttons">
-          <button class="cat-btn active" data-cat="kahvalti">KAHVALTI</button>
-          <button class="cat-btn" data-cat="bowl">BOWL</button>
-          <button class="cat-btn" data-cat="lezzetler">LEZZETLER</button>
-          <button class="cat-btn" data-cat="tatli">TATLILAR</button>
-          <button class="cat-btn" data-cat="matcha">MATCHA</button>
-          <button class="cat-btn" data-cat="soguk">SOĞUK İÇECEK</button>
-          <button class="cat-btn" data-cat="sicak">SICAK İÇECEK</button>
+          <button class="cat-btn active" data-cat="kahvalti" data-i18n="catKahvalti">KAHVALTI</button>
+          <button class="cat-btn" data-cat="bowl" data-i18n="catBowl">BOWL</button>
+          <button class="cat-btn" data-cat="lezzetler" data-i18n="catLezzetler">LEZZETLER</button>
+          <button class="cat-btn" data-cat="tatli" data-i18n="catTatli">TATLILAR</button>
+          <button class="cat-btn" data-cat="matcha" data-i18n="catMatcha">MATCHA</button>
+          <button class="cat-btn" data-cat="soguk" data-i18n="catSoguk">SOĞUK İÇECEK</button>
+          <button class="cat-btn" data-cat="sicak" data-i18n="catSicak">SICAK İÇECEK</button>
         </div>
       </div>
     </aside>
