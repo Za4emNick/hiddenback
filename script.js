@@ -62,6 +62,10 @@ function refreshUiText() {
 
 function resolveTranslation(key) {
   if (!key) return "";
+  const nested = key
+    .split(".")
+    .reduce((acc, part) => (acc && typeof acc === "object" && part in acc ? acc[part] : undefined), translations);
+  if (typeof nested === "string") return nested;
   if (translations.ui && key in translations.ui) return translations.ui[key];
   if (key in translations) return translations[key];
   return "";

@@ -13,6 +13,19 @@
   "catMatcha": "MATCHA",
   "catSoguk": "SOĞUK İÇECEK",
   "catSicak": "SICAK İÇECEK",
+  "navAbout": "Hakkımızda",
+  "about": {
+    "heroTitle": "Şehrin tam merkezinde, gözlerden uzakta saklanan eski bir kafe.",
+    "heroLead": "hiddenback, Yalova’nın kalbinde, keşfedilmeyi bekleyen gizli bir nokta. Amacımız; iyi kahveyi, ev yapımı tatlıları ve sıcak bir atmosferi tek bir yerde buluşturmak. Sabah kahvaltısından akşam kahvesine kadar, her saat burada kendi ritmine sahip.",
+    "heroClosing": "Burada menü, sadece bir yemek listesi değil — misafirlerimizin anılarının bir parçası. Aşağıda hiddenback’in atmosferini, hikâyesini ve detaylarını daha yakından keşfedebilirsin.",
+    "block1Title": "Publika • Yalova’da modern bir buluşma noktası",
+    "block1Body": "Zamanla hiddenback, Yalova’nın kalbinde modern ve samimi bir buluşma noktası haline geliyor. Aynı masada öğrenciler, yazılımcılar, bankacılar, avukatlar ve yaratıcı insanlar bir araya geliyor; hem çalışmak hem de arkadaşlarla sakin bir akşam geçirmek isteyen herkes burada buluşuyor. hiddenback’te her misafir kendi ritmini bulur: yolda hızlı bir espresso, dizüstü bilgisayar eşliğinde sakin bir filtre kahve molası ya da akşam buluşmasına eşlik eden bir tatlı. Tüm kahvelerin detaylı açıklamalarını ve kafein seviyelerini online menümüzde bulabilirsin.",
+    "block2Title": "Tatlı Vitrini • Günlük hazırlanan tatlılar",
+    "block2Body": "Cheesecake, brownie, tart ve waffle çeşitlerimiz her gün taze hazırlanıyor. Tatlılar, kahveyle uyumlu olacak şekilde tasarlandı — online menüde hem içerikleri hem de fiyatları rahatça inceleyebilirsin.",
+    "block3Title": "Atmosfer • Sessiz köşeler ve sıcak ışıklar",
+    "block3Body": "hiddenback, hem bilgisayarla çalışanlar hem de arkadaşlarla sohbet edenler için tasarlandı. Loş ışık, rahat oturma alanları ve sakin müzik — tüm bunlar menüyle beraber deneyimin doğal bir parçası.",
+    "instagramHeading": "Canlıdan kareler"
+  },
   "ui": {
     "snakeReadyStatus": "Hazır",
     "snakeStartedStatus": "Başladı",
