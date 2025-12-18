@@ -22,221 +22,138 @@ const GROUP_TITLES = {
   }
 };
 
-const TRANSLATIONS = {
-  tr: {
-    metaTitle: "HiddenBack — Menü",
-    metaDescription: "HiddenBack Cafe — Yalova. Modern, temiz ve kullanışlı online menü.",
-    introTitle: "Dili seçin",
-    navAbout: "Hakkımızda",
-    navGames: "Games",
-    navMenu: "Menü",
-    heroHeadline: "Şehrin tam merkezinde, gözlerden uzakta saklanan eski bir kafe.",
-    heroBody1:
-      "hiddenback, Yalova’nın kalbinde, keşfedilmeyi bekleyen gizli bir nokta. Amacımız; iyi kahveyi, ev yapımı tatlıları ve sıcak bir atmosferi tek bir yerde buluşturmak. Sabah kahvaltısından akşam kahvesine kadar, her saat burada kendi ritmine sahip.",
-    heroBody2:
-      "Burada menü, sadece bir yemek listesi değil — misafirlerimizin anılarının bir parçası. Aşağıda hiddenback’in atmosferini, hikâyesini ve detaylarını daha yakından keşfedebilirsin.",
-    article1Title: "Publika • Yalova’da modern bir buluşma noktası",
-    article1Body:
-      "Zamanla hiddenback, Yalova’nın kalbinde modern ve samimi bir buluşma noktası haline geliyor. Aynı masada öğrenciler, yazılımcılar, bankacılar, avukatlar ve yaratıcı insanlar bir araya geliyor; hem çalışmak hem de arkadaşlarla sakin bir akşam geçirmek isteyen herkes burada buluşuyor. hiddenback’te her misafir kendi ritmini bulur: yolda hızlı bir espresso, dizüstü bilgisayar eşliğinde sakin bir filtre kahve molası ya da akşam buluşmasına eşlik eden bir tatlı. Tüm kahvelerin detaylı açıklamalarını ve kafein seviyelerini online menümüzde bulabilirsin.",
-    article2Title: "Tatlı Vitrini • Günlük hazırlanan tatlılar",
-    article2Body:
-      "Cheesecake, brownie, tart ve waffle çeşitlerimiz her gün taze hazırlanıyor. Tatlılar, kahveyle uyumlu olacak şekilde tasarlandı — online menüde hem içerikleri hem de fiyatları rahatça inceleyebilirsin.",
-    article3Title: "Atmosfer • Sessiz köşeler ve sıcak ışıklar",
-    article3Body:
-      "hiddenback, hem bilgisayarla çalışanlar hem de arkadaşlarla sohbet edenler için tasarlandı. Loş ışık, rahat oturma alanları ve sakin müzik — tüm bunlar menüyle beraber deneyimin doğal bir parçası.",
-    instagramTitle: "Canlıdan kareler",
-    instagramButton: "Instagram'a git",
-    gamesHeading: "Oyununu seç ve oyna",
-    gamesIntro:
-      "Games sekmesinden artık üç oyuna erişebilirsin. Dilediğin oyunu yukarıdan seç, kuralları oku ve hemen oynamaya başla.",
-    snakeTab: "Yılan Oyunu",
-    tttTab: "Çapraz & Sıfır",
-    checkersTab: "Dama",
-    snakeScore: "Skor",
-    snakeBest: "Rekor",
-    snakeStatus: "Durum",
-    snakeTipTitle: "İpucu",
-    snakeTip1: "Önce bir dil seç, sonra \"Games\"e geçip oyunu başlat.",
-    snakeTip2: "Hız yavaş başlar; her elma ile biraz artar.",
-    snakeTip3: "Telefon için butonlar büyük, dokunmatik gecikme yok.",
-    snakeRestart: "Başlat / Sıfırla",
-    snakeControls: "Mobilde yön tuşlarını, masaüstünde ok/WASD tuşlarını kullanabilirsiniz.",
-    snakeReadyStatus: "Hazır",
-    snakeStartedStatus: "Başladı",
-    snakeStoppedStatus: "Durdu",
-    snakeGameOverStatus: "Oyun bitti",
-    snakePlayingStatus: "Oynanıyor",
-    tttRulesTitle: "Kurallar",
-    tttRules1:
-      "Çapraz & Sıfır oyununda amaç, 3x3 karede yatay, dikey veya çapraz olarak kendi sembolünü dizmek. Sıra değişiyor: X başlar, ardından O gelir.",
-    tttRules2:
-      "Telefon ya da masaüstünde karelere dokunarak/klikleyerek oynayabilirsin. Berabere kalırsan yeniden başlat tuşu hemen burada.",
-    tttReset: "Yeniden Başlat",
-    tttTurn: "Sıra: {player}",
-    tttDraw: "Berabere! Yeniden deneyin.",
-    tttWin: "{player} kazandı!",
-    checkersRulesTitle: "Kurallar",
-    checkersRules1:
-      "Dama 8x8 tahtada oynanır. Kırmızı taşlar yukarı, siyah taşlar aşağı doğru çapraz hareket eder. İleriye çapraz bir kare gidebilir veya rakip taşın üzerinden atlayarak hamle yapabilirler.",
-    checkersRules2:
-      "Taşın varacağı kare boş olmalı. Son sıraya ulaşan taş dama olur ve her yöne gidebilir. Sıra değiştikçe durum aşağıda gösterilir.",
-    checkersReset: "Yeni Oyun",
-    checkersHint: "Taşına dokun, geçerli hamleler vurgulanır.",
-    checkerRed: "Kırmızı",
-    checkerBlack: "Siyah",
-    checkersTurn: "Sıra: {player}",
-    checkersWin: "{player} kazandı!",
-    filters: "Filtreler",
-    filterVeg: "Vejetaryen",
-    filterSpicy: "Acılı",
-    filterCheese: "Peynirli",
-    filterDessert: "Tatlı",
-    groups: "Bölümler",
-    searchPlaceholder: "Menüde ara...",
-  },
-  en: {
-    metaTitle: "HiddenBack — Menu",
-    metaDescription: "HiddenBack Cafe — Yalova. Modern, clean, and convenient online menu.",
-    introTitle: "Choose your language",
-    navAbout: "About",
-    navGames: "Games",
-    navMenu: "Menu",
-    heroHeadline: "In the heart of the city, a tucked-away old cafe.",
-    heroBody1:
-      "hiddenback is a hidden spot in the heart of Yalova waiting to be discovered. Our goal is to bring good coffee, homemade desserts, and a warm atmosphere together in one place. From breakfast to evening coffee, every hour here has its own rhythm.",
-    heroBody2:
-      "Here, the menu is more than a list — it's part of our guests' memories. Explore hiddenback’s atmosphere, story, and details below.",
-    article1Title: "Publika • A modern meeting point in Yalova",
-    article1Body:
-      "Over time, hiddenback becomes a modern and friendly meeting spot in Yalova’s center. Students, developers, bankers, lawyers, and creatives gather at the same table; anyone who wants to work or enjoy a calm evening with friends meets here. Every guest finds their rhythm at hiddenback: a quick espresso on the go, a quiet filter coffee with a laptop, or a dessert to pair with an evening meetup. You can find detailed coffee descriptions and caffeine levels in our online menu.",
-    article2Title: "Dessert Display • Freshly made every day",
-    article2Body:
-      "Our cheesecakes, brownies, tarts, and waffles are prepared fresh daily. Desserts are designed to pair with coffee — check ingredients and prices easily in the online menu.",
-    article3Title: "Atmosphere • Cozy corners and warm lights",
-    article3Body:
-      "hiddenback is designed both for those working on laptops and for friends chatting together. Dim lights, comfortable seating, and calm music — all of these are a natural part of the experience alongside the menu.",
-    instagramTitle: "Moments from live",
-    instagramButton: "Open Instagram",
-    gamesHeading: "Pick a game and play",
-    gamesIntro:
-      "You can now access three games from the Games tab. Choose one above, read the rules, and start playing right away.",
-    snakeTab: "Snake",
-    tttTab: "Tic Tac Toe",
-    checkersTab: "Checkers",
-    snakeScore: "Score",
-    snakeBest: "Best",
-    snakeStatus: "Status",
-    snakeTipTitle: "Hint",
-    snakeTip1: "Pick a language, then open Games to start.",
-    snakeTip2: "Speed starts slow and rises with every apple.",
-    snakeTip3: "Buttons are big for phones with no touch delay.",
-    snakeRestart: "Start / Reset",
-    snakeControls: "Use arrows/WASD on desktop; tap the arrows on mobile.",
-    snakeReadyStatus: "Ready",
-    snakeStartedStatus: "Started",
-    snakeStoppedStatus: "Stopped",
-    snakeGameOverStatus: "Game over",
-    snakePlayingStatus: "Playing",
-    tttRulesTitle: "Rules",
-    tttRules1:
-      "In Tic Tac Toe, the goal is to line up your symbol horizontally, vertically, or diagonally on the 3x3 grid. X starts, then O follows.",
-    tttRules2:
-      "Tap or click the squares on phone or desktop. If it's a draw, restart with the button right here.",
-    tttReset: "Restart",
-    tttTurn: "Turn: {player}",
-    tttDraw: "Draw! Try again.",
-    tttWin: "{player} wins!",
-    checkersRulesTitle: "Rules",
-    checkersRules1:
-      "Checkers is played on an 8x8 board. Red pieces move upward, black pieces move downward diagonally. They can move one diagonal square forward or jump over opponents.",
-    checkersRules2:
-      "The destination square must be empty. Reaching the last rank crowns a piece so it can move in all directions. The status updates below as turns change.",
-    checkersReset: "New Game",
-    checkersHint: "Tap your piece to highlight valid moves.",
-    checkerRed: "Red",
-    checkerBlack: "Black",
-    checkersTurn: "Turn: {player}",
-    checkersWin: "{player} wins!",
-    filters: "Filters",
-    filterVeg: "Vegetarian",
-    filterSpicy: "Spicy",
-    filterCheese: "Cheesy",
-    filterDessert: "Dessert",
-    groups: "Sections",
-    searchPlaceholder: "Search the menu...",
-  },
-  ru: {
-    metaTitle: "HiddenBack — Меню",
-    metaDescription: "HiddenBack Cafe — Ялова. Современное, удобное онлайн-меню.",
-    introTitle: "Выберите язык",
-    navAbout: "О нас",
-    navGames: "Игры",
-    navMenu: "Меню",
-    heroHeadline: "В самом центре города, спрятанное от глаз старое кафе.",
-    heroBody1:
-      "hiddenback — тайное место в центре Ялова, которое ждет, чтобы его открыли. Наша цель — соединить хороший кофе, домашние десерты и теплую атмосферу в одном месте. От утреннего завтрака до вечернего кофе здесь у каждого часа свой ритм.",
-    heroBody2:
-      "Здесь меню — больше, чем список блюд, это часть воспоминаний наших гостей. Ниже можно ближе познакомиться с атмосферой и историей hiddenback.",
-    article1Title: "Publika • Современная точка встречи в Ялова",
-    article1Body:
-      "Со временем hiddenback превращается в современное и дружелюбное место встречи в центре Ялова. За одним столом собираются студенты, разработчики, банкиры, юристы и креативщики; здесь встречаются и те, кто хочет поработать, и те, кто хочет спокойно провести вечер с друзьями. Каждый гость находит свой ритм: быстрый эспрессо на ходу, спокойная чашка фильтра с ноутбуком или десерт для вечерней встречи. Подробные описания и уровень кофеина каждого напитка есть в онлайн-меню.",
-    article2Title: "Витрина десертов • Готовим каждый день",
-    article2Body:
-      "Наши чизкейки, брауни, тарты и вафли готовятся свежими каждый день. Десерты созданы так, чтобы сочетаться с кофе — состав и цены удобно посмотреть в онлайн-меню.",
-    article3Title: "Атмосфера • Тихие уголки и теплый свет",
-    article3Body:
-      "hiddenback создан и для работы за ноутбуком, и для разговоров с друзьями. Приглушенный свет, комфортные зоны и спокойная музыка — естественная часть впечатления вместе с меню.",
-    instagramTitle: "Кадры из жизни",
-    instagramButton: "Открыть Instagram",
-    gamesHeading: "Выберите игру и играйте",
-    gamesIntro:
-      "В разделе Games теперь доступны три игры. Выберите любую выше, прочитайте правила и сразу начинайте играть.",
-    snakeTab: "Змейка",
-    tttTab: "Крестики-нолики",
-    checkersTab: "Шашки",
-    snakeScore: "Счёт",
-    snakeBest: "Рекорд",
-    snakeStatus: "Статус",
-    snakeTipTitle: "Подсказка",
-    snakeTip1: "Сначала выберите язык, затем откройте Games и запустите игру.",
-    snakeTip2: "Скорость начинается медленно и растёт с каждым яблоком.",
-    snakeTip3: "Кнопки крупные для телефона, без задержки касания.",
-    snakeRestart: "Старт / Сброс",
-    snakeControls: "Используйте стрелки/WASD на компьютере или кнопки на телефоне.",
-    snakeReadyStatus: "Готово",
-    snakeStartedStatus: "Старт",
-    snakeStoppedStatus: "Остановлено",
-    snakeGameOverStatus: "Игра окончена",
-    snakePlayingStatus: "Идёт игра",
-    tttRulesTitle: "Правила",
-    tttRules1:
-      "В крестиках-ноликах цель — выстроить свой символ по горизонтали, вертикали или диагонали на поле 3x3. Ходит X, затем O.",
-    tttRules2:
-      "Можно нажимать клетки на телефоне или компьютере. Если ничья — перезапустите кнопкой здесь же.",
-    tttReset: "Перезапустить",
-    tttTurn: "Ход: {player}",
-    tttDraw: "Ничья! Попробуйте снова.",
-    tttWin: "Победа: {player}!",
-    checkersRulesTitle: "Правила",
-    checkersRules1:
-      "Шашки играются на доске 8x8. Красные ходят вверх, черные вниз по диагонали. Можно пройти на одну диагональ вперёд или перепрыгнуть соперника.",
-    checkersRules2:
-      "Клетка назначения должна быть пустой. Достигнув последней линии, шашка становится дамкой и может ходить во все стороны. Статус ниже обновляется по ходам.",
-    checkersReset: "Новая игра",
-    checkersHint: "Нажмите на свою шашку, чтобы увидеть возможные ходы.",
-    checkerRed: "Красные",
-    checkerBlack: "Чёрные",
-    checkersTurn: "Ход: {player}",
-    checkersWin: "Победа: {player}!",
-    filters: "Фильтры",
-    filterVeg: "Вегетарианское",
-    filterSpicy: "Острое",
-    filterCheese: "Сырное",
-    filterDessert: "Десерт",
-    groups: "Разделы",
-    searchPlaceholder: "Поиск по меню...",
-  },
+const DEFAULT_TEXT = {
+  snakeReadyStatus: "Hazır",
+  snakeStartedStatus: "Başladı",
+  snakeStoppedStatus: "Durdu",
+  snakeGameOverStatus: "Oyun bitti",
+  snakePlayingStatus: "Oynanıyor",
+  filterVeg: "Vejetaryen",
+  filterSpicy: "Acılı",
+  filterCheese: "Peynirli",
+  filterDessert: "Tatlı",
+  filtersLabel: "Filtreler",
+  checkerRed: "Kırmızı",
+  checkerBlack: "Siyah",
 };
+
+let uiText = { ...DEFAULT_TEXT };
+
+const SUPPORTED_LANGS = ["tr", "en", "ru"];
+const DEFAULT_LANG = "tr";
+let currentLang = DEFAULT_LANG;
+let translations = {};
+
+function getItemId(item) {
+  if (item.id) return item.id;
+  if (item.img) {
+    const last = item.img.split("/").pop() || "";
+    return last.replace(/\.\w+$/, "");
+  }
+  return item.title?.toLowerCase().replace(/[^a-z0-9]+/gi, "_") || "";
+}
+
+function refreshUiText() {
+  const incoming = translations.ui || translations.text || {};
+  uiText = { ...DEFAULT_TEXT, ...incoming };
+  snakeStatusText = uiText.snakeReadyStatus;
+  checkersStatusState = { key: "checkersTurn", vars: { player: uiText.checkerRed } };
+}
+
+function resolveTranslation(key) {
+  if (!key) return "";
+  if (translations.ui && key in translations.ui) return translations.ui[key];
+  if (key in translations) return translations[key];
+  return "";
+}
+
+function applyStaticTranslations() {
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    const key = el.dataset.i18n;
+    if (!el.dataset.defaultText) el.dataset.defaultText = el.textContent?.trim() || "";
+    const translated = resolveTranslation(key);
+    el.textContent = translated || el.dataset.defaultText;
+  });
+
+  document.querySelectorAll("[data-i18n-content]").forEach((el) => {
+    const key = el.dataset.i18nContent;
+    if (!el.dataset.defaultContent) el.dataset.defaultContent = el.getAttribute("content") || "";
+    const translated = resolveTranslation(key);
+    el.setAttribute("content", translated || el.dataset.defaultContent);
+  });
+
+  const titleEl = document.querySelector("title[data-i18n]");
+  if (titleEl) document.title = titleEl.textContent;
+}
+
+function translateMenuItem(item) {
+  const itemId = getItemId(item);
+  const menuEntry = translations.menu?.[itemId] || {};
+  return {
+    ...item,
+    id: itemId,
+    title: menuEntry.title || item.title,
+    desc: menuEntry.desc || item.desc,
+  };
+}
+
+function translateGroupTitle(cat, group) {
+  return translations.groups?.[cat]?.[group] || (GROUP_TITLES[cat] || {})[group] || group;
+}
+
+async function fetchTranslations(lang) {
+  try {
+    const response = await fetch(`locales/${lang}.json`);
+    if (!response.ok) return {};
+    return await response.json();
+  } catch (error) {
+    console.warn("Translation load failed", error);
+    return {};
+  }
+}
+
+function showIntroOverlay() {
+  document.body.classList.add("intro-active");
+  const overlay = document.getElementById("intro-overlay");
+  if (overlay) overlay.removeAttribute("hidden");
+}
+
+function hideIntroOverlay(instant = false) {
+  const overlay = document.getElementById("intro-overlay");
+  const panel = document.getElementById("intro-panel");
+  document.body.classList.remove("intro-active");
+  if (!overlay) return;
+  if (instant) {
+    overlay.setAttribute("hidden", "hidden");
+    return;
+  }
+  overlay.classList.add("intro-reveal");
+  panel?.classList.add("intro-panel-hide");
+  setTimeout(() => overlay.setAttribute("hidden", "hidden"), 450);
+}
+
+async function applyLanguage(lang) {
+  currentLang = SUPPORTED_LANGS.includes(lang) ? lang : DEFAULT_LANG;
+  translations = await fetchTranslations(currentLang);
+  document.documentElement.lang = currentLang;
+  refreshUiText();
+  applyStaticTranslations();
+  renderItems();
+  updateSnakeHUD();
+  updateTttStatus(tttStatusState.key, tttStatusState.vars);
+  updateCheckersStatus(checkersStatusState.key, checkersStatusState.vars);
+  localStorage.setItem("hb-lang", currentLang);
+}
+
+async function initLanguage() {
+  const saved = localStorage.getItem("hb-lang");
+  await applyLanguage(saved || DEFAULT_LANG);
+  if (saved) {
+    hideIntroOverlay(true);
+  } else {
+    showIntroOverlay();
+  }
+}
 
 const itemImg = (name) => `images/items/${name}.webp`;
 
@@ -311,21 +228,16 @@ const ITEMS = [
   { cat: "matcha", title: "Orange Mango Matcha", price: 220, desc: "Portakal ve mango ile matcha.", img: itemImg("orange_mango_matcha") },
 
   // ──────────── SOĞUK İÇECEK ────────────
-  { cat: "soguk", group: "sogukicecek", title: "Coca Cola", price: 120, desc: "Zero ve şekersiz seçenekleriyle.", img: itemImg("coca_cola") },
-  { cat: "soguk", group: "sogukicecek", title: "Fanta", price: 120, desc: "Soğuk gazlı içecek.", img: itemImg("fanta") },
-  { cat: "soguk", group: "sogukicecek", title: "Sprite", price: 120, desc: "Limon aromalı gazlı içecek.", img: itemImg("sprite") },
+  { cat: "soguk", group: "sogukicecek", title: "Coca Cola / Fanta / Sprite", price: 120, desc: "Coca Cola, Fanta veya Sprite seçenekleri.", img: itemImg("coca_cola") },
   { cat: "soguk", group: "sogukicecek", title: "Fuse Tea", price: 120, desc: "Şeftali, limon, mango ve ananas seçenekleriyle.", img: itemImg("fuse_tea") },
   { cat: "soguk", group: "sogukicecek", title: "Cappy", price: 120, desc: "Vişne, şeftali ve karışık meyve seçenekleriyle.", img: itemImg("cappy") },
   { cat: "soguk", group: "sogukicecek", title: "Burn", price: 160, desc: "Enerji içeceği.", img: itemImg("burn") },
   { cat: "soguk", group: "sogukicecek", title: "Cam Şişe Su", price: 50, desc: "Cam şişede su.", img: itemImg("cam_sise_su") },
-  { cat: "soguk", group: "sogukicecek", title: "Minera Maden Suyu", price: 100, desc: "Doğal maden suyu.", img: itemImg("minera_maden_suyu") },
-  { cat: "soguk", group: "sogukicecek", title: "Minera Limon Aromalı", price: 100, desc: "Limon aromalı maden suyu.", img: itemImg("minera_limon_aromali") },
-  { cat: "soguk", group: "sogukicecek", title: "Minera Elma Aromalı", price: 100, desc: "Elma aromalı maden suyu.", img: itemImg("minera_elma_aromali") },
+  { cat: "soguk", group: "sogukicecek", title: "Minera Maden Suyu Çeşitleri", price: 100, desc: "Doğal, limon, elma veya karpuz-çilek aromalı seçenekler.", img: itemImg("minera_maden_suyu") },
   { cat: "soguk", group: "sogukicecek", title: "Churchill", price: 120, desc: "Ferahlık veren karışım.", img: itemImg("churchill") },
   { cat: "soguk", group: "sogukicecek", title: "Ayran", price: 90, desc: "Serinletici ayran.", img: itemImg("ayran") },
   { cat: "soguk", group: "sogukicecek", title: "Taze Portakal Suyu", price: 210, desc: "Taze sıkılmış portakal suyu.", img: itemImg("taze_portakal_suyu") },
   { cat: "soguk", group: "sogukicecek", title: "Redbull", price: 190, desc: "Enerji içeceği.", img: itemImg("redbull") },
-  { cat: "soguk", group: "sogukicecek", title: "Minera Karpuz Çilek Aromalı", price: 100, desc: "Karpuz ve çilek aromalı maden suyu.", img: itemImg("minera_karpuz_cilek_aromali") },
 
   // ──────────── SOĞUK KAHVELER ────────────
   { cat: "soguk", group: "coldcoffee", title: "Ice White Mocha", price: 210, desc: "Buzlu beyaz çikolatalı mocha.", img: itemImg("ice_white_mocha") },
@@ -406,10 +318,6 @@ const container = document.getElementById("items-container");
 const instagramBlock = document.getElementById("instagram-block");
 const gamesSection = document.getElementById("games-section");
 const layoutRoot = document.getElementById("layout-root");
-const introOverlay = document.getElementById("intro-overlay");
-const introPanel = document.getElementById("intro-panel");
-const languageButtons = document.querySelectorAll(".intro-lang-btn");
-
 const snakeCanvas = document.getElementById("snake-canvas");
 const snakeRestart = document.getElementById("snake-restart");
 const snakeKeys = document.querySelectorAll(".snake-key");
@@ -465,47 +373,41 @@ const GAME_CATEGORY = "games";
 let activeCategory = "hiddenback";
 let activeGame = "snake";
 let searchTerm = "";
-let introStarted = false;
-let selectedLanguage = document.documentElement.lang || "tr";
-let snakeStatusKey = "snakeReadyStatus";
+let snakeStatusText = uiText.snakeReadyStatus;
 let tttStatusState = { key: "tttTurn", vars: { player: "X" } };
-let checkersStatusState = { key: "checkersTurn", vars: { player: t("checkerRed") } };
+let checkersStatusState = { key: "checkersTurn", vars: { player: uiText.checkerRed } };
 
-function t(key, vars = {}) {
-  const lang = TRANSLATIONS[selectedLanguage] ? selectedLanguage : "tr";
-  const fallback = TRANSLATIONS.tr[key] || key;
-  const template = TRANSLATIONS[lang][key] || fallback;
-  return template.replace(/\{(\w+)\}/g, (_, match) => {
-    return Object.prototype.hasOwnProperty.call(vars, match) ? vars[match] : `{${match}}`;
-  });
+function formatTttStatus(key, vars = {}) {
+  const templates = translations.games?.tictactoe || translations.games?.ttt || {};
+  if (typeof templates[key] === "string") return templates[key].replace("{player}", vars.player || "");
+  if (key === "tttTurn") return `Sıra: ${vars.player}`;
+  if (key === "tttDraw") return "Berabere! Yeniden deneyin.";
+  if (key === "tttWin") return `${vars.player} kazandı!`;
+  return "";
 }
 
-function applyTranslations() {
-  document.title = t("metaTitle");
-  const metaDesc = document.getElementById("meta-description");
-  if (metaDesc) metaDesc.setAttribute("content", t("metaDescription"));
-
-  document.querySelectorAll("[data-i18n]").forEach((el) => {
-    const key = el.getAttribute("data-i18n");
-    el.textContent = t(key);
-  });
-
-  document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
-    const key = el.getAttribute("data-i18n-placeholder");
-    el.setAttribute("placeholder", t(key));
-  });
-
-  updateSnakeHUD();
-  renderTttStatus();
-  updateCheckersStatus();
+function formatCheckersStatus(key, vars = {}) {
+  const templates = translations.games?.checkers || {};
+  if (typeof templates[key] === "string") return templates[key].replace("{player}", vars.player || "");
+  if (key === "checkersTurn") return `Sıra: ${vars.player}`;
+  if (key === "checkersWin") return `${vars.player} kazandı!`;
+  return "";
 }
 
-const TAG_LABELS = {
-  veg: { labelKey: "filterVeg", color: "text-emerald-600" },
-  spicy: { labelKey: "filterSpicy", color: "text-red-600" },
-  cheese: { labelKey: "filterCheese", color: "text-amber-600" },
-  dessert: { labelKey: "filterDessert", color: "text-pink-600" },
-};
+const getTagLabels = () => ({
+  veg: { label: uiText.filterVeg, color: "text-emerald-600" },
+  spicy: { label: uiText.filterSpicy, color: "text-red-600" },
+  cheese: { label: uiText.filterCheese, color: "text-amber-600" },
+  dessert: { label: uiText.filterDessert, color: "text-pink-600" },
+});
+
+const getSnakeStatusText = () => ({
+  snakeReadyStatus: uiText.snakeReadyStatus,
+  snakeStartedStatus: uiText.snakeStartedStatus,
+  snakeStoppedStatus: uiText.snakeStoppedStatus,
+  snakeGameOverStatus: uiText.snakeGameOverStatus,
+  snakePlayingStatus: uiText.snakePlayingStatus,
+});
 
 const formatPrice = (price) => (typeof price === "number" ? `${price}₺` : "" );
 
@@ -559,10 +461,10 @@ function saveSnakeBest() {
 }
 
 function updateSnakeHUD(statusKey = "") {
-  if (statusKey) snakeStatusKey = statusKey;
+  if (statusKey) snakeStatusText = getSnakeStatusText()[statusKey] || statusKey;
   if (snakeScoreEl) snakeScoreEl.textContent = snakeState.score;
   if (snakeBestEl) snakeBestEl.textContent = snakeState.best;
-  if (snakeStatusEl) snakeStatusEl.textContent = t(snakeStatusKey);
+  if (snakeStatusEl) snakeStatusEl.textContent = snakeStatusText;
 }
 
 function resetSnakeState() {
@@ -743,7 +645,7 @@ function initSnake() {
 // ─────────────────────────────
 
 function renderTttStatus() {
-  if (tttStatus) tttStatus.textContent = t(tttStatusState.key, tttStatusState.vars);
+  if (tttStatus) tttStatus.textContent = formatTttStatus(tttStatusState.key, tttStatusState.vars);
 }
 
 function setTttStatus(key, vars = {}) {
@@ -834,10 +736,10 @@ function buildInitialCheckersBoard() {
 function updateCheckersStatus() {
   const isTurn = (checkersStatusState.key || "checkersTurn") === "checkersTurn";
   const vars = isTurn
-    ? { player: checkersCurrent === "r" ? t("checkerRed") : t("checkerBlack") }
+    ? { player: checkersCurrent === "r" ? uiText.checkerRed : uiText.checkerBlack }
     : checkersStatusState.vars;
   checkersStatusState = { key: checkersStatusState.key || "checkersTurn", vars };
-  if (checkersStatusEl) checkersStatusEl.textContent = t(checkersStatusState.key, checkersStatusState.vars);
+  if (checkersStatusEl) checkersStatusEl.textContent = formatCheckersStatus(checkersStatusState.key, checkersStatusState.vars);
 }
 
 function resetCheckers() {
@@ -846,7 +748,7 @@ function resetCheckers() {
   checkersSelected = null;
   checkersMoves = [];
   checkersFinished = false;
-  checkersStatusState = { key: "checkersTurn", vars: { player: t("checkerRed") } };
+  checkersStatusState = { key: "checkersTurn", vars: { player: uiText.checkerRed } };
   updateCheckersStatus();
   renderCheckersBoard();
 }
@@ -936,12 +838,12 @@ function moveCheckersPiece(targetX, targetY) {
     checkersFinished = true;
     checkersStatusState = {
       key: "checkersWin",
-      vars: { player: redLeft ? t("checkerRed") : t("checkerBlack") },
+      vars: { player: redLeft ? uiText.checkerRed : uiText.checkerBlack },
     };
   } else {
     checkersStatusState = {
       key: "checkersTurn",
-      vars: { player: checkersCurrent === "r" ? t("checkerRed") : t("checkerBlack") },
+      vars: { player: checkersCurrent === "r" ? uiText.checkerRed : uiText.checkerBlack },
     };
   }
 
@@ -982,42 +884,6 @@ function renderCheckersBoard() {
       checkersBoardEl.appendChild(cell);
     }
   }
-}
-
-function setLanguage(lang) {
-  selectedLanguage = lang;
-  document.documentElement.lang = lang;
-  document.documentElement.dataset.lang = lang;
-  applyTranslations();
-}
-
-function launchIntroFlow(lang) {
-  if (!introOverlay || introStarted) return;
-
-  introStarted = true;
-  setLanguage(lang);
-
-  introPanel?.classList.add("intro-panel-hide");
-
-  introOverlay.classList.add("intro-reveal");
-  document.body.classList.remove("intro-active");
-
-  setTimeout(() => {
-    introOverlay?.remove();
-  }, 400);
-}
-
-function initIntroOverlay() {
-  if (!introOverlay) return;
-
-  document.body.classList.add("intro-active");
-
-  languageButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const lang = btn.dataset.lang || "tr";
-      launchIntroFlow(lang);
-    });
-  });
 }
 
 function updateLayout(category) {
@@ -1113,7 +979,7 @@ function setActiveGame(game) {
   if (game === "snake") {
     initSnake();
   } else {
-    stopSnakeGame("Durdu");
+    stopSnakeGame("snakeStoppedStatus");
   }
 
   if (game === "tictactoe") {
@@ -1157,7 +1023,7 @@ function toggleSections(category) {
   if (showGame) {
     setActiveGame(activeGame || "snake");
   } else {
-    stopSnakeGame("Durdu");
+    stopSnakeGame("snakeStoppedStatus");
   }
 
   updateLayout(category);
@@ -1174,9 +1040,10 @@ function syncFilterButtons(key, isActive) {
 
 function applyFilters(item) {
   const term = searchTerm.trim().toLowerCase();
+  const translated = translateMenuItem(item);
   const matchesSearch = term
-    ? (item.title && item.title.toLowerCase().includes(term)) ||
-      (item.desc && item.desc.toLowerCase().includes(term))
+    ? (translated.title && translated.title.toLowerCase().includes(term)) ||
+      (translated.desc && translated.desc.toLowerCase().includes(term))
     : true;
 
   const activeKeys = Object.entries(activeFilters)
@@ -1216,7 +1083,7 @@ function renderGroupNav(groups) {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "filter-chip";
-    btn.textContent = titles[group];
+    btn.textContent = translateGroupTitle(activeCategory, group);
     btn.addEventListener("click", () => scrollToGroup(group));
     groupNavButtons.appendChild(btn);
   });
@@ -1225,6 +1092,8 @@ function renderGroupNav(groups) {
 }
 
 function createCard(item) {
+  const translated = translateMenuItem(item);
+  const tagLabels = getTagLabels();
   const card = document.createElement("article");
   card.className = "bg-white border border-hb-border rounded-2xl p-4 sm:p-5 flex flex-col gap-3 shadow-[0_6px_18px_rgba(0,0,0,0.04)] card-fade";
 
@@ -1235,20 +1104,20 @@ function createCard(item) {
 
   card.innerHTML = `
     <div class="rounded-xl overflow-hidden bg-neutral-200 aspect-[4/3]">
-      <img src="${item.img}" alt="${item.title}" class="w-full h-full object-cover">
+      <img src="${item.img}" alt="${translated.title}" class="w-full h-full object-cover">
     </div>
     <div class="flex flex-col gap-2">
       <div class="flex items-start justify-between gap-2">
-        <h3 class="text-base font-semibold leading-tight">${item.title}</h3>
+        <h3 class="text-base font-semibold leading-tight">${translated.title}</h3>
         <span class="text-sm font-semibold">${formatPrice(item.price)}</span>
       </div>
-      <p class="text-xs font-normal text-hb-muted leading-relaxed">${item.desc || ""}</p>
+      <p class="text-xs font-normal text-hb-muted leading-relaxed">${translated.desc || ""}</p>
       ${caffeineLine}
       <div class="flex flex-wrap gap-2 text-[11px] text-hb-muted">
         ${(item.tags || [])
           .map((tag) => {
-            const meta = TAG_LABELS[tag];
-            return meta ? `<span class="px-2 py-0.5 rounded-full bg-gray-100 ${meta.color}">${t(meta.labelKey)}</span>` : "";
+            const meta = tagLabels[tag];
+            return meta ? `<span class="px-2 py-0.5 rounded-full bg-gray-100 ${meta.color}">${meta.label}</span>` : "";
           })
           .join("")}
       </div>
@@ -1275,7 +1144,7 @@ function renderItems() {
   ITEMS.filter((item) => item.cat === activeCategory)
     .filter(applyFilters)
     .forEach((item) => {
-      const groupTitle = groupTitles[item.group];
+      const groupTitle = translateGroupTitle(activeCategory, item.group);
       if (groupTitle && !addedGroup.has(item.group)) {
         const heading = document.createElement("h3");
         heading.className =
@@ -1304,15 +1173,18 @@ function renderItems() {
 function openModal(item) {
   if (!modalOverlay) return;
 
-  modalImg.src = item.img;
-  modalImg.alt = item.title;
-  modalTitle.textContent = item.title;
-  modalDesc.textContent = item.desc || "";
-  modalPrice.textContent = formatPrice(item.price);
+  const translated = translateMenuItem(item);
+  const tagLabels = getTagLabels();
+
+  modalImg.src = translated.img;
+  modalImg.alt = translated.title;
+  modalTitle.textContent = translated.title;
+  modalDesc.textContent = translated.desc || "";
+  modalPrice.textContent = formatPrice(translated.price);
 
   const activeKeys = Object.entries(activeFilters)
     .filter(([, value]) => value)
-    .map(([key]) => (TAG_LABELS[key] ? t(TAG_LABELS[key].labelKey) : null))
+    .map(([key]) => (tagLabels[key] ? tagLabels[key].label : null))
     .filter(Boolean);
 
   const extraParts = [];
@@ -1322,7 +1194,7 @@ function openModal(item) {
   }
 
   if (activeKeys.length) {
-    extraParts.push(`${t("filters")}: ${activeKeys.join(", ")}`);
+    extraParts.push(`${uiText.filtersLabel}: ${activeKeys.join(", ")}`);
   }
 
   if (extraParts.length) {
@@ -1493,9 +1365,16 @@ window.addEventListener("keydown", (event) => {
   }
 });
 
-applyTranslations();
-initIntroOverlay();
-// Initial render
-setCategory(activeCategory);
-updateMenuArrow();
-updateBackToTop();
+document.querySelectorAll(".intro-lang-btn").forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    await applyLanguage(btn.dataset.lang);
+    hideIntroOverlay();
+  });
+});
+
+(async () => {
+  await initLanguage();
+  setCategory(activeCategory);
+  updateMenuArrow();
+  updateBackToTop();
+})();
