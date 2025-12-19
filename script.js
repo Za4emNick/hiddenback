@@ -683,7 +683,7 @@ function drawTetris() {
     drawRunnerScene(true);
     return;
   }
-}
+
 
   drawRunnerScene();
   runnerLoop = requestAnimationFrame(stepRunner);
