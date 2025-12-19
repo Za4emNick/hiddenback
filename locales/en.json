@@ -14,6 +14,22 @@
   "catSoguk": "COLD DRINKS",
   "catSicak": "HOT DRINKS",
   "navAbout": "About",
+  "about": {
+    "heroTitle": "hiddenback • YALOVA",
+    "heroParagraph1": "Right in the city center, tucked away from sight. hiddenback is a calm escape waiting to be discovered in the heart of Yalova.",
+    "heroParagraph3": "The idea was to bring good coffee, homemade desserts, and a warm atmosphere together under one roof. From breakfast to an evening coffee, it offers a space where you can catch your own rhythm at any time of the day.",
+    "heroParagraph4": "Here, the menu is more than a list; it’s an experience that accompanies guests’ memories. Below, you can explore hiddenback’s story, atmosphere, and details more closely.",
+    "block1Title": "A modern meeting point in Yalova",
+    "block1Paragraph1": "Over time, hiddenback became a modern and friendly meeting spot in the center of Yalova.",
+    "block1Paragraph2": "Students, developers, bankers, lawyers, and creative minds all share the same tables.",
+    "block1Paragraph3": "For some, it’s a quick espresso break; for others, a calm filter coffee with a laptop; and for many, an evening meetup with desserts. At hiddenback, everyone moves at their own pace.",
+    "block2Title": "Dessert Display • Prepared fresh daily",
+    "block2Paragraph1": "Cheesecakes, brownies, tiramisu, and croissants are prepared fresh every day. Our desserts are crafted to pair with coffee, with balanced and light flavor profiles.",
+    "block2Paragraph2": "You can easily review ingredients and prices through the online menu.",
+    "block3Title": "Atmosphere • Quiet corners, warm lights",
+    "block3Paragraph1": "hiddenback is designed for both those working on a laptop and those chatting with friends. Soft, warm lighting, comfortable seating, and calm music become a natural part of the experience along with the menu.",
+    "instagramHeading": "Live moments"
+  },
   "ui": {
     "snakeReadyStatus": "Ready",
     "snakeStartedStatus": "Started",
@@ -49,18 +65,6 @@
       "kahve": "Coffee",
       "dunya": "World Teas"
     }
-  },
-  "about": {
-    "heroTitle": "Right in the city center, a hidden little cafe.",
-    "heroLead": "hiddenback is a tucked-away spot in the heart of Yalova, waiting to be found. We mix quality coffee, homemade desserts, and a cozy atmosphere. From morning breakfast to an evening latte — everyone keeps their own rhythm here.",
-    "heroClosing": "The menu is part of our guests’ memories. Explore the atmosphere and story of hiddenback below.",
-    "block1Title": "Publika • A modern meeting point in Yalova",
-    "block1Body": "Over time, hiddenback has become an intimate, modern place in the center of Yalova. Students, IT folks, bankers, lawyers, and creatives gather around one table; people drop by to work or to spend a quiet evening with friends. Everyone finds their rhythm: a quick espresso on the go, a calm filter coffee with a laptop, or a dessert for an evening meetup. Details on drinks and caffeine levels are in the online menu.",
-    "block2Title": "Dessert Display • Made fresh every day",
-    "block2Body": "We make cheesecakes, brownies, tart, and waffles daily. Desserts are chosen to pair perfectly with coffee — the online menu makes it easy to review ingredients and prices.",
-    "block3Title": "Atmosphere • Quiet corners and warm light",
-    "block3Body": "hiddenback is built both for those working on a laptop and those chatting with friends. Soft lighting, comfy seats, and calm music are a natural part of the experience alongside the menu.",
-    "instagramHeading": "Live moments"
   },
   "menu": {
     "affogato": { "title": "Affogato", "desc": "Espresso with a scoop of ice cream." },
