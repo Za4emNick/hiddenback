@@ -690,6 +690,70 @@
       }
     }
 
+    /* Global wordmark styling */
+    .hb-wordmark {
+      color: #000000 !important;
+      font-weight: 800 !important;
+      font-size: 0.85rem;
+      letter-spacing: 0.22em;
+    }
+
+    /* Instagram embed overrides */
+    .hb-ig {
+      color: #e5e7eb;
+    }
+    .hb-ig-title{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:800;
+      color:#ffffff;
+      font-size:20px;
+      margin: 0 0 14px 0;
+      letter-spacing: .2px;
+    }
+    .hb-ig-label{
+      font-weight:500;
+      color:#ffffff;
+    }
+    .hb-ig-btn{
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #ffffff;
+      background: rgba(255,255,255,0.08);
+      font-weight:600;
+      font-size: 14px;
+      line-height: 1.2;
+      transition: background 0.16s ease, border-color 0.16s ease, transform 0.12s ease;
+    }
+    .hb-ig-btn:hover,
+    .hb-ig-btn:focus-visible{
+      background: rgba(255,255,255,0.14);
+      border-color: rgba(255,255,255,0.5);
+      transform: translateY(-1px);
+      outline: none;
+    }
+    .hb-ig-icon{
+      width:22px;
+      height:22px;
+      fill:#ffffff;
+      flex:0 0 auto;
+    }
+
+    /* Hide obvious promo/extra blocks (best-effort) */
+    .hb-ig .tabs-inofd{ display:none !important; }
+
+    /* Часто у виджетов есть “powered by”, “brand”, “footer” — пробуем скрыть типовые варианты */
+    .hb-ig [class*="powered"],
+    .hb-ig [class*="brand"],
+    .hb-ig [class*="promo"],
+    .hb-ig [class*="footer"],
+    .hb-ig a[href*="socactive.com"],
+    .hb-ig a[href*="ev2.ru"]{
+      display:none !important;
+    }
+
   </style>
 </head>
 
@@ -698,7 +762,7 @@
   <!-- INTRO OVERLAY -->
   <div id="intro-overlay" aria-hidden="true" hidden>
     <div class="intro-panel" id="intro-panel">
-      <span class="intro-badge">h i d d e n b a c k</span>
+      <span class="intro-badge hb-wordmark">h i d d e n b a c k</span>
       <p class="intro-title" data-i18n="introTitle">Dili seçin</p>
       <div class="w-full flex flex-col gap-3 items-center">
         <div class="intro-langs">
@@ -725,7 +789,7 @@
       <div class="flex items-center gap-2">
         <img src="logo-x-x.jpg" alt="HiddenBack Logo" class="w-9 h-9">
         <div class="flex flex-col leading-tight">
-          <span class="font-semibold tracking-wide text-sm">h i d d e n b a c k</span>
+          <span class="font-semibold tracking-wide text-sm hb-wordmark">h i d d e n b a c k</span>
           <span class="text-xs text-hb-muted">Yalova • Cafe & Dessert</span>
         </div>
       </div>
@@ -831,7 +895,7 @@
         <div class="bg-white border border-hb-border rounded-2xl p-4 sm:p-6 md:max-h-[480px] md:overflow-hidden">
           <div class="grid md:grid-cols-[1.1fr_0.9fr] gap-4 md:gap-7 items-start md:items-center">
             <div class="order-2 md:order-1 flex flex-col justify-center max-w-2xl">
-              <p class="text-[11px] font-semibold tracking-[0.2em] text-hb-muted mb-2">
+              <p class="text-lg font-semibold mb-2 hb-wordmark" data-i18n="heroTitle">
                 h i d d e n b a c k • YALOVA
               </p>
               <p class="text-sm text-hb-muted leading-relaxed mb-3" data-i18n="about.heroParagraph1">
@@ -909,29 +973,64 @@
 
       <!-- Instagram bloğu (yalnızca HiddenBack; JS ile göstereceğiz/gizleyeceğiz) -->
       <div id="instagram-block"
-           class="bg-white border border-hb-border rounded-2xl p-4 sm:p-5">
-        <div class="flex items-center justify-between mb-3">
-          <div>
-            <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-hb-muted mb-1">
-              Instagram • @hiddenbackk
-            </p>
-            <h2 class="text-lg font-semibold" data-i18n="about.instagramHeading">Canlıdan kareler</h2>
+           class="bg-[#0b0b0f] border border-[#1f1f24] rounded-2xl p-4 sm:p-5 text-white">
+        <!-- Instagram block (bottom of hakkimizda) -->
+        <div class="hb-ig">
+          <div class="hb-ig-title">
+            <!-- Instagram icon (inline SVG) -->
+            <svg class="hb-ig-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9Zm4.5 4.3A5.7 5.7 0 1 1 6.3 14 5.7 5.7 0 0 1 12 8.3Zm0 2A3.7 3.7 0 1 0 15.7 14 3.7 3.7 0 0 0 12 10.3ZM18 6.8a1.1 1.1 0 1 1-1.1-1.1A1.1 1.1 0 0 1 18 6.8Z"></path>
+            </svg>
+
+            <span class="hb-ig-label">Instagram'a git</span>
+            <a class="hb-ig-btn" href="https://www.instagram.com/hiddenbackk/" target="_blank" rel="noreferrer">Instagram</a>
           </div>
-          <a href="https://www.instagram.com/hiddenbackk/" target="_blank"
-             class="hidden sm:inline-flex text-xs px-3 py-1.5 rounded-full border border-hb-border">
-            <span>Instagram'a git</span>
-          </a>
-        </div>
 
-        <div class="rounded-2xl overflow-hidden mb-3">
-          <script src="https://elfsightcdn.com/platform.js" async></script>
-          <div class="elfsight-app-9337cc09-4df4-4ad9-840f-434c25afc047" data-elfsight-app-lazy></div>
-        </div>
+          <!-- Your Socactive widget code -->
+          <style>.instawall-root360{min-height:80px;margin:0 auto}</style>
+          <script>
+            window['instawall360']={
+              "token":"rrhcmKHBqra7JqwI0ehXgeIURiD6FmZfxD+1rGJOA0EV+9ZTJi8fwUG6e3SKBrn+GU1vXI0wyMT8F+ZTfDHcqw8JlJh5sPOAMmGFzcfvP+NTKMY6nKF6/eX/BNvIZJU=",
+              "root_tagid":"instawall-root360",
+              "card_padding":"5",
+              "card_border_radius":"5",
+              "card_count":"3",
+              "layout_max_width":"1128",
+              "count_post":"12",
+              "header_text_size":"20",
+              "header_text_color":"#000000",
+              "header_logo_size":"50",
+              "header_button_text":"Подписаться",
+              "header_button_text_size":"12",
+              "header_button_text_color":"#ffffff",
+              "header_button_background_color":"#0095f6",
+              "hide_groupname":"1",
+              "hide_text":"0",
+              "hide_shadow":"1",
+              "show_header":"0",
+              "show_header_logo":"1",
+              "show_header_button":"1"
+            };
+          </script>
 
-        <a href="https://www.instagram.com/hiddenbackk/" target="_blank"
-           class="sm:hidden inline-flex text-xs px-3 py-1.5 rounded-full border border-hb-border">
-          <span>Instagram'a git</span>
-        </a>
+          <div id="instawall-root360" class="instawall instawall-root360"></div>
+
+          <script>
+            (function(d, s, id){
+              var js, dfjs = d.getElementsByTagName(s)[0];
+              if (d.getElementById(id)) {return;}
+              js = d.createElement(s);
+              js.id = id;
+              js.setAttribute("data-scriptid", "360");
+              js.src = "https://socactive.com/widgets/instawall/i.js?id=360&r="+Math.random();
+              dfjs.parentNode.insertBefore(js, dfjs);
+            }(document, "script", "instawall-export360"));
+          </script>
+
+          <!-- Keep this hidden / remove entirely (you already had it) -->
+          <style>.tabs-inofd{margin-top:-22px;opacity:0;padding-left:6px;}</style>
+          <div class="tabs-inofd"><a href="https://ev2.ru/city/1" target="_blank">Афиша</a></div>
+        </div>
       </div>
 
       <!-- GAMES -->
