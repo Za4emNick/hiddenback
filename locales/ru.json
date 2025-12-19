@@ -43,15 +43,18 @@
     "filterDessert": "Десерт",
     "filtersLabel": "Фильтры",
     "checkerRed": "Красные",
-    "checkerBlack": "Черные"
+    "checkerBlack": "Черные",
+    "caffeineLabel": "кофеина"
   },
   "groups": {
-    "kahvalti": {},
-    "bowl": {
-      "smoothie": "Смузи-боулы",
-      "savory": "Боулы"
+    "kahvalti": {
+      "smoothie": "Смузи-боулы"
     },
-    "lezzetler": {},
+    "bowl": {},
+    "lezzetler": {
+      "vegetarian": "Вегетарианское",
+      "chicken": "Куриное"
+    },
     "tatli": {},
     "matcha": {},
     "soguk": {
