@@ -43,15 +43,18 @@
     "filterDessert": "Dessert",
     "filtersLabel": "Filters",
     "checkerRed": "Red",
-    "checkerBlack": "Black"
+    "checkerBlack": "Black",
+    "caffeineLabel": "caffeine"
   },
   "groups": {
-    "kahvalti": {},
-    "bowl": {
-      "smoothie": "Smoothie Bowls",
-      "savory": "Savory Bowls"
+    "kahvalti": {
+      "smoothie": "Smoothie Bowls"
     },
-    "lezzetler": {},
+    "bowl": {},
+    "lezzetler": {
+      "vegetarian": "Vegetarian",
+      "chicken": "Chicken"
+    },
     "tatli": {},
     "matcha": {},
     "soguk": {
