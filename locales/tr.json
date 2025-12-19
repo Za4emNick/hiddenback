@@ -43,15 +43,18 @@
     "filterDessert": "Tatlı",
     "filtersLabel": "Filtreler",
     "checkerRed": "Kırmızı",
-    "checkerBlack": "Siyah"
+    "checkerBlack": "Siyah",
+    "caffeineLabel": "kafein"
   },
   "groups": {
-    "kahvalti": {},
-    "bowl": {
-      "smoothie": "Smoothie Bowl",
-      "savory": "Bowl"
+    "kahvalti": {
+      "smoothie": "Smoothie Bowl"
     },
-    "lezzetler": {},
+    "bowl": {},
+    "lezzetler": {
+      "vegetarian": "Vejetaryen",
+      "chicken": "Tavuklu"
+    },
     "tatli": {},
     "matcha": {},
     "soguk": {
