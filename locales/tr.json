@@ -32,11 +32,6 @@
     "instagramHeading": "Canlıdan kareler"
   },
   "ui": {
-    "snakeReadyStatus": "Hazır",
-    "snakeStartedStatus": "Başladı",
-    "snakeStoppedStatus": "Durdu",
-    "snakeGameOverStatus": "Oyun bitti",
-    "snakePlayingStatus": "Oynanıyor",
     "filterVeg": "Vejetaryen",
     "filterSpicy": "Acılı",
     "filterCheese": "Peynirli",
@@ -44,6 +39,9 @@
     "filtersLabel": "Filtreler",
     "checkerRed": "Kırmızı",
     "checkerBlack": "Siyah",
+    "runnerReadyStatus": "Hazır",
+    "runnerRunningStatus": "Koşuyor",
+    "runnerCrashedStatus": "Çarptı",
     "caffeineLabel": "kafein"
   },
   "groups": {
