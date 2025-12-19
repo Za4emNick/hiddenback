@@ -45,6 +45,8 @@ const SUPPORTED_LANGS = ["tr", "en", "ru"];
 const DEFAULT_LANG = "tr";
 let currentLang = DEFAULT_LANG;
 let translations = {};
+const hiddenLogo = new Image();
+hiddenLogo.src = "logo-x-x.jpg";
 
 function getItemId(item) {
   if (item.id) return item.id;
@@ -333,12 +335,6 @@ const container = document.getElementById("items-container");
 const instagramBlock = document.getElementById("instagram-block");
 const gamesSection = document.getElementById("games-section");
 const layoutRoot = document.getElementById("layout-root");
-const snakeCanvas = document.getElementById("snake-canvas");
-const snakeRestart = document.getElementById("snake-restart");
-const snakeKeys = document.querySelectorAll(".snake-key");
-const snakeScoreEl = document.getElementById("snake-score");
-const snakeBestEl = document.getElementById("snake-best");
-const snakeStatusEl = document.getElementById("snake-status");
 const runnerCanvas = document.getElementById("runner-canvas");
 const runnerStart = document.getElementById("runner-start");
 const runnerDistanceEl = document.getElementById("runner-distance");
@@ -385,9 +381,8 @@ const MENU_CATEGORIES = new Set(["kahvalti", "bowl", "lezzetler", "tatli", "matc
 const GAME_CATEGORY = "games";
 
 let activeCategory = "hiddenback";
-let activeGame = "snake";
+let activeGame = "runner";
 let searchTerm = "";
-let snakeStatusText = uiText.snakeReadyStatus;
 let runnerStatusText = uiText.runnerReadyStatus;
 
 const getTagLabels = () => ({
@@ -397,36 +392,7 @@ const getTagLabels = () => ({
   dessert: { label: uiText.filterDessert, color: "text-pink-600" },
 });
 
-const getSnakeStatusText = () => ({
-  snakeReadyStatus: uiText.snakeReadyStatus,
-  snakeStartedStatus: uiText.snakeStartedStatus,
-  snakeStoppedStatus: uiText.snakeStoppedStatus,
-  snakeGameOverStatus: uiText.snakeGameOverStatus,
-  snakePlayingStatus: uiText.snakePlayingStatus,
-});
-
 const formatPrice = (price) => (typeof price === "number" ? `${price}₺` : "" );
-
-// ─────────────────────────────
-//  GAMES: SNAKE
-// ─────────────────────────────
-
-const snakeState = {
-  gridSize: 18,
-  tile: 20,
-  speed: 140,
-  playing: false,
-  snake: [],
-  direction: { x: 1, y: 0 },
-  nextDirection: { x: 1, y: 0 },
-  food: { x: 8, y: 8 },
-  score: 0,
-  best: 0,
-};
-
-let snakeCtx = null;
-let snakeLoop = null;
-let snakeReady = false;
 
 const runnerState = {
   x: 82,
@@ -456,226 +422,6 @@ const DIR_MAP = {
   left: { x: -1, y: 0 },
   right: { x: 1, y: 0 },
 };
-
-function loadSnakeBest() {
-  const saved = Number(localStorage.getItem("hb_snake_best")) || 0;
-  snakeState.best = saved;
-  updateSnakeHUD();
-}
-
-function saveSnakeBest() {
-  localStorage.setItem("hb_snake_best", String(snakeState.best));
-}
-
-function updateSnakeHUD(statusKey = "") {
-  if (statusKey) snakeStatusText = getSnakeStatusText()[statusKey] || statusKey;
-  if (snakeScoreEl) snakeScoreEl.textContent = snakeState.score;
-  if (snakeBestEl) snakeBestEl.textContent = snakeState.best;
-  if (snakeStatusEl) snakeStatusEl.textContent = snakeStatusText;
-}
-
-function resetSnakeState() {
-  snakeState.snake = [
-    { x: 6, y: 9 },
-    { x: 5, y: 9 },
-    { x: 4, y: 9 },
-  ];
-  snakeState.direction = { x: 1, y: 0 };
-  snakeState.nextDirection = { x: 1, y: 0 };
-  snakeState.food = { x: 10, y: 9 };
-  snakeState.score = 0;
-  snakeState.speed = 140;
-  updateSnakeHUD("snakeReadyStatus");
-  drawSnake();
-}
-
-function clearSnakeLoop() {
-  if (snakeLoop) {
-    clearTimeout(snakeLoop);
-    snakeLoop = null;
-  }
-}
-
-function startSnakeGame() {
-  if (!snakeCtx) return;
-
-  clearSnakeLoop();
-  snakeState.playing = true;
-  resetSnakeState();
-  updateSnakeHUD("snakeStartedStatus");
-  scheduleSnakeTick();
-}
-
-function stopSnakeGame(messageKey = "snakeStoppedStatus") {
-  snakeState.playing = false;
-  clearSnakeLoop();
-  updateSnakeHUD(messageKey);
-}
-
-function scheduleSnakeTick() {
-  clearSnakeLoop();
-  snakeLoop = setTimeout(stepSnake, snakeState.speed);
-}
-
-function stepSnake() {
-  if (!snakeState.playing) return;
-
-  snakeState.direction = snakeState.nextDirection;
-  const head = { ...snakeState.snake[0] };
-  head.x += snakeState.direction.x;
-  head.y += snakeState.direction.y;
-
-  if (hitWall(head) || hitSelf(head)) {
-    stopSnakeGame("snakeGameOverStatus");
-    return;
-  }
-
-  snakeState.snake.unshift(head);
-
-  if (head.x === snakeState.food.x && head.y === snakeState.food.y) {
-    snakeState.score += 1;
-    snakeState.speed = Math.max(70, snakeState.speed - 3);
-    placeFood();
-    if (snakeState.score > snakeState.best) {
-      snakeState.best = snakeState.score;
-      saveSnakeBest();
-    }
-  } else {
-    snakeState.snake.pop();
-  }
-
-  updateSnakeHUD("snakePlayingStatus");
-  drawSnake();
-  scheduleSnakeTick();
-}
-
-function hitWall(point) {
-  return (
-    point.x < 0 ||
-    point.y < 0 ||
-    point.x >= snakeState.gridSize ||
-    point.y >= snakeState.gridSize
-  );
-}
-
-function hitSelf(point) {
-  return snakeState.snake.some((p) => p.x === point.x && p.y === point.y);
-}
-
-function placeFood() {
-  const openTiles = [];
-  for (let y = 0; y < snakeState.gridSize; y += 1) {
-    for (let x = 0; x < snakeState.gridSize; x += 1) {
-      if (!snakeState.snake.some((p) => p.x === x && p.y === y)) {
-        openTiles.push({ x, y });
-      }
-    }
-  }
-
-  if (!openTiles.length) return;
-  snakeState.food = openTiles[Math.floor(Math.random() * openTiles.length)];
-}
-
-function drawSnake() {
-  if (!snakeCtx || !snakeCanvas) return;
-
-  const { width, height } = snakeCanvas;
-  const bg = snakeCtx.createLinearGradient(0, 0, width, height);
-  bg.addColorStop(0, "#0c0f1f");
-  bg.addColorStop(1, "#0b0b0b");
-  snakeCtx.fillStyle = bg;
-  snakeCtx.fillRect(0, 0, width, height);
-
-  snakeCtx.strokeStyle = "rgba(255,255,255,0.06)";
-  snakeCtx.lineWidth = 1;
-  for (let x = 0; x <= width; x += snakeState.tile) {
-    snakeCtx.beginPath();
-    snakeCtx.moveTo(x, 0);
-    snakeCtx.lineTo(x, height);
-    snakeCtx.stroke();
-  }
-  for (let y = 0; y <= height; y += snakeState.tile) {
-    snakeCtx.beginPath();
-    snakeCtx.moveTo(0, y);
-    snakeCtx.lineTo(width, y);
-    snakeCtx.stroke();
-  }
-
-  // Food
-  snakeCtx.fillStyle = "#f97316";
-  snakeCtx.fillRect(
-    snakeState.food.x * snakeState.tile,
-    snakeState.food.y * snakeState.tile,
-    snakeState.tile,
-    snakeState.tile
-  );
-  snakeCtx.fillStyle = "rgba(249,115,22,0.35)";
-  snakeCtx.fillRect(
-    snakeState.food.x * snakeState.tile - 1,
-    snakeState.food.y * snakeState.tile - 1,
-    snakeState.tile + 2,
-    snakeState.tile + 2
-  );
-
-  // Snake body
-  snakeState.snake.forEach((part, index) => {
-    const color = index === 0 ? "#22d3ee" : "#10b981";
-    const shadow = index === 0 ? "rgba(34,211,238,0.35)" : "rgba(16,185,129,0.35)";
-    snakeCtx.fillStyle = color;
-    snakeCtx.shadowColor = shadow;
-    snakeCtx.shadowBlur = 6;
-    snakeCtx.fillRect(
-      part.x * snakeState.tile,
-      part.y * snakeState.tile,
-      snakeState.tile - 1,
-      snakeState.tile - 1
-    );
-  });
-  snakeCtx.shadowBlur = 0;
-}
-
-function queueDirection(dirKey) {
-  const next = DIR_MAP[dirKey];
-  if (!next) return;
-
-  const { x, y } = next;
-  if (snakeState.direction.x === -x && snakeState.direction.y === -y) return;
-  snakeState.nextDirection = next;
-}
-
-function bindSnakeControls() {
-  if (snakeRestart) {
-    snakeRestart.addEventListener("click", () => {
-      startSnakeGame();
-    });
-  }
-
-  snakeKeys.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const dir = btn.dataset.dir;
-      queueDirection(dir);
-    });
-  });
-
-  window.addEventListener("keydown", (event) => {
-    const key = event.key.toLowerCase();
-    if (["w", "arrowup"].includes(key)) queueDirection("up");
-    if (["s", "arrowdown"].includes(key)) queueDirection("down");
-    if (["a", "arrowleft"].includes(key)) queueDirection("left");
-    if (["d", "arrowright"].includes(key)) queueDirection("right");
-  });
-}
-
-function initSnake() {
-  if (!snakeCanvas || snakeReady) return;
-
-  snakeCtx = snakeCanvas.getContext("2d");
-  snakeReady = true;
-  loadSnakeBest();
-  bindSnakeControls();
-  resetSnakeState();
-}
-
 // ─────────────────────────────
 //  GAMES: HIDDENBACK RUN
 // ─────────────────────────────
@@ -760,16 +506,26 @@ function drawKolobok(x, y) {
   runnerCtx.fill();
   runnerCtx.stroke();
 
-  runnerCtx.fillStyle = "#0b0b0b";
-  runnerCtx.font = `${r * 0.8}px 'Courier New', monospace`;
-  runnerCtx.textAlign = "center";
-  runnerCtx.textBaseline = "middle";
-  runnerCtx.fillText("X X", x, y - r * 0.38);
+  const size = r * 1.4;
+  if (hiddenLogo.complete) {
+    runnerCtx.save();
+    runnerCtx.beginPath();
+    runnerCtx.arc(x, y, r - 1, 0, Math.PI * 2);
+    runnerCtx.clip();
+    runnerCtx.drawImage(hiddenLogo, x - size / 2, y - size / 2, size, size);
+    runnerCtx.restore();
+  } else {
+    runnerCtx.fillStyle = "#0b0b0b";
+    runnerCtx.font = `${r * 0.8}px 'Courier New', monospace`;
+    runnerCtx.textAlign = "center";
+    runnerCtx.textBaseline = "middle";
+    runnerCtx.fillText("X X", x, y - r * 0.38);
 
-  runnerCtx.lineWidth = 1.8;
-  runnerCtx.beginPath();
-  runnerCtx.arc(x, y + r * 0.25, r * 0.4, 0, Math.PI, false);
-  runnerCtx.stroke();
+    runnerCtx.lineWidth = 1.8;
+    runnerCtx.beginPath();
+    runnerCtx.arc(x, y + r * 0.25, r * 0.4, 0, Math.PI, false);
+    runnerCtx.stroke();
+  }
 }
 
 function drawRunnerScene(showPrompt = false) {
@@ -940,6 +696,356 @@ function initRunner() {
   resetRunnerState();
 }
 
+// ─────────────────────────────
+//  GAMES: HIDDENBACK RACE
+// ─────────────────────────────
+
+function loadDriverBest() {
+  const saved = Number(localStorage.getItem("hb_driver_best")) || 0;
+  driverState.best = saved;
+  updateDriverHUD();
+}
+
+function saveDriverBest() {
+  localStorage.setItem("hb_driver_best", String(driverState.best));
+}
+
+function updateDriverHUD() {
+  driverDistanceEl && (driverDistanceEl.textContent = `${Math.floor(driverState.distance)} m`);
+  driverBestEl && (driverBestEl.textContent = `${Math.floor(driverState.best)} m`);
+  driverStatusEl && (driverStatusEl.textContent = driverState.running ? "Koşuyor" : "Hazır");
+}
+
+function resetDriverState() {
+  driverState.laneWidth = (driverCanvas?.width || 320) / 3;
+  driverState.x = driverState.laneWidth * 1.5;
+  driverState.y = (driverCanvas?.height || 220) - 60;
+  driverState.velocity = 0;
+  driverState.obstacles = [];
+  driverState.distance = 0;
+  driverState.running = false;
+  driverState.lastTime = 0;
+  updateDriverHUD();
+  drawDriverScene(true);
+}
+
+function drawDriverCar(ctx, x, y, w, h) {
+  ctx.fillStyle = "#0b0b0b";
+  ctx.fillRect(x - w / 2, y - h / 2, w, h);
+  const logoSize = Math.min(w, h) * 0.7;
+  if (hiddenLogo.complete) {
+    ctx.drawImage(hiddenLogo, x - logoSize / 2, y - logoSize / 2, logoSize, logoSize);
+  }
+}
+
+function drawDriverScene(showPrompt = false) {
+  if (!driverCtx || !driverCanvas) return;
+  const { width, height } = driverCanvas;
+  driverCtx.clearRect(0, 0, width, height);
+
+  driverCtx.fillStyle = "#0f172a";
+  driverCtx.fillRect(0, 0, width, height);
+  driverCtx.fillStyle = "#111827";
+  driverCtx.fillRect(width * 0.2, 0, width * 0.6, height);
+
+  driverCtx.strokeStyle = "rgba(255,255,255,0.4)";
+  driverCtx.lineWidth = 3;
+  for (let i = 1; i < 3; i += 1) {
+    const laneX = (width * 0.2) + (driverState.laneWidth * i);
+    driverCtx.setLineDash([12, 12]);
+    driverCtx.beginPath();
+    driverCtx.moveTo(laneX, 0);
+    driverCtx.lineTo(laneX, height);
+    driverCtx.stroke();
+  }
+  driverCtx.setLineDash([]);
+
+  driverCtx.fillStyle = "#38bdf8";
+  driverState.obstacles.forEach((ob) => {
+    driverCtx.fillRect(ob.x - ob.w / 2, ob.y - ob.h / 2, ob.w, ob.h);
+  });
+
+  drawDriverCar(driverCtx, driverState.x, driverState.y, driverState.width, driverState.height);
+
+  if (showPrompt) {
+    driverCtx.fillStyle = "#e5e7eb";
+    driverCtx.font = "600 14px Inter, sans-serif";
+    driverCtx.textAlign = "center";
+    driverCtx.fillText("Başlat / Yeniden dene ile yarışı başlat", width / 2, height / 2);
+  }
+}
+
+function moveDriver(direction) {
+  const lane = Math.round((driverState.x - driverState.laneWidth * 0.5) / driverState.laneWidth);
+  let targetLane = lane + direction;
+  targetLane = Math.max(0, Math.min(2, targetLane));
+  driverState.x = driverState.laneWidth * (0.5 + targetLane);
+}
+
+function spawnDriverObstacle() {
+  if (!driverCanvas) return;
+  const lane = Math.floor(Math.random() * 3);
+  const x = driverState.laneWidth * (0.5 + lane);
+  driverState.obstacles.push({
+    x,
+    y: -30,
+    w: driverState.width * 0.8,
+    h: driverState.height * 0.8,
+  });
+}
+
+function stepDriver(timestamp) {
+  if (!driverState.running || !driverCtx || !driverCanvas) return;
+  const delta = Math.min(50, (timestamp - driverState.lastTime) || 16);
+  driverState.lastTime = timestamp;
+  const travel = delta * driverState.speed * 60;
+
+  driverState.distance += travel * 0.02;
+
+  driverState.obstacles = driverState.obstacles
+    .map((ob) => ({ ...ob, y: ob.y + travel * 0.04 }))
+    .filter((ob) => ob.y - ob.h / 2 < driverCanvas.height + 40);
+
+  if (Math.random() < 0.015) spawnDriverObstacle();
+
+  const collided = driverState.obstacles.some((ob) => {
+    return (
+      Math.abs(ob.x - driverState.x) < (ob.w + driverState.width) / 2 - 4 &&
+      Math.abs(ob.y - driverState.y) < (ob.h + driverState.height) / 2 - 4
+    );
+  });
+
+  if (collided) {
+    stopDriver();
+    drawDriverScene(true);
+    return;
+  }
+
+  drawDriverScene();
+  driverLoop = requestAnimationFrame(stepDriver);
+  updateDriverHUD();
+}
+
+function startDriver() {
+  if (!driverCtx) return;
+  resetDriverState();
+  driverState.running = true;
+  driverState.lastTime = performance.now();
+  driverLoop = requestAnimationFrame(stepDriver);
+  updateDriverHUD();
+}
+
+function stopDriver() {
+  if (driverLoop) cancelAnimationFrame(driverLoop);
+  driverLoop = null;
+  if (driverState.distance > driverState.best) {
+    driverState.best = driverState.distance;
+    saveDriverBest();
+  }
+  driverState.running = false;
+  updateDriverHUD();
+}
+
+function bindDriverControls() {
+  window.addEventListener("keydown", (event) => {
+    if (activeGame !== "driver") return;
+    const key = event.key.toLowerCase();
+    if (["arrowleft", "a"].includes(key)) moveDriver(-1);
+    if (["arrowright", "d"].includes(key)) moveDriver(1);
+  });
+
+  driverStart?.addEventListener("click", () => {
+    startDriver();
+  });
+}
+
+function initDriver() {
+  if (!driverCanvas || driverCtx) return;
+  driverCtx = driverCanvas.getContext("2d");
+  loadDriverBest();
+  bindDriverControls();
+  resetDriverState();
+}
+
+// ─────────────────────────────
+//  GAMES: HIDDENBACK TETRIS
+// ─────────────────────────────
+
+const TETROMINOS = {
+  I: [[1, 1, 1, 1]],
+  O: [[1, 1], [1, 1]],
+  T: [[0, 1, 0], [1, 1, 1]],
+  L: [[1, 0, 0], [1, 1, 1]],
+  J: [[0, 0, 1], [1, 1, 1]],
+  S: [[0, 1, 1], [1, 1, 0]],
+  Z: [[1, 1, 0], [0, 1, 1]],
+};
+
+function newGrid() {
+  return Array.from({ length: tetrisState.rows }, () => Array(tetrisState.cols).fill(0));
+}
+
+function randomPiece() {
+  const keys = Object.keys(TETROMINOS);
+  const key = keys[Math.floor(Math.random() * keys.length)];
+  return { shape: TETROMINOS[key], x: 3, y: 0, key };
+}
+
+function rotate(matrix) {
+  return matrix[0].map((_, i) => matrix.map((row) => row[i]).reverse());
+}
+
+function collide(grid, piece) {
+  return piece.shape.some((row, y) =>
+    row.some((value, x) => value && (
+      grid[y + piece.y] === undefined ||
+      grid[y + piece.y][x + piece.x] === undefined ||
+      grid[y + piece.y][x + piece.x]
+    )));
+}
+
+function merge(grid, piece) {
+  piece.shape.forEach((row, y) => {
+    row.forEach((value, x) => {
+      if (value && grid[y + piece.y]) grid[y + piece.y][x + piece.x] = piece.key;
+    });
+  });
+}
+
+function clearLines() {
+  tetrisState.grid = tetrisState.grid.filter((row) => row.some((cell) => !cell));
+  const cleared = tetrisState.rows - tetrisState.grid.length;
+  while (tetrisState.grid.length < tetrisState.rows) {
+    tetrisState.grid.unshift(Array(tetrisState.cols).fill(0));
+  }
+  if (cleared > 0) tetrisState.score += cleared * 100;
+}
+
+function drawTetris() {
+  if (!tetrisCtx || !tetrisCanvas) return;
+  const { width, height } = tetrisCanvas;
+  tetrisCtx.clearRect(0, 0, width, height);
+  tetrisCtx.fillStyle = "#0f172a";
+  tetrisCtx.fillRect(0, 0, width, height);
+
+  const c = tetrisState.cellSize;
+  const colors = {
+    I: "#22d3ee",
+    O: "#fbbf24",
+    T: "#a855f7",
+    L: "#fb7185",
+    J: "#3b82f6",
+    S: "#34d399",
+    Z: "#f97316",
+  };
+
+  tetrisState.grid.forEach((row, y) => {
+    row.forEach((cell, x) => {
+      if (cell) {
+        tetrisCtx.fillStyle = colors[cell] || "#e5e7eb";
+        tetrisCtx.fillRect(x * c, y * c, c - 1, c - 1);
+      }
+    });
+  });
+
+  if (tetrisState.current) {
+    tetrisState.current.shape.forEach((row, y) => {
+      row.forEach((value, x) => {
+        if (value) {
+          tetrisCtx.fillStyle = colors[tetrisState.current.key] || "#e5e7eb";
+          tetrisCtx.fillRect((tetrisState.current.x + x) * c, (tetrisState.current.y + y) * c, c - 1, c - 1);
+        }
+      });
+    });
+  }
+}
+
+function dropTetris(delta) {
+  tetrisState.dropAcc += delta;
+  if (tetrisState.dropAcc < tetrisState.dropInterval) return;
+  tetrisState.dropAcc = 0;
+  if (!tetrisState.current) return;
+  tetrisState.current.y += 1;
+  if (collide(tetrisState.grid, tetrisState.current)) {
+    tetrisState.current.y -= 1;
+    merge(tetrisState.grid, tetrisState.current);
+    clearLines();
+    spawnTetrisPiece();
+  }
+}
+
+function spawnTetrisPiece() {
+  tetrisState.current = tetrisState.next || randomPiece();
+  tetrisState.current.x = Math.floor((tetrisState.cols - tetrisState.current.shape[0].length) / 2);
+  tetrisState.current.y = 0;
+  tetrisState.next = randomPiece();
+  if (collide(tetrisState.grid, tetrisState.current)) {
+    stopTetris();
+    tetrisStatusEl && (tetrisStatusEl.textContent = "Oyun bitti");
+  }
+}
+
+function moveTetris(dx) {
+  if (!tetrisState.current) return;
+  tetrisState.current.x += dx;
+  if (collide(tetrisState.grid, tetrisState.current)) tetrisState.current.x -= dx;
+}
+
+function rotateTetris() {
+  if (!tetrisState.current) return;
+  const rotated = rotate(tetrisState.current.shape);
+  const prev = tetrisState.current.shape;
+  tetrisState.current.shape = rotated;
+  if (collide(tetrisState.grid, tetrisState.current)) tetrisState.current.shape = prev;
+}
+
+function stepTetris(timestamp) {
+  if (!tetrisState.running) return;
+  const delta = Math.min(50, (timestamp - tetrisState.lastTime) || 16);
+  tetrisState.lastTime = timestamp;
+  dropTetris(delta);
+  drawTetris();
+  requestAnimationFrame(stepTetris);
+}
+
+function startTetris() {
+  if (!tetrisCtx) return;
+  tetrisState.grid = newGrid();
+  tetrisState.score = 0;
+  tetrisState.running = true;
+  tetrisState.dropAcc = 0;
+  spawnTetrisPiece();
+  tetrisState.lastTime = performance.now();
+  tetrisStatusEl && (tetrisStatusEl.textContent = "Oynanıyor");
+  requestAnimationFrame(stepTetris);
+}
+
+function stopTetris() {
+  tetrisState.running = false;
+  tetrisStatusEl && (tetrisStatusEl.textContent = "Hazır");
+}
+
+function bindTetrisControls() {
+  window.addEventListener("keydown", (event) => {
+    if (activeGame !== "tetris") return;
+    const key = event.key.toLowerCase();
+    if (key === "arrowleft") moveTetris(-1);
+    if (key === "arrowright") moveTetris(1);
+    if (key === "arrowup") rotateTetris();
+    if (key === " " || key === "arrowdown") {
+      tetrisState.current && (tetrisState.current.y += 1);
+    }
+  });
+  tetrisStart?.addEventListener("click", () => startTetris());
+}
+
+function initTetris() {
+  if (!tetrisCanvas || tetrisCtx) return;
+  tetrisCtx = tetrisCanvas.getContext("2d");
+  bindTetrisControls();
+  drawTetris();
+}
+
 function updateLayout(category) {
   const isHome = category === "hiddenback";
   layoutRoot?.classList.toggle("home-layout", isHome);
@@ -1030,15 +1136,22 @@ function setActiveGame(game) {
     panel.classList.toggle("hidden", panel.dataset.game !== game);
   });
 
-  if (game === "snake") {
-    initSnake();
-    stopRunner("runnerReadyStatus");
-  } else if (game === "runner") {
+  if (game === "runner") {
     initRunner();
-    stopSnakeGame("snakeStoppedStatus");
   } else {
-    stopSnakeGame("snakeStoppedStatus");
     stopRunner("runnerReadyStatus");
+  }
+
+  if (game === "driver") {
+    initDriver();
+  } else {
+    stopDriver();
+  }
+
+  if (game === "tetris") {
+    initTetris();
+  } else {
+    stopTetris();
   }
 }
 
@@ -1072,10 +1185,11 @@ function toggleSections(category) {
   }
 
   if (showGame) {
-    setActiveGame(activeGame || "snake");
+    setActiveGame(activeGame || "runner");
   } else {
-    stopSnakeGame("snakeStoppedStatus");
     stopRunner("runnerReadyStatus");
+    stopDriver();
+    stopTetris();
   }
 
   updateLayout(category);
@@ -1150,8 +1264,8 @@ function createCard(item) {
   card.className = "bg-white border border-hb-border rounded-2xl p-4 sm:p-5 flex flex-col gap-3 shadow-[0_6px_18px_rgba(0,0,0,0.04)] card-fade";
 
   card.innerHTML = `
-    <div class="rounded-xl overflow-hidden bg-neutral-100 aspect-square">
-      <img src="${item.img}" alt="${translated.title}" class="w-full h-full object-contain p-2">
+    <div class="rounded-xl overflow-hidden bg-neutral-200 aspect-square">
+      <img src="${item.img}" alt="${translated.title}" class="w-full h-full object-cover">
     </div>
     <div class="flex flex-col gap-2">
       <div class="flex items-start justify-between gap-2">
@@ -1285,7 +1399,7 @@ catButtons.forEach((btn) => {
 gameTabButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
     const { game } = btn.dataset;
-    setActiveGame(game || "snake");
+    setActiveGame(game || "runner");
   });
 });
 
