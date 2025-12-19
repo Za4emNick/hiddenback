@@ -32,11 +32,6 @@
     "instagramHeading": "Canlıdan kareler"
   },
   "ui": {
-    "snakeReadyStatus": "Hazır",
-    "snakeStartedStatus": "Başladı",
-    "snakeStoppedStatus": "Durdu",
-    "snakeGameOverStatus": "Oyun bitti",
-    "snakePlayingStatus": "Oynanıyor",
     "filterVeg": "Vejetaryen",
     "filterSpicy": "Acılı",
     "filterCheese": "Peynirli",

@@ -55,7 +55,6 @@ function getItemId(item) {
 function refreshUiText() {
   const incoming = translations.ui || translations.text || {};
   uiText = { ...DEFAULT_TEXT, ...incoming };
-  snakeStatusText = uiText.snakeReadyStatus;
   runnerStatusText = uiText.runnerReadyStatus;
 }
 
@@ -412,9 +411,6 @@ const runnerState = {
 
 let runnerCtx = null;
 let runnerLoop = null;
-let driverCtx = null;
-let driverLoop = null;
-let tetrisCtx = null;
 
 const DIR_MAP = {
   up: { x: 0, y: -1 },
@@ -621,6 +617,26 @@ function stepRunner(timestamp) {
     runnerState.y = runnerState.ground;
     runnerState.velocityY = 0;
   }
+  if (cleared > 0) tetrisState.score += cleared * 100;
+}
+
+function drawTetris() {
+  if (!tetrisCtx || !tetrisCanvas) return;
+  const { width, height } = tetrisCanvas;
+  tetrisCtx.clearRect(0, 0, width, height);
+  tetrisCtx.fillStyle = "#0f172a";
+  tetrisCtx.fillRect(0, 0, width, height);
+
+  const c = tetrisState.cellSize;
+  const colors = {
+    I: "#22d3ee",
+    O: "#fbbf24",
+    T: "#a855f7",
+    L: "#fb7185",
+    J: "#3b82f6",
+    S: "#34d399",
+    Z: "#f97316",
+  };
 
   runnerState.spawnTimer -= delta;
   runnerState.starTimer -= delta;
@@ -667,6 +683,7 @@ function stepRunner(timestamp) {
     drawRunnerScene(true);
     return;
   }
+}
 
   drawRunnerScene();
   runnerLoop = requestAnimationFrame(stepRunner);
@@ -694,356 +711,6 @@ function initRunner() {
   loadRunnerBest();
   bindRunnerControls();
   resetRunnerState();
-}
-
-// ─────────────────────────────
-//  GAMES: HIDDENBACK RACE
-// ─────────────────────────────
-
-function loadDriverBest() {
-  const saved = Number(localStorage.getItem("hb_driver_best")) || 0;
-  driverState.best = saved;
-  updateDriverHUD();
-}
-
-function saveDriverBest() {
-  localStorage.setItem("hb_driver_best", String(driverState.best));
-}
-
-function updateDriverHUD() {
-  driverDistanceEl && (driverDistanceEl.textContent = `${Math.floor(driverState.distance)} m`);
-  driverBestEl && (driverBestEl.textContent = `${Math.floor(driverState.best)} m`);
-  driverStatusEl && (driverStatusEl.textContent = driverState.running ? "Koşuyor" : "Hazır");
-}
-
-function resetDriverState() {
-  driverState.laneWidth = (driverCanvas?.width || 320) / 3;
-  driverState.x = driverState.laneWidth * 1.5;
-  driverState.y = (driverCanvas?.height || 220) - 60;
-  driverState.velocity = 0;
-  driverState.obstacles = [];
-  driverState.distance = 0;
-  driverState.running = false;
-  driverState.lastTime = 0;
-  updateDriverHUD();
-  drawDriverScene(true);
-}
-
-function drawDriverCar(ctx, x, y, w, h) {
-  ctx.fillStyle = "#0b0b0b";
-  ctx.fillRect(x - w / 2, y - h / 2, w, h);
-  const logoSize = Math.min(w, h) * 0.7;
-  if (hiddenLogo.complete) {
-    ctx.drawImage(hiddenLogo, x - logoSize / 2, y - logoSize / 2, logoSize, logoSize);
-  }
-}
-
-function drawDriverScene(showPrompt = false) {
-  if (!driverCtx || !driverCanvas) return;
-  const { width, height } = driverCanvas;
-  driverCtx.clearRect(0, 0, width, height);
-
-  driverCtx.fillStyle = "#0f172a";
-  driverCtx.fillRect(0, 0, width, height);
-  driverCtx.fillStyle = "#111827";
-  driverCtx.fillRect(width * 0.2, 0, width * 0.6, height);
-
-  driverCtx.strokeStyle = "rgba(255,255,255,0.4)";
-  driverCtx.lineWidth = 3;
-  for (let i = 1; i < 3; i += 1) {
-    const laneX = (width * 0.2) + (driverState.laneWidth * i);
-    driverCtx.setLineDash([12, 12]);
-    driverCtx.beginPath();
-    driverCtx.moveTo(laneX, 0);
-    driverCtx.lineTo(laneX, height);
-    driverCtx.stroke();
-  }
-  driverCtx.setLineDash([]);
-
-  driverCtx.fillStyle = "#38bdf8";
-  driverState.obstacles.forEach((ob) => {
-    driverCtx.fillRect(ob.x - ob.w / 2, ob.y - ob.h / 2, ob.w, ob.h);
-  });
-
-  drawDriverCar(driverCtx, driverState.x, driverState.y, driverState.width, driverState.height);
-
-  if (showPrompt) {
-    driverCtx.fillStyle = "#e5e7eb";
-    driverCtx.font = "600 14px Inter, sans-serif";
-    driverCtx.textAlign = "center";
-    driverCtx.fillText("Başlat / Yeniden dene ile yarışı başlat", width / 2, height / 2);
-  }
-}
-
-function moveDriver(direction) {
-  const lane = Math.round((driverState.x - driverState.laneWidth * 0.5) / driverState.laneWidth);
-  let targetLane = lane + direction;
-  targetLane = Math.max(0, Math.min(2, targetLane));
-  driverState.x = driverState.laneWidth * (0.5 + targetLane);
-}
-
-function spawnDriverObstacle() {
-  if (!driverCanvas) return;
-  const lane = Math.floor(Math.random() * 3);
-  const x = driverState.laneWidth * (0.5 + lane);
-  driverState.obstacles.push({
-    x,
-    y: -30,
-    w: driverState.width * 0.8,
-    h: driverState.height * 0.8,
-  });
-}
-
-function stepDriver(timestamp) {
-  if (!driverState.running || !driverCtx || !driverCanvas) return;
-  const delta = Math.min(50, (timestamp - driverState.lastTime) || 16);
-  driverState.lastTime = timestamp;
-  const travel = delta * driverState.speed * 60;
-
-  driverState.distance += travel * 0.02;
-
-  driverState.obstacles = driverState.obstacles
-    .map((ob) => ({ ...ob, y: ob.y + travel * 0.04 }))
-    .filter((ob) => ob.y - ob.h / 2 < driverCanvas.height + 40);
-
-  if (Math.random() < 0.015) spawnDriverObstacle();
-
-  const collided = driverState.obstacles.some((ob) => {
-    return (
-      Math.abs(ob.x - driverState.x) < (ob.w + driverState.width) / 2 - 4 &&
-      Math.abs(ob.y - driverState.y) < (ob.h + driverState.height) / 2 - 4
-    );
-  });
-
-  if (collided) {
-    stopDriver();
-    drawDriverScene(true);
-    return;
-  }
-
-  drawDriverScene();
-  driverLoop = requestAnimationFrame(stepDriver);
-  updateDriverHUD();
-}
-
-function startDriver() {
-  if (!driverCtx) return;
-  resetDriverState();
-  driverState.running = true;
-  driverState.lastTime = performance.now();
-  driverLoop = requestAnimationFrame(stepDriver);
-  updateDriverHUD();
-}
-
-function stopDriver() {
-  if (driverLoop) cancelAnimationFrame(driverLoop);
-  driverLoop = null;
-  if (driverState.distance > driverState.best) {
-    driverState.best = driverState.distance;
-    saveDriverBest();
-  }
-  driverState.running = false;
-  updateDriverHUD();
-}
-
-function bindDriverControls() {
-  window.addEventListener("keydown", (event) => {
-    if (activeGame !== "driver") return;
-    const key = event.key.toLowerCase();
-    if (["arrowleft", "a"].includes(key)) moveDriver(-1);
-    if (["arrowright", "d"].includes(key)) moveDriver(1);
-  });
-
-  driverStart?.addEventListener("click", () => {
-    startDriver();
-  });
-}
-
-function initDriver() {
-  if (!driverCanvas || driverCtx) return;
-  driverCtx = driverCanvas.getContext("2d");
-  loadDriverBest();
-  bindDriverControls();
-  resetDriverState();
-}
-
-// ─────────────────────────────
-//  GAMES: HIDDENBACK TETRIS
-// ─────────────────────────────
-
-const TETROMINOS = {
-  I: [[1, 1, 1, 1]],
-  O: [[1, 1], [1, 1]],
-  T: [[0, 1, 0], [1, 1, 1]],
-  L: [[1, 0, 0], [1, 1, 1]],
-  J: [[0, 0, 1], [1, 1, 1]],
-  S: [[0, 1, 1], [1, 1, 0]],
-  Z: [[1, 1, 0], [0, 1, 1]],
-};
-
-function newGrid() {
-  return Array.from({ length: tetrisState.rows }, () => Array(tetrisState.cols).fill(0));
-}
-
-function randomPiece() {
-  const keys = Object.keys(TETROMINOS);
-  const key = keys[Math.floor(Math.random() * keys.length)];
-  return { shape: TETROMINOS[key], x: 3, y: 0, key };
-}
-
-function rotate(matrix) {
-  return matrix[0].map((_, i) => matrix.map((row) => row[i]).reverse());
-}
-
-function collide(grid, piece) {
-  return piece.shape.some((row, y) =>
-    row.some((value, x) => value && (
-      grid[y + piece.y] === undefined ||
-      grid[y + piece.y][x + piece.x] === undefined ||
-      grid[y + piece.y][x + piece.x]
-    )));
-}
-
-function merge(grid, piece) {
-  piece.shape.forEach((row, y) => {
-    row.forEach((value, x) => {
-      if (value && grid[y + piece.y]) grid[y + piece.y][x + piece.x] = piece.key;
-    });
-  });
-}
-
-function clearLines() {
-  tetrisState.grid = tetrisState.grid.filter((row) => row.some((cell) => !cell));
-  const cleared = tetrisState.rows - tetrisState.grid.length;
-  while (tetrisState.grid.length < tetrisState.rows) {
-    tetrisState.grid.unshift(Array(tetrisState.cols).fill(0));
-  }
-  if (cleared > 0) tetrisState.score += cleared * 100;
-}
-
-function drawTetris() {
-  if (!tetrisCtx || !tetrisCanvas) return;
-  const { width, height } = tetrisCanvas;
-  tetrisCtx.clearRect(0, 0, width, height);
-  tetrisCtx.fillStyle = "#0f172a";
-  tetrisCtx.fillRect(0, 0, width, height);
-
-  const c = tetrisState.cellSize;
-  const colors = {
-    I: "#22d3ee",
-    O: "#fbbf24",
-    T: "#a855f7",
-    L: "#fb7185",
-    J: "#3b82f6",
-    S: "#34d399",
-    Z: "#f97316",
-  };
-
-  tetrisState.grid.forEach((row, y) => {
-    row.forEach((cell, x) => {
-      if (cell) {
-        tetrisCtx.fillStyle = colors[cell] || "#e5e7eb";
-        tetrisCtx.fillRect(x * c, y * c, c - 1, c - 1);
-      }
-    });
-  });
-
-  if (tetrisState.current) {
-    tetrisState.current.shape.forEach((row, y) => {
-      row.forEach((value, x) => {
-        if (value) {
-          tetrisCtx.fillStyle = colors[tetrisState.current.key] || "#e5e7eb";
-          tetrisCtx.fillRect((tetrisState.current.x + x) * c, (tetrisState.current.y + y) * c, c - 1, c - 1);
-        }
-      });
-    });
-  }
-}
-
-function dropTetris(delta) {
-  tetrisState.dropAcc += delta;
-  if (tetrisState.dropAcc < tetrisState.dropInterval) return;
-  tetrisState.dropAcc = 0;
-  if (!tetrisState.current) return;
-  tetrisState.current.y += 1;
-  if (collide(tetrisState.grid, tetrisState.current)) {
-    tetrisState.current.y -= 1;
-    merge(tetrisState.grid, tetrisState.current);
-    clearLines();
-    spawnTetrisPiece();
-  }
-}
-
-function spawnTetrisPiece() {
-  tetrisState.current = tetrisState.next || randomPiece();
-  tetrisState.current.x = Math.floor((tetrisState.cols - tetrisState.current.shape[0].length) / 2);
-  tetrisState.current.y = 0;
-  tetrisState.next = randomPiece();
-  if (collide(tetrisState.grid, tetrisState.current)) {
-    stopTetris();
-    tetrisStatusEl && (tetrisStatusEl.textContent = "Oyun bitti");
-  }
-}
-
-function moveTetris(dx) {
-  if (!tetrisState.current) return;
-  tetrisState.current.x += dx;
-  if (collide(tetrisState.grid, tetrisState.current)) tetrisState.current.x -= dx;
-}
-
-function rotateTetris() {
-  if (!tetrisState.current) return;
-  const rotated = rotate(tetrisState.current.shape);
-  const prev = tetrisState.current.shape;
-  tetrisState.current.shape = rotated;
-  if (collide(tetrisState.grid, tetrisState.current)) tetrisState.current.shape = prev;
-}
-
-function stepTetris(timestamp) {
-  if (!tetrisState.running) return;
-  const delta = Math.min(50, (timestamp - tetrisState.lastTime) || 16);
-  tetrisState.lastTime = timestamp;
-  dropTetris(delta);
-  drawTetris();
-  requestAnimationFrame(stepTetris);
-}
-
-function startTetris() {
-  if (!tetrisCtx) return;
-  tetrisState.grid = newGrid();
-  tetrisState.score = 0;
-  tetrisState.running = true;
-  tetrisState.dropAcc = 0;
-  spawnTetrisPiece();
-  tetrisState.lastTime = performance.now();
-  tetrisStatusEl && (tetrisStatusEl.textContent = "Oynanıyor");
-  requestAnimationFrame(stepTetris);
-}
-
-function stopTetris() {
-  tetrisState.running = false;
-  tetrisStatusEl && (tetrisStatusEl.textContent = "Hazır");
-}
-
-function bindTetrisControls() {
-  window.addEventListener("keydown", (event) => {
-    if (activeGame !== "tetris") return;
-    const key = event.key.toLowerCase();
-    if (key === "arrowleft") moveTetris(-1);
-    if (key === "arrowright") moveTetris(1);
-    if (key === "arrowup") rotateTetris();
-    if (key === " " || key === "arrowdown") {
-      tetrisState.current && (tetrisState.current.y += 1);
-    }
-  });
-  tetrisStart?.addEventListener("click", () => startTetris());
-}
-
-function initTetris() {
-  if (!tetrisCanvas || tetrisCtx) return;
-  tetrisCtx = tetrisCanvas.getContext("2d");
-  bindTetrisControls();
-  drawTetris();
 }
 
 function updateLayout(category) {
@@ -1141,18 +808,6 @@ function setActiveGame(game) {
   } else {
     stopRunner("runnerReadyStatus");
   }
-
-  if (game === "driver") {
-    initDriver();
-  } else {
-    stopDriver();
-  }
-
-  if (game === "tetris") {
-    initTetris();
-  } else {
-    stopTetris();
-  }
 }
 
 function openDrawer() {
@@ -1188,8 +843,6 @@ function toggleSections(category) {
     setActiveGame(activeGame || "runner");
   } else {
     stopRunner("runnerReadyStatus");
-    stopDriver();
-    stopTetris();
   }
 
   updateLayout(category);

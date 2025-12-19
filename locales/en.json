@@ -32,11 +32,6 @@
     "instagramHeading": "Live moments"
   },
   "ui": {
-    "snakeReadyStatus": "Ready",
-    "snakeStartedStatus": "Started",
-    "snakeStoppedStatus": "Stopped",
-    "snakeGameOverStatus": "Game over",
-    "snakePlayingStatus": "Playing",
     "filterVeg": "Vegetarian",
     "filterSpicy": "Spicy",
     "filterCheese": "Cheesy",

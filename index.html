@@ -1034,72 +1034,17 @@
           </div>
 
           <div class="game-select-grid">
-            <button class="game-tab-btn active" data-game="snake">
-              <span class="icon" aria-hidden="true">🟢</span>
-              <span>Yılan Oyunu</span>
-            </button>
-            <button class="game-tab-btn" data-game="runner">
+            <button class="game-tab-btn active" data-game="runner">
               <span class="icon" aria-hidden="true">🙂</span>
               <span>HiddenBack Run</span>
             </button>
           </div>
 
           <p class="text-sm text-hb-muted leading-relaxed">
-            Games sekmesinden iki oyuna erişebilirsin. Dilediğin oyunu yukarıdan seç, kuralları oku ve hemen oynamaya başla.
+            Games sekmesinden oyunu seç, kuralları oku ve hemen oyna.
           </p>
 
-          <section class="game-panel" data-game="snake">
-            <div class="grid md:grid-cols-[1.05fr_0.95fr] gap-5 items-start">
-              <div class="flex flex-col gap-3">
-                <div class="flex items-center gap-3 text-sm">
-                  <div class="px-3 py-2 rounded-xl bg-gray-100 border border-hb-border">
-                    <span>Skor</span>: <span id="snake-score" class="font-semibold">0</span>
-                  </div>
-                  <div class="px-3 py-2 rounded-xl bg-gray-100 border border-hb-border">
-                    <span>Rekor</span>: <span id="snake-best" class="font-semibold">0</span>
-                  </div>
-                  <div class="px-3 py-2 rounded-xl bg-gray-100 border border-hb-border">
-                    <span>Durum</span>: <span id="snake-status" class="font-semibold">Hazır</span>
-                  </div>
-                </div>
-                <div class="rounded-2xl border border-hb-border bg-gray-50 p-3">
-                  <p class="text-sm font-semibold mb-2">İpucu</p>
-                  <ul class="text-sm text-hb-muted list-disc list-inside space-y-1">
-                    <li>Önce bir dil seç, sonra "Games"e geçip oyunu başlat.</li>
-                    <li>Hız yavaş başlar; her elma ile biraz artar.</li>
-                    <li>Telefon için butonlar büyük, dokunmatik gecikme yok.</li>
-                  </ul>
-                </div>
-              </div>
-
-              <div class="flex flex-col items-center gap-3">
-                <canvas id="snake-canvas" width="360" height="360"></canvas>
-                <div class="snake-grid w-full">
-                  <span></span>
-                  <button class="snake-key" data-dir="up" aria-label="Yukarı">↑</button>
-                  <span></span>
-                  <button class="snake-key" data-dir="left" aria-label="Sol">←</button>
-                  <span></span>
-                  <button class="snake-key" data-dir="right" aria-label="Sağ">→</button>
-                  <span></span>
-                  <button class="snake-key" data-dir="down" aria-label="Aşağı">↓</button>
-                  <span></span>
-                </div>
-              </div>
-            </div>
-
-              <div class="flex flex-col items-center gap-2 pt-1">
-                <button id="snake-restart" type="button"
-                        class="px-5 py-2 rounded-full border border-hb-border text-sm font-semibold bg-black text-white shadow-sm">
-                <span>Başlat / Sıfırla</span>
-                </button>
-                <p class="text-xs text-hb-muted text-center">
-                <span>Mobilde yön tuşlarını, masaüstünde ok/WASD tuşlarını kullanabilirsiniz.</span>
-                </p>
-              </div>
-            </section>
-
-          <section class="game-panel hidden" data-game="runner">
+          <section class="game-panel" data-game="runner">
             <div class="grid md:grid-cols-[1.05fr_0.95fr] gap-5 items-start">
               <div class="flex flex-col gap-3">
                 <div class="flex items-center gap-3 text-sm">
