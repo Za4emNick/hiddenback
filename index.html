@@ -378,6 +378,23 @@
       text-align: center;
     }
 
+    /* Sticky menu strip */
+    #controls-wrapper {
+      position: sticky;
+      top: 0;
+      z-index: 25;
+      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.9));
+      backdrop-filter: blur(8px);
+    }
+
+    #mobile-top-menu {
+      position: sticky;
+      top: 0;
+      z-index: 26;
+      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.9));
+      backdrop-filter: blur(8px);
+    }
+
     #mobile-drawer-handle.hide {
       opacity: 0;
       pointer-events: none;
@@ -1100,10 +1117,10 @@
                 <div class="rounded-2xl border border-hb-border bg-gray-50 p-4 flex flex-col gap-2">
                   <h3 class="text-lg font-semibold">HiddenBack Run</h3>
                   <p class="text-sm text-hb-muted leading-relaxed">
-                    Kolobok gülücüğü ile yola çık. Engelleri aşmak için tek dokunuşla zıpla ve ne kadar uzağa gidebileceğini gör.
+                    Hiddenboy restoranımıza yetişmeye çalışıyor. Ona engelleri aşmasında yardım et; onu ilk ulaştıran oyuncu menüden dilediği bir yemeği hediye kazanır.
                   </p>
                   <div class="runner-legend">
-                    <span class="runner-pill">🙂 Kolobok koşucu</span>
+                    <span class="runner-pill">🙂 Hiddenboy</span>
                     <span class="runner-pill">⬛ Engeller</span>
                     <span class="runner-pill">⬜ Yıldız parçaları</span>
                   </div>

@@ -429,10 +429,10 @@ let snakeLoop = null;
 let snakeReady = false;
 
 const runnerState = {
-  x: 80,
+  x: 82,
   y: 160,
-  radius: 18,
-  ground: 170,
+  radius: 20,
+  ground: 172,
   velocityY: 0,
   gravity: 0.0024,
   jump: -0.82,
@@ -748,23 +748,25 @@ function spawnRunnerStar() {
 function drawKolobok(x, y) {
   if (!runnerCtx) return;
   const r = runnerState.radius;
-  const gradient = runnerCtx.createRadialGradient(x - r * 0.4, y - r * 0.4, r * 0.2, x, y, r * 1.2);
-  gradient.addColorStop(0, "#fde68a");
-  gradient.addColorStop(1, "#f59e0b");
+  const gradient = runnerCtx.createRadialGradient(x - r * 0.2, y - r * 0.2, r * 0.2, x, y, r * 1.2);
+  gradient.addColorStop(0, "#ffffff");
+  gradient.addColorStop(1, "#f8fafc");
 
   runnerCtx.fillStyle = gradient;
+  runnerCtx.strokeStyle = "#0b0b0b";
+  runnerCtx.lineWidth = 2.5;
   runnerCtx.beginPath();
   runnerCtx.arc(x, y, r, 0, Math.PI * 2);
   runnerCtx.fill();
+  runnerCtx.stroke();
 
-  runnerCtx.fillStyle = "#111827";
-  runnerCtx.beginPath();
-  runnerCtx.arc(x - r * 0.4, y - r * 0.2, r * 0.18, 0, Math.PI * 2);
-  runnerCtx.arc(x + r * 0.4, y - r * 0.2, r * 0.18, 0, Math.PI * 2);
-  runnerCtx.fill();
+  runnerCtx.fillStyle = "#0b0b0b";
+  runnerCtx.font = `${r * 1.05}px 'Courier New', monospace`;
+  runnerCtx.textAlign = "center";
+  runnerCtx.textBaseline = "middle";
+  runnerCtx.fillText("X  X", x, y - r * 0.35);
 
-  runnerCtx.lineWidth = 2.4;
-  runnerCtx.strokeStyle = "#0b0b0b";
+  runnerCtx.lineWidth = 2.2;
   runnerCtx.beginPath();
   runnerCtx.arc(x, y + r * 0.25, r * 0.55, 0, Math.PI, false);
   runnerCtx.stroke();
@@ -1148,8 +1150,8 @@ function createCard(item) {
   card.className = "bg-white border border-hb-border rounded-2xl p-4 sm:p-5 flex flex-col gap-3 shadow-[0_6px_18px_rgba(0,0,0,0.04)] card-fade";
 
   card.innerHTML = `
-    <div class="rounded-xl overflow-hidden bg-neutral-200 aspect-[4/3]">
-      <img src="${item.img}" alt="${translated.title}" class="w-full h-full object-cover">
+    <div class="rounded-xl overflow-hidden bg-neutral-100 aspect-square">
+      <img src="${item.img}" alt="${translated.title}" class="w-full h-full object-contain p-2">
     </div>
     <div class="flex flex-col gap-2">
       <div class="flex items-start justify-between gap-2">
