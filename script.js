@@ -617,26 +617,6 @@ function stepRunner(timestamp) {
     runnerState.y = runnerState.ground;
     runnerState.velocityY = 0;
   }
-  if (cleared > 0) tetrisState.score += cleared * 100;
-}
-
-function drawTetris() {
-  if (!tetrisCtx || !tetrisCanvas) return;
-  const { width, height } = tetrisCanvas;
-  tetrisCtx.clearRect(0, 0, width, height);
-  tetrisCtx.fillStyle = "#0f172a";
-  tetrisCtx.fillRect(0, 0, width, height);
-
-  const c = tetrisState.cellSize;
-  const colors = {
-    I: "#22d3ee",
-    O: "#fbbf24",
-    T: "#a855f7",
-    L: "#fb7185",
-    J: "#3b82f6",
-    S: "#34d399",
-    Z: "#f97316",
-  };
 
   runnerState.spawnTimer -= delta;
   runnerState.starTimer -= delta;
@@ -683,7 +663,6 @@ function drawTetris() {
     drawRunnerScene(true);
     return;
   }
-
 
   drawRunnerScene();
   runnerLoop = requestAnimationFrame(stepRunner);
@@ -793,21 +772,17 @@ function updateBackToTop() {
 }
 
 function setActiveGame(game) {
-  activeGame = game;
+  activeGame = "runner";
 
   gameTabButtons.forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.game === game);
+    btn.classList.toggle("active", btn.dataset.game === "runner");
   });
 
   gamePanels.forEach((panel) => {
-    panel.classList.toggle("hidden", panel.dataset.game !== game);
+    panel.classList.toggle("hidden", panel.dataset.game !== "runner");
   });
 
-  if (game === "runner") {
-    initRunner();
-  } else {
-    stopRunner("runnerReadyStatus");
-  }
+  initRunner();
 }
 
 function openDrawer() {
@@ -1032,8 +1007,7 @@ catButtons.forEach((btn) => {
 
 gameTabButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
-    const { game } = btn.dataset;
-    setActiveGame(game || "runner");
+    setActiveGame("runner");
   });
 });
 
