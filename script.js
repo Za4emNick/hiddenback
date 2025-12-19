@@ -5,10 +5,7 @@
 const GROUP_TITLES = {
   kahvalti: { smoothie: "Smoothie Bowl" },
   bowl: {},
-  lezzetler: {
-    vegetarian: "Vejetaryen",
-    chicken: "Tavuklu",
-  },
+  lezzetler: {},
   tatli: {},
   matcha: {},
   soguk: {
@@ -26,18 +23,14 @@ const GROUP_TITLES = {
 };
 
 const DEFAULT_TEXT = {
-  snakeReadyStatus: "Hazır",
-  snakeStartedStatus: "Başladı",
-  snakeStoppedStatus: "Durdu",
-  snakeGameOverStatus: "Oyun bitti",
-  snakePlayingStatus: "Oynanıyor",
+  runnerReadyStatus: "Hazır",
+  runnerRunningStatus: "Koşuyor",
+  runnerCrashedStatus: "Çarptı",
   filterVeg: "Vejetaryen",
   filterSpicy: "Acılı",
   filterCheese: "Peynirli",
   filterDessert: "Tatlı",
   filtersLabel: "Filtreler",
-  checkerRed: "Kırmızı",
-  checkerBlack: "Siyah",
   caffeineLabel: "kafein",
 };
 
@@ -47,6 +40,8 @@ const SUPPORTED_LANGS = ["tr", "en", "ru"];
 const DEFAULT_LANG = "tr";
 let currentLang = DEFAULT_LANG;
 let translations = {};
+const hiddenLogo = new Image();
+hiddenLogo.src = "logo-x-x.jpg";
 
 function getItemId(item) {
   if (item.id) return item.id;
@@ -61,7 +56,7 @@ function refreshUiText() {
   const incoming = translations.ui || translations.text || {};
   uiText = { ...DEFAULT_TEXT, ...incoming };
   snakeStatusText = uiText.snakeReadyStatus;
-  checkersStatusState = { key: "checkersTurn", vars: { player: uiText.checkerRed } };
+  runnerStatusText = uiText.runnerReadyStatus;
 }
 
 function resolveTranslation(key) {
@@ -106,6 +101,7 @@ function translateMenuItem(item) {
 }
 
 function translateGroupTitle(cat, group) {
+  if (cat === "lezzetler") return "";
   return translations.groups?.[cat]?.[group] || (GROUP_TITLES[cat] || {})[group] || group;
 }
 
@@ -161,9 +157,8 @@ async function applyLanguage(lang) {
   refreshUiText();
   applyStaticTranslations();
   renderItems();
-  updateSnakeHUD();
-  renderTttStatus();
-  updateCheckersStatus();
+  loadRunnerBest();
+  updateRunnerHUD();
   localStorage.setItem("hb-lang", currentLang);
 }
 
@@ -197,6 +192,8 @@ const ITEMS = [
   { cat: "kahvalti", title: "Kruvasan", price: 180, desc: "Tereyağlı kruvasan.", img: itemImg("kruvasan") },
   { cat: "kahvalti", title: "Kruvasan Çikolata & Çilek", price: 230, desc: "Çikolata ve taze çilekle sunulan kruvasan.", img: itemImg("kruvasan_cikolata_ve_cilek") },
   { cat: "kahvalti", title: "Menemen", price: 190, desc: "Yaz domatesiyle menemen, beyaz peynir ve ekşi maya ekmek.", img: itemImg("menemen") },
+  { cat: "kahvalti", title: "Ekmek Üstü", price: 240, desc: "Ekşi maya ekmek üstü krem peynir, çırpılmış yumurta ve avokado.", img: itemImg("ekmek_ustu") },
+  { cat: "kahvalti", title: "Patates Tava", price: 160, desc: "Klasik kızarmış patates.", img: itemImg("patates_tava") },
   { cat: "kahvalti", group: "smoothie", title: "Acaí Bowl", price: 220, desc: "Acai özü, muz, böğürtlen, frambuaz ve granola.", img: itemImg("bowl") },
   { cat: "kahvalti", group: "smoothie", title: "Berry Bowl", price: 200, desc: "Süzme yoğurt, bal, granola ve çilek.", img: itemImg("bowl1") },
   
@@ -210,15 +207,15 @@ const ITEMS = [
   { cat: "bowl", title: "Fresh Bowl", price: 220, desc: "Kinoa, avokado, çilek, havuç, Akdeniz yeşilliği ve zeytinyağı.", img: itemImg("bowl8") },
 
   // ──────────── LEZZETLER ────────────
-  { cat: "lezzetler", group: "chicken", title: "Tavuklu Sezar Salata", price: 250, desc: "Izgara tavuk göğsü, taze göbek marul, domates, kruton, sezar sos ve mısır.", img: itemImg("tavuklu_sezar_salata") },
-  { cat: "lezzetler", group: "vegetarian", title: "Yeşil Salata", price: 190, desc: "Taze göbek marul, lolorosso, havuç, turp, salatalık, domates ve beyaz peynir.", img: itemImg("yesil_salata") },
-  { cat: "lezzetler", group: "chicken", title: "Çıtır Tavuk", price: 280, desc: "Panelenmiş jülyen tavuk dilimleri, sweet chili sos, sezar sos ve patates kızartması.", img: itemImg("citir_tavuk") },
-  { cat: "lezzetler", group: "chicken", title: "Burritos Tavuk Dürüm", price: 280, desc: "Tortilla ekmeğinde tavuk dilimleri, burritos sos, renkli biberler, mantar, mısır, cheddar peyniri, patates kızartması ve Akdeniz yeşilliği.", img: itemImg("burritos_tavuk_durum") },
-  { cat: "lezzetler", group: "chicken", title: "Fettucine Alfredo", price: 280, desc: "Sotelenmiş tavuk dilimleri, fettuccine makarna, mantar, renkli biberler, pesto sos, krema ve parmesan peyniri.", img: itemImg("fettucine_alfredo") },
-  { cat: "lezzetler", group: "chicken", title: "Köri Soslu Tavuk", price: 290, desc: "Köri soslu tavuk, mantar, renkli biberler, basmati pilav ve Akdeniz yeşillikleri.", img: itemImg("kori_soslu_tavuk") },
-  { cat: "lezzetler", group: "chicken", title: "Sandviç", price: 220, desc: "Ekşi maya ekmek, cheddar, taze kaşar, krem peynir, dana jambon, haşlanmış yumurta ve lolorosso.", img: itemImg("sandvic") },
-  { cat: "lezzetler", group: "vegetarian", title: "Ekmek Üstü", price: 240, desc: "Ekşi maya ekmek üstü krem peynir, çırpılmış yumurta ve avokado.", img: itemImg("ekmek_ustu") },
-  { cat: "lezzetler", group: "vegetarian", title: "Patates Tava", price: 160, desc: "Klasik kızarmış patates.", img: itemImg("patates_tava") },
+  { cat: "lezzetler", title: "Tavuklu Sezar Salata", price: 250, desc: "Izgara tavuk göğsü, taze göbek marul, domates, kruton, sezar sos ve mısır.", img: itemImg("tavuklu_sezar_salata") },
+  { cat: "lezzetler", title: "Yeşil Salata", price: 190, desc: "Taze göbek marul, lolorosso, havuç, turp, salatalık, domates ve beyaz peynir.", img: itemImg("yesil_salata") },
+  { cat: "lezzetler", title: "Çıtır Tavuk", price: 280, desc: "Panelenmiş jülyen tavuk dilimleri, sweet chili sos, sezar sos ve patates kızartması.", img: itemImg("citir_tavuk") },
+  { cat: "lezzetler", title: "Burritos Tavuk Dürüm", price: 280, desc: "Tortilla ekmeğinde tavuk dilimleri, burritos sos, renkli biberler, mantar, mısır, cheddar peyniri, patates kızartması ve Akdeniz yeşilliği.", img: itemImg("burritos_tavuk_durum") },
+  { cat: "lezzetler", title: "Fettucine Alfredo", price: 280, desc: "Sotelenmiş tavuk dilimleri, fettuccine makarna, mantar, renkli biberler, pesto sos, krema ve parmesan peyniri.", img: itemImg("fettucine_alfredo") },
+  { cat: "lezzetler", title: "Köri Soslu Tavuk", price: 290, desc: "Köri soslu tavuk, mantar, renkli biberler, basmati pilav ve Akdeniz yeşillikleri.", img: itemImg("kori_soslu_tavuk") },
+  { cat: "lezzetler", title: "Sandviç", price: 220, desc: "Ekşi maya ekmekte cheddar, taze kaşar, krem peynir, dana jambon, haşlanmış yumurta ve lolorosso.", img: itemImg("sandvic") },
+  { cat: "lezzetler", title: "Ekmek Üstü", price: 240, desc: "Ekşi maya ekmek üstü krem peynir, çırpılmış yumurta ve avokado.", img: itemImg("ekmek_ustu") },
+  { cat: "lezzetler", title: "Patates Tava", price: 160, desc: "Klasik kızarmış patates.", img: itemImg("patates_tava") },
 
   // ──────────── TATLILAR ────────────
   { cat: "tatli", title: "Brownie Pasta", price: 260, desc: "İki dilim brownie arasında pasta kreması ve çilek dilimleri.", img: itemImg("brownie_pasta") },
@@ -337,21 +334,14 @@ const container = document.getElementById("items-container");
 const instagramBlock = document.getElementById("instagram-block");
 const gamesSection = document.getElementById("games-section");
 const layoutRoot = document.getElementById("layout-root");
-const snakeCanvas = document.getElementById("snake-canvas");
-const snakeRestart = document.getElementById("snake-restart");
-const snakeKeys = document.querySelectorAll(".snake-key");
-const snakeScoreEl = document.getElementById("snake-score");
-const snakeBestEl = document.getElementById("snake-best");
-const snakeStatusEl = document.getElementById("snake-status");
+const runnerCanvas = document.getElementById("runner-canvas");
+const runnerStart = document.getElementById("runner-start");
+const runnerDistanceEl = document.getElementById("runner-distance");
+const runnerBestEl = document.getElementById("runner-best");
+const runnerStatusEl = document.getElementById("runner-status");
 
 const gameTabButtons = document.querySelectorAll(".game-tab-btn");
 const gamePanels = document.querySelectorAll(".game-panel");
-const tttCells = document.querySelectorAll(".ttt-cell");
-const tttStatus = document.getElementById("ttt-status");
-const tttReset = document.getElementById("ttt-reset");
-const checkersBoardEl = document.getElementById("checkers-board");
-const checkersStatusEl = document.getElementById("checkers-status");
-const checkersReset = document.getElementById("checkers-reset");
 
 const modalOverlay = document.getElementById("modal-overlay");
 const modal = document.getElementById("modal");
@@ -390,28 +380,9 @@ const MENU_CATEGORIES = new Set(["kahvalti", "bowl", "lezzetler", "tatli", "matc
 const GAME_CATEGORY = "games";
 
 let activeCategory = "hiddenback";
-let activeGame = "snake";
+let activeGame = "runner";
 let searchTerm = "";
-let snakeStatusText = uiText.snakeReadyStatus;
-let tttStatusState = { key: "tttTurn", vars: { player: "X" } };
-let checkersStatusState = { key: "checkersTurn", vars: { player: uiText.checkerRed } };
-
-function formatTttStatus(key, vars = {}) {
-  const templates = translations.games?.tictactoe || translations.games?.ttt || {};
-  if (typeof templates[key] === "string") return templates[key].replace("{player}", vars.player || "");
-  if (key === "tttTurn") return `Sıra: ${vars.player}`;
-  if (key === "tttDraw") return "Berabere! Yeniden deneyin.";
-  if (key === "tttWin") return `${vars.player} kazandı!`;
-  return "";
-}
-
-function formatCheckersStatus(key, vars = {}) {
-  const templates = translations.games?.checkers || {};
-  if (typeof templates[key] === "string") return templates[key].replace("{player}", vars.player || "");
-  if (key === "checkersTurn") return `Sıra: ${vars.player}`;
-  if (key === "checkersWin") return `${vars.player} kazandı!`;
-  return "";
-}
+let runnerStatusText = uiText.runnerReadyStatus;
 
 const getTagLabels = () => ({
   veg: { label: uiText.filterVeg, color: "text-emerald-600" },
@@ -420,47 +391,32 @@ const getTagLabels = () => ({
   dessert: { label: uiText.filterDessert, color: "text-pink-600" },
 });
 
-const getSnakeStatusText = () => ({
-  snakeReadyStatus: uiText.snakeReadyStatus,
-  snakeStartedStatus: uiText.snakeStartedStatus,
-  snakeStoppedStatus: uiText.snakeStoppedStatus,
-  snakeGameOverStatus: uiText.snakeGameOverStatus,
-  snakePlayingStatus: uiText.snakePlayingStatus,
-});
-
 const formatPrice = (price) => (typeof price === "number" ? `${price}₺` : "" );
 
-// ─────────────────────────────
-//  GAMES: SNAKE
-// ─────────────────────────────
-
-const snakeState = {
-  gridSize: 18,
-  tile: 20,
-  speed: 140,
-  playing: false,
-  snake: [],
-  direction: { x: 1, y: 0 },
-  nextDirection: { x: 1, y: 0 },
-  food: { x: 8, y: 8 },
-  score: 0,
+const runnerState = {
+  x: 82,
+  y: 160,
+  radius: 20,
+  ground: 172,
+  velocityY: 0,
+  gravity: 0.0024,
+  jump: -0.82,
+  speed: 0.35,
+  obstacles: [],
+  stars: [],
+  running: false,
+  distance: 0,
   best: 0,
+  lastTime: 0,
+  spawnTimer: 1000,
+  starTimer: 0,
 };
 
-let snakeCtx = null;
-let snakeLoop = null;
-let snakeReady = false;
-
-let tttBoard = Array(9).fill(null);
-let tttCurrent = "X";
-let tttFinished = false;
-
-const CHECKERS_SIZE = 8;
-let checkersBoard = [];
-let checkersCurrent = "r";
-let checkersSelected = null;
-let checkersMoves = [];
-let checkersFinished = false;
+let runnerCtx = null;
+let runnerLoop = null;
+let driverCtx = null;
+let driverLoop = null;
+let tetrisCtx = null;
 
 const DIR_MAP = {
   up: { x: 0, y: -1 },
@@ -468,441 +424,628 @@ const DIR_MAP = {
   left: { x: -1, y: 0 },
   right: { x: 1, y: 0 },
 };
+// ─────────────────────────────
+//  GAMES: HIDDENBACK RUN
+// ─────────────────────────────
 
-function loadSnakeBest() {
-  const saved = Number(localStorage.getItem("hb_snake_best")) || 0;
-  snakeState.best = saved;
-  updateSnakeHUD();
+const getRunnerStatusText = () => ({
+  runnerReadyStatus: uiText.runnerReadyStatus,
+  runnerRunningStatus: uiText.runnerRunningStatus,
+  runnerCrashedStatus: uiText.runnerCrashedStatus,
+});
+
+function loadRunnerBest() {
+  const saved = Number(localStorage.getItem("hb_runner_best")) || 0;
+  runnerState.best = saved;
+  updateRunnerHUD();
 }
 
-function saveSnakeBest() {
-  localStorage.setItem("hb_snake_best", String(snakeState.best));
+function saveRunnerBest() {
+  localStorage.setItem("hb_runner_best", String(runnerState.best));
 }
 
-function updateSnakeHUD(statusKey = "") {
-  if (statusKey) snakeStatusText = getSnakeStatusText()[statusKey] || statusKey;
-  if (snakeScoreEl) snakeScoreEl.textContent = snakeState.score;
-  if (snakeBestEl) snakeBestEl.textContent = snakeState.best;
-  if (snakeStatusEl) snakeStatusEl.textContent = snakeStatusText;
+function updateRunnerHUD(statusKey = "") {
+  if (statusKey) runnerStatusText = getRunnerStatusText()[statusKey] || statusKey;
+  if (runnerDistanceEl) runnerDistanceEl.textContent = `${Math.floor(runnerState.distance)} m`;
+  if (runnerBestEl) runnerBestEl.textContent = `${Math.floor(runnerState.best)} m`;
+  if (runnerStatusEl) runnerStatusEl.textContent = runnerStatusText;
 }
 
-function resetSnakeState() {
-  snakeState.snake = [
-    { x: 6, y: 9 },
-    { x: 5, y: 9 },
-    { x: 4, y: 9 },
-  ];
-  snakeState.direction = { x: 1, y: 0 };
-  snakeState.nextDirection = { x: 1, y: 0 };
-  snakeState.food = { x: 10, y: 9 };
-  snakeState.score = 0;
-  snakeState.speed = 140;
-  updateSnakeHUD("snakeReadyStatus");
-  drawSnake();
+function resetRunnerState() {
+  if (runnerCanvas) {
+    runnerState.ground = runnerCanvas.height - 50;
+    runnerState.x = Math.min(runnerState.x, runnerCanvas.width * 0.25);
+  }
+  runnerState.y = runnerState.ground;
+  runnerState.velocityY = 0;
+  runnerState.obstacles = [];
+  runnerState.stars = [];
+  runnerState.distance = 0;
+  runnerState.spawnTimer = 900;
+  runnerState.starTimer = 0;
+  runnerState.running = false;
+  runnerState.lastTime = 0;
+  updateRunnerHUD("runnerReadyStatus");
+  drawRunnerScene(true);
 }
 
-function clearSnakeLoop() {
-  if (snakeLoop) {
-    clearTimeout(snakeLoop);
-    snakeLoop = null;
+function spawnRunnerObstacle() {
+  if (!runnerCanvas) return;
+  const height = 28 + Math.random() * 40;
+  const width = 26 + Math.random() * 24;
+  const y = runnerState.ground - height;
+  runnerState.obstacles.push({
+    x: runnerCanvas.width + width + 20,
+    y,
+    width,
+    height,
+    color: Math.random() > 0.5 ? "#38bdf8" : "#f97316",
+  });
+}
+
+function spawnRunnerStar() {
+  if (!runnerCanvas) return;
+  runnerState.stars.push({
+    x: runnerCanvas.width + 20,
+    y: 20 + Math.random() * 80,
+    size: 3 + Math.random() * 3,
+    glow: Math.random() * 0.4 + 0.4,
+  });
+}
+
+function drawKolobok(x, y) {
+  if (!runnerCtx) return;
+  const r = runnerState.radius;
+  const gradient = runnerCtx.createRadialGradient(x - r * 0.2, y - r * 0.2, r * 0.2, x, y, r * 1.2);
+  gradient.addColorStop(0, "#ffffff");
+  gradient.addColorStop(1, "#f8fafc");
+
+  runnerCtx.fillStyle = gradient;
+  runnerCtx.strokeStyle = "#0b0b0b";
+  runnerCtx.lineWidth = 2;
+  runnerCtx.beginPath();
+  runnerCtx.arc(x, y, r, 0, Math.PI * 2);
+  runnerCtx.fill();
+  runnerCtx.stroke();
+
+  const size = r * 1.4;
+  if (hiddenLogo.complete) {
+    runnerCtx.save();
+    runnerCtx.beginPath();
+    runnerCtx.arc(x, y, r - 1, 0, Math.PI * 2);
+    runnerCtx.clip();
+    runnerCtx.drawImage(hiddenLogo, x - size / 2, y - size / 2, size, size);
+    runnerCtx.restore();
+  } else {
+    runnerCtx.fillStyle = "#0b0b0b";
+    runnerCtx.font = `${r * 0.8}px 'Courier New', monospace`;
+    runnerCtx.textAlign = "center";
+    runnerCtx.textBaseline = "middle";
+    runnerCtx.fillText("X X", x, y - r * 0.38);
+
+    runnerCtx.lineWidth = 1.8;
+    runnerCtx.beginPath();
+    runnerCtx.arc(x, y + r * 0.25, r * 0.4, 0, Math.PI, false);
+    runnerCtx.stroke();
   }
 }
 
-function startSnakeGame() {
-  if (!snakeCtx) return;
+function drawRunnerScene(showPrompt = false) {
+  if (!runnerCtx || !runnerCanvas) return;
+  const { width, height } = runnerCanvas;
+  runnerCtx.clearRect(0, 0, width, height);
 
-  clearSnakeLoop();
-  snakeState.playing = true;
-  resetSnakeState();
-  updateSnakeHUD("snakeStartedStatus");
-  scheduleSnakeTick();
+  const groundLine = runnerState.ground + runnerState.radius;
+  const skyGradient = runnerCtx.createLinearGradient(0, 0, 0, height);
+  skyGradient.addColorStop(0, "#0b1220");
+  skyGradient.addColorStop(1, "#0f172a");
+  runnerCtx.fillStyle = skyGradient;
+  runnerCtx.fillRect(0, 0, width, height);
+
+  runnerCtx.fillStyle = "rgba(255,255,255,0.08)";
+  runnerState.stars.forEach((star) => {
+    runnerCtx.save();
+    runnerCtx.globalAlpha = star.glow;
+    runnerCtx.fillRect(star.x, star.y, star.size, star.size);
+    runnerCtx.restore();
+  });
+
+  runnerCtx.fillStyle = "#0b0b0b";
+  runnerCtx.fillRect(0, groundLine, width, height - groundLine);
+  runnerCtx.fillStyle = "rgba(255,255,255,0.08)";
+  runnerCtx.fillRect(0, groundLine - 10, width, 2);
+
+  runnerState.obstacles.forEach((ob) => {
+    const grad = runnerCtx.createLinearGradient(ob.x, ob.y, ob.x, ob.y + ob.height);
+    grad.addColorStop(0, ob.color);
+    grad.addColorStop(1, "#0f172a");
+    runnerCtx.fillStyle = grad;
+    runnerCtx.fillRect(ob.x, ob.y, ob.width, ob.height);
+    runnerCtx.fillStyle = "rgba(255,255,255,0.12)";
+    runnerCtx.fillRect(ob.x + ob.width * 0.35, ob.y, 2, ob.height);
+  });
+
+  drawKolobok(runnerState.x, runnerState.y);
+
+  if (showPrompt) {
+    runnerCtx.fillStyle = "#e5e7eb";
+    runnerCtx.font = "600 16px Inter, sans-serif";
+    runnerCtx.textAlign = "center";
+    runnerCtx.fillText("Başlat / Yeniden dene ile koşuya başla", width / 2, height / 2);
+  }
 }
 
-function stopSnakeGame(messageKey = "snakeStoppedStatus") {
-  snakeState.playing = false;
-  clearSnakeLoop();
-  updateSnakeHUD(messageKey);
+function startRunner() {
+  if (!runnerCtx) return;
+  resetRunnerState();
+  runnerState.running = true;
+  runnerStatusText = getRunnerStatusText().runnerRunningStatus;
+  runnerState.lastTime = performance.now();
+  runnerLoop = requestAnimationFrame(stepRunner);
+  updateRunnerHUD();
 }
 
-function scheduleSnakeTick() {
-  clearSnakeLoop();
-  snakeLoop = setTimeout(stepSnake, snakeState.speed);
+function stopRunner(statusKey = "runnerCrashedStatus") {
+  runnerState.running = false;
+  if (runnerLoop) cancelAnimationFrame(runnerLoop);
+  runnerLoop = null;
+  if (runnerState.distance > runnerState.best) {
+    runnerState.best = runnerState.distance;
+    saveRunnerBest();
+  }
+  updateRunnerHUD(statusKey);
 }
 
-function stepSnake() {
-  if (!snakeState.playing) return;
+function handleRunnerJump() {
+  if (activeGame !== "runner" || !runnerCtx) return;
+  if (!runnerState.running) {
+    startRunner();
+    return;
+  }
+  if (runnerState.y >= runnerState.ground - 1) {
+    runnerState.velocityY = runnerState.jump;
+  }
+}
 
-  snakeState.direction = snakeState.nextDirection;
-  const head = { ...snakeState.snake[0] };
-  head.x += snakeState.direction.x;
-  head.y += snakeState.direction.y;
+function stepRunner(timestamp) {
+  if (!runnerState.running || !runnerCanvas) return;
+  const delta = Math.min(50, (timestamp - runnerState.lastTime) || 16);
+  runnerState.lastTime = timestamp;
+  const travel = delta * runnerState.speed;
 
-  if (hitWall(head) || hitSelf(head)) {
-    stopSnakeGame("snakeGameOverStatus");
+  runnerState.velocityY += runnerState.gravity * delta;
+  runnerState.y += runnerState.velocityY * delta;
+  if (runnerState.y < runnerState.radius) {
+    runnerState.y = runnerState.radius;
+    runnerState.velocityY = 0;
+  }
+  if (runnerState.y > runnerState.ground) {
+    runnerState.y = runnerState.ground;
+    runnerState.velocityY = 0;
+  }
+
+  runnerState.spawnTimer -= delta;
+  runnerState.starTimer -= delta;
+  if (runnerState.spawnTimer <= 0) {
+    spawnRunnerObstacle();
+    runnerState.spawnTimer = 720 + Math.random() * 680;
+  }
+  if (runnerState.starTimer <= 0) {
+    spawnRunnerStar();
+    runnerState.starTimer = 260 + Math.random() * 360;
+  }
+
+  runnerState.obstacles = runnerState.obstacles
+    .map((ob) => ({ ...ob, x: ob.x - travel }))
+    .filter((ob) => ob.x + ob.width > -40);
+
+  runnerState.stars = runnerState.stars
+    .map((star) => ({ ...star, x: star.x - travel * 0.35 }))
+    .filter((star) => star.x > -20);
+
+  runnerState.distance += travel * 0.2;
+  updateRunnerHUD();
+
+  const playerLeft = runnerState.x - runnerState.radius + 4;
+  const playerRight = runnerState.x + runnerState.radius - 4;
+  const playerTop = runnerState.y - runnerState.radius + 2;
+  const playerBottom = runnerState.y + runnerState.radius - 2;
+
+  const collided = runnerState.obstacles.some((ob) => {
+    const obLeft = ob.x;
+    const obRight = ob.x + ob.width;
+    const obTop = ob.y;
+    const obBottom = ob.y + ob.height;
+    return (
+      playerRight > obLeft &&
+      playerLeft < obRight &&
+      playerBottom > obTop &&
+      playerTop < obBottom
+    );
+  });
+
+  if (collided) {
+    stopRunner("runnerCrashedStatus");
+    drawRunnerScene(true);
     return;
   }
 
-  snakeState.snake.unshift(head);
-
-  if (head.x === snakeState.food.x && head.y === snakeState.food.y) {
-    snakeState.score += 1;
-    snakeState.speed = Math.max(70, snakeState.speed - 3);
-    placeFood();
-    if (snakeState.score > snakeState.best) {
-      snakeState.best = snakeState.score;
-      saveSnakeBest();
-    }
-  } else {
-    snakeState.snake.pop();
-  }
-
-  updateSnakeHUD("snakePlayingStatus");
-  drawSnake();
-  scheduleSnakeTick();
+  drawRunnerScene();
+  runnerLoop = requestAnimationFrame(stepRunner);
 }
 
-function hitWall(point) {
-  return (
-    point.x < 0 ||
-    point.y < 0 ||
-    point.x >= snakeState.gridSize ||
-    point.y >= snakeState.gridSize
-  );
-}
-
-function hitSelf(point) {
-  return snakeState.snake.some((p) => p.x === point.x && p.y === point.y);
-}
-
-function placeFood() {
-  const openTiles = [];
-  for (let y = 0; y < snakeState.gridSize; y += 1) {
-    for (let x = 0; x < snakeState.gridSize; x += 1) {
-      if (!snakeState.snake.some((p) => p.x === x && p.y === y)) {
-        openTiles.push({ x, y });
-      }
-    }
-  }
-
-  if (!openTiles.length) return;
-  snakeState.food = openTiles[Math.floor(Math.random() * openTiles.length)];
-}
-
-function drawSnake() {
-  if (!snakeCtx || !snakeCanvas) return;
-
-  snakeCtx.fillStyle = "#050505";
-  snakeCtx.fillRect(0, 0, snakeCanvas.width, snakeCanvas.height);
-
-  // Food
-  snakeCtx.fillStyle = "#f97316";
-  snakeCtx.fillRect(
-    snakeState.food.x * snakeState.tile,
-    snakeState.food.y * snakeState.tile,
-    snakeState.tile,
-    snakeState.tile
-  );
-
-  // Snake body
-  snakeCtx.fillStyle = "#10b981";
-  snakeState.snake.forEach((part, index) => {
-    const color = index === 0 ? "#22d3ee" : "#10b981";
-    snakeCtx.fillStyle = color;
-    snakeCtx.fillRect(
-      part.x * snakeState.tile,
-      part.y * snakeState.tile,
-      snakeState.tile - 1,
-      snakeState.tile - 1
-    );
-  });
-}
-
-function queueDirection(dirKey) {
-  const next = DIR_MAP[dirKey];
-  if (!next) return;
-
-  const { x, y } = next;
-  if (snakeState.direction.x === -x && snakeState.direction.y === -y) return;
-  snakeState.nextDirection = next;
-}
-
-function bindSnakeControls() {
-  if (snakeRestart) {
-    snakeRestart.addEventListener("click", () => {
-      startSnakeGame();
-    });
-  }
-
-  snakeKeys.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const dir = btn.dataset.dir;
-      queueDirection(dir);
-    });
-  });
+function bindRunnerControls() {
+  runnerCanvas?.addEventListener("pointerdown", handleRunnerJump);
 
   window.addEventListener("keydown", (event) => {
     const key = event.key.toLowerCase();
-    if (["w", "arrowup"].includes(key)) queueDirection("up");
-    if (["s", "arrowdown"].includes(key)) queueDirection("down");
-    if (["a", "arrowleft"].includes(key)) queueDirection("left");
-    if (["d", "arrowright"].includes(key)) queueDirection("right");
+    if ([" ", "w", "arrowup"].includes(key)) {
+      event.preventDefault();
+      handleRunnerJump();
+    }
+  });
+
+  runnerStart?.addEventListener("click", () => {
+    startRunner();
   });
 }
 
-function initSnake() {
-  if (!snakeCanvas || snakeReady) return;
-
-  snakeCtx = snakeCanvas.getContext("2d");
-  snakeReady = true;
-  loadSnakeBest();
-  bindSnakeControls();
-  resetSnakeState();
+function initRunner() {
+  if (!runnerCanvas || runnerCtx) return;
+  runnerCtx = runnerCanvas.getContext("2d");
+  loadRunnerBest();
+  bindRunnerControls();
+  resetRunnerState();
 }
 
 // ─────────────────────────────
-//  GAMES: TIC TAC TOE
+//  GAMES: HIDDENBACK RACE
 // ─────────────────────────────
 
-function renderTttStatus() {
-  if (tttStatus) tttStatus.textContent = formatTttStatus(tttStatusState.key, tttStatusState.vars);
+function loadDriverBest() {
+  const saved = Number(localStorage.getItem("hb_driver_best")) || 0;
+  driverState.best = saved;
+  updateDriverHUD();
 }
 
-function setTttStatus(key, vars = {}) {
-  tttStatusState = { key, vars };
-  renderTttStatus();
+function saveDriverBest() {
+  localStorage.setItem("hb_driver_best", String(driverState.best));
 }
 
-function resetTtt() {
-  tttBoard = Array(9).fill(null);
-  tttCurrent = "X";
-  tttFinished = false;
-  setTttStatus("tttTurn", { player: tttCurrent });
+function updateDriverHUD() {
+  driverDistanceEl && (driverDistanceEl.textContent = `${Math.floor(driverState.distance)} m`);
+  driverBestEl && (driverBestEl.textContent = `${Math.floor(driverState.best)} m`);
+  driverStatusEl && (driverStatusEl.textContent = driverState.running ? "Koşuyor" : "Hazır");
+}
 
-  tttCells.forEach((cell) => {
-    cell.textContent = "";
-    cell.classList.remove("filled");
+function resetDriverState() {
+  driverState.laneWidth = (driverCanvas?.width || 320) / 3;
+  driverState.x = driverState.laneWidth * 1.5;
+  driverState.y = (driverCanvas?.height || 220) - 60;
+  driverState.velocity = 0;
+  driverState.obstacles = [];
+  driverState.distance = 0;
+  driverState.running = false;
+  driverState.lastTime = 0;
+  updateDriverHUD();
+  drawDriverScene(true);
+}
+
+function drawDriverCar(ctx, x, y, w, h) {
+  ctx.fillStyle = "#0b0b0b";
+  ctx.fillRect(x - w / 2, y - h / 2, w, h);
+  const logoSize = Math.min(w, h) * 0.7;
+  if (hiddenLogo.complete) {
+    ctx.drawImage(hiddenLogo, x - logoSize / 2, y - logoSize / 2, logoSize, logoSize);
+  }
+}
+
+function drawDriverScene(showPrompt = false) {
+  if (!driverCtx || !driverCanvas) return;
+  const { width, height } = driverCanvas;
+  driverCtx.clearRect(0, 0, width, height);
+
+  driverCtx.fillStyle = "#0f172a";
+  driverCtx.fillRect(0, 0, width, height);
+  driverCtx.fillStyle = "#111827";
+  driverCtx.fillRect(width * 0.2, 0, width * 0.6, height);
+
+  driverCtx.strokeStyle = "rgba(255,255,255,0.4)";
+  driverCtx.lineWidth = 3;
+  for (let i = 1; i < 3; i += 1) {
+    const laneX = (width * 0.2) + (driverState.laneWidth * i);
+    driverCtx.setLineDash([12, 12]);
+    driverCtx.beginPath();
+    driverCtx.moveTo(laneX, 0);
+    driverCtx.lineTo(laneX, height);
+    driverCtx.stroke();
+  }
+  driverCtx.setLineDash([]);
+
+  driverCtx.fillStyle = "#38bdf8";
+  driverState.obstacles.forEach((ob) => {
+    driverCtx.fillRect(ob.x - ob.w / 2, ob.y - ob.h / 2, ob.w, ob.h);
+  });
+
+  drawDriverCar(driverCtx, driverState.x, driverState.y, driverState.width, driverState.height);
+
+  if (showPrompt) {
+    driverCtx.fillStyle = "#e5e7eb";
+    driverCtx.font = "600 14px Inter, sans-serif";
+    driverCtx.textAlign = "center";
+    driverCtx.fillText("Başlat / Yeniden dene ile yarışı başlat", width / 2, height / 2);
+  }
+}
+
+function moveDriver(direction) {
+  const lane = Math.round((driverState.x - driverState.laneWidth * 0.5) / driverState.laneWidth);
+  let targetLane = lane + direction;
+  targetLane = Math.max(0, Math.min(2, targetLane));
+  driverState.x = driverState.laneWidth * (0.5 + targetLane);
+}
+
+function spawnDriverObstacle() {
+  if (!driverCanvas) return;
+  const lane = Math.floor(Math.random() * 3);
+  const x = driverState.laneWidth * (0.5 + lane);
+  driverState.obstacles.push({
+    x,
+    y: -30,
+    w: driverState.width * 0.8,
+    h: driverState.height * 0.8,
   });
 }
 
-function checkTttWinner() {
-  const lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ];
+function stepDriver(timestamp) {
+  if (!driverState.running || !driverCtx || !driverCanvas) return;
+  const delta = Math.min(50, (timestamp - driverState.lastTime) || 16);
+  driverState.lastTime = timestamp;
+  const travel = delta * driverState.speed * 60;
 
-  for (const [a, b, c] of lines) {
-    if (tttBoard[a] && tttBoard[a] === tttBoard[b] && tttBoard[a] === tttBoard[c]) {
-      return tttBoard[a];
-    }
-  }
+  driverState.distance += travel * 0.02;
 
-  if (tttBoard.every(Boolean)) return "draw";
-  return null;
-}
+  driverState.obstacles = driverState.obstacles
+    .map((ob) => ({ ...ob, y: ob.y + travel * 0.04 }))
+    .filter((ob) => ob.y - ob.h / 2 < driverCanvas.height + 40);
 
-function handleTttClick(index) {
-  if (tttFinished || tttBoard[index]) return;
+  if (Math.random() < 0.015) spawnDriverObstacle();
 
-  tttBoard[index] = tttCurrent;
-  const cell = tttCells[index];
-  if (cell) {
-    cell.textContent = tttCurrent;
-    cell.classList.add("filled");
-  }
+  const collided = driverState.obstacles.some((ob) => {
+    return (
+      Math.abs(ob.x - driverState.x) < (ob.w + driverState.width) / 2 - 4 &&
+      Math.abs(ob.y - driverState.y) < (ob.h + driverState.height) / 2 - 4
+    );
+  });
 
-  const winner = checkTttWinner();
-  if (winner === "draw") {
-    tttFinished = true;
-    setTttStatus("tttDraw");
+  if (collided) {
+    stopDriver();
+    drawDriverScene(true);
     return;
   }
 
-  if (winner) {
-    tttFinished = true;
-    setTttStatus("tttWin", { player: winner });
-    return;
-  }
+  drawDriverScene();
+  driverLoop = requestAnimationFrame(stepDriver);
+  updateDriverHUD();
+}
 
-  tttCurrent = tttCurrent === "X" ? "O" : "X";
-  setTttStatus("tttTurn", { player: tttCurrent });
+function startDriver() {
+  if (!driverCtx) return;
+  resetDriverState();
+  driverState.running = true;
+  driverState.lastTime = performance.now();
+  driverLoop = requestAnimationFrame(stepDriver);
+  updateDriverHUD();
+}
+
+function stopDriver() {
+  if (driverLoop) cancelAnimationFrame(driverLoop);
+  driverLoop = null;
+  if (driverState.distance > driverState.best) {
+    driverState.best = driverState.distance;
+    saveDriverBest();
+  }
+  driverState.running = false;
+  updateDriverHUD();
+}
+
+function bindDriverControls() {
+  window.addEventListener("keydown", (event) => {
+    if (activeGame !== "driver") return;
+    const key = event.key.toLowerCase();
+    if (["arrowleft", "a"].includes(key)) moveDriver(-1);
+    if (["arrowright", "d"].includes(key)) moveDriver(1);
+  });
+
+  driverStart?.addEventListener("click", () => {
+    startDriver();
+  });
+}
+
+function initDriver() {
+  if (!driverCanvas || driverCtx) return;
+  driverCtx = driverCanvas.getContext("2d");
+  loadDriverBest();
+  bindDriverControls();
+  resetDriverState();
 }
 
 // ─────────────────────────────
-//  GAMES: CHECKERS
+//  GAMES: HIDDENBACK TETRIS
 // ─────────────────────────────
 
-function buildInitialCheckersBoard() {
-  const board = Array.from({ length: CHECKERS_SIZE }, () => Array(CHECKERS_SIZE).fill(null));
+const TETROMINOS = {
+  I: [[1, 1, 1, 1]],
+  O: [[1, 1], [1, 1]],
+  T: [[0, 1, 0], [1, 1, 1]],
+  L: [[1, 0, 0], [1, 1, 1]],
+  J: [[0, 0, 1], [1, 1, 1]],
+  S: [[0, 1, 1], [1, 1, 0]],
+  Z: [[1, 1, 0], [0, 1, 1]],
+};
 
-  for (let y = 0; y < CHECKERS_SIZE; y += 1) {
-    for (let x = 0; x < CHECKERS_SIZE; x += 1) {
-      if ((x + y) % 2 === 0) continue;
+function newGrid() {
+  return Array.from({ length: tetrisState.rows }, () => Array(tetrisState.cols).fill(0));
+}
 
-      if (y < 3) board[y][x] = "b";
-      if (y > 4) board[y][x] = "r";
-    }
+function randomPiece() {
+  const keys = Object.keys(TETROMINOS);
+  const key = keys[Math.floor(Math.random() * keys.length)];
+  return { shape: TETROMINOS[key], x: 3, y: 0, key };
+}
+
+function rotate(matrix) {
+  return matrix[0].map((_, i) => matrix.map((row) => row[i]).reverse());
+}
+
+function collide(grid, piece) {
+  return piece.shape.some((row, y) =>
+    row.some((value, x) => value && (
+      grid[y + piece.y] === undefined ||
+      grid[y + piece.y][x + piece.x] === undefined ||
+      grid[y + piece.y][x + piece.x]
+    )));
+}
+
+function merge(grid, piece) {
+  piece.shape.forEach((row, y) => {
+    row.forEach((value, x) => {
+      if (value && grid[y + piece.y]) grid[y + piece.y][x + piece.x] = piece.key;
+    });
+  });
+}
+
+function clearLines() {
+  tetrisState.grid = tetrisState.grid.filter((row) => row.some((cell) => !cell));
+  const cleared = tetrisState.rows - tetrisState.grid.length;
+  while (tetrisState.grid.length < tetrisState.rows) {
+    tetrisState.grid.unshift(Array(tetrisState.cols).fill(0));
   }
-
-  return board;
+  if (cleared > 0) tetrisState.score += cleared * 100;
 }
 
-function updateCheckersStatus() {
-  const isTurn = (checkersStatusState.key || "checkersTurn") === "checkersTurn";
-  const vars = isTurn
-    ? { player: checkersCurrent === "r" ? uiText.checkerRed : uiText.checkerBlack }
-    : checkersStatusState.vars;
-  checkersStatusState = { key: checkersStatusState.key || "checkersTurn", vars };
-  if (checkersStatusEl) checkersStatusEl.textContent = formatCheckersStatus(checkersStatusState.key, checkersStatusState.vars);
-}
+function drawTetris() {
+  if (!tetrisCtx || !tetrisCanvas) return;
+  const { width, height } = tetrisCanvas;
+  tetrisCtx.clearRect(0, 0, width, height);
+  tetrisCtx.fillStyle = "#0f172a";
+  tetrisCtx.fillRect(0, 0, width, height);
 
-function resetCheckers() {
-  checkersBoard = buildInitialCheckersBoard();
-  checkersCurrent = "r";
-  checkersSelected = null;
-  checkersMoves = [];
-  checkersFinished = false;
-  checkersStatusState = { key: "checkersTurn", vars: { player: uiText.checkerRed } };
-  updateCheckersStatus();
-  renderCheckersBoard();
-}
+  const c = tetrisState.cellSize;
+  const colors = {
+    I: "#22d3ee",
+    O: "#fbbf24",
+    T: "#a855f7",
+    L: "#fb7185",
+    J: "#3b82f6",
+    S: "#34d399",
+    Z: "#f97316",
+  };
 
-function isCurrentPlayerPiece(piece) {
-  if (!piece) return false;
-  return piece.toLowerCase() === checkersCurrent;
-}
-
-function isOpponentPiece(piece) {
-  if (!piece) return false;
-  return piece.toLowerCase() !== checkersCurrent;
-}
-
-function getPieceDirections(piece) {
-  const isKing = piece === piece.toUpperCase();
-  if (isKing) return [1, -1];
-  return piece.toLowerCase() === "r" ? [-1] : [1];
-}
-
-function collectMoves(x, y) {
-  const piece = checkersBoard[y][x];
-  if (!piece || !isCurrentPlayerPiece(piece)) return [];
-
-  const dirs = getPieceDirections(piece);
-  const moves = [];
-
-  dirs.forEach((dy) => {
-    [-1, 1].forEach((dx) => {
-      const nx = x + dx;
-      const ny = y + dy;
-      if (nx < 0 || nx >= CHECKERS_SIZE || ny < 0 || ny >= CHECKERS_SIZE) return;
-
-      if (!checkersBoard[ny][nx]) {
-        moves.push({ x: nx, y: ny, capture: false });
-        return;
-      }
-
-      const jumpX = x + dx * 2;
-      const jumpY = y + dy * 2;
-      if (
-        jumpX >= 0 &&
-        jumpX < CHECKERS_SIZE &&
-        jumpY >= 0 &&
-        jumpY < CHECKERS_SIZE &&
-        !checkersBoard[jumpY][jumpX] &&
-        isOpponentPiece(checkersBoard[ny][nx])
-      ) {
-        moves.push({ x: jumpX, y: jumpY, capture: true, captured: { x: nx, y: ny } });
+  tetrisState.grid.forEach((row, y) => {
+    row.forEach((cell, x) => {
+      if (cell) {
+        tetrisCtx.fillStyle = colors[cell] || "#e5e7eb";
+        tetrisCtx.fillRect(x * c, y * c, c - 1, c - 1);
       }
     });
   });
 
-  return moves;
-}
-
-function maybeCrown(piece, y) {
-  if (piece === "r" && y === 0) return "R";
-  if (piece === "b" && y === CHECKERS_SIZE - 1) return "B";
-  return piece;
-}
-
-function moveCheckersPiece(targetX, targetY) {
-  if (!checkersSelected) return;
-
-  const { x, y } = checkersSelected;
-  const piece = checkersBoard[y][x];
-  const move = checkersMoves.find((m) => m.x === targetX && m.y === targetY);
-  if (!move || !piece) return;
-
-  checkersBoard[y][x] = null;
-  checkersBoard[targetY][targetX] = maybeCrown(piece, targetY);
-
-  if (move.capture && move.captured) {
-    checkersBoard[move.captured.y][move.captured.x] = null;
+  if (tetrisState.current) {
+    tetrisState.current.shape.forEach((row, y) => {
+      row.forEach((value, x) => {
+        if (value) {
+          tetrisCtx.fillStyle = colors[tetrisState.current.key] || "#e5e7eb";
+          tetrisCtx.fillRect((tetrisState.current.x + x) * c, (tetrisState.current.y + y) * c, c - 1, c - 1);
+        }
+      });
+    });
   }
-
-  checkersSelected = null;
-  checkersMoves = [];
-  checkersCurrent = checkersCurrent === "r" ? "b" : "r";
-
-  const flat = checkersBoard.flat();
-  const redLeft = flat.some((p) => p && p.toLowerCase() === "r");
-  const blackLeft = flat.some((p) => p && p.toLowerCase() === "b");
-
-  if (!redLeft || !blackLeft) {
-    checkersFinished = true;
-    checkersStatusState = {
-      key: "checkersWin",
-      vars: { player: redLeft ? uiText.checkerRed : uiText.checkerBlack },
-    };
-  } else {
-    checkersStatusState = {
-      key: "checkersTurn",
-      vars: { player: checkersCurrent === "r" ? uiText.checkerRed : uiText.checkerBlack },
-    };
-  }
-
-  updateCheckersStatus();
-  renderCheckersBoard();
 }
 
-function renderCheckersBoard() {
-  if (!checkersBoardEl) return;
+function dropTetris(delta) {
+  tetrisState.dropAcc += delta;
+  if (tetrisState.dropAcc < tetrisState.dropInterval) return;
+  tetrisState.dropAcc = 0;
+  if (!tetrisState.current) return;
+  tetrisState.current.y += 1;
+  if (collide(tetrisState.grid, tetrisState.current)) {
+    tetrisState.current.y -= 1;
+    merge(tetrisState.grid, tetrisState.current);
+    clearLines();
+    spawnTetrisPiece();
+  }
+}
 
-  checkersBoardEl.innerHTML = "";
+function spawnTetrisPiece() {
+  tetrisState.current = tetrisState.next || randomPiece();
+  tetrisState.current.x = Math.floor((tetrisState.cols - tetrisState.current.shape[0].length) / 2);
+  tetrisState.current.y = 0;
+  tetrisState.next = randomPiece();
+  if (collide(tetrisState.grid, tetrisState.current)) {
+    stopTetris();
+    tetrisStatusEl && (tetrisStatusEl.textContent = "Oyun bitti");
+  }
+}
 
-  for (let y = 0; y < CHECKERS_SIZE; y += 1) {
-    for (let x = 0; x < CHECKERS_SIZE; x += 1) {
-      const cell = document.createElement("button");
-      cell.className = "checker-cell";
-      cell.dataset.x = String(x);
-      cell.dataset.y = String(y);
-      if ((x + y) % 2 === 1) cell.classList.add("dark");
+function moveTetris(dx) {
+  if (!tetrisState.current) return;
+  tetrisState.current.x += dx;
+  if (collide(tetrisState.grid, tetrisState.current)) tetrisState.current.x -= dx;
+}
 
-      const piece = checkersBoard[y][x];
-      if (piece) {
-        const span = document.createElement("span");
-        const isRed = piece.toLowerCase() === "r";
-        span.className = `checker-piece ${isRed ? "red" : "black"}`;
-        span.textContent = piece === piece.toUpperCase() ? "♛" : "●";
-        cell.appendChild(span);
-      }
+function rotateTetris() {
+  if (!tetrisState.current) return;
+  const rotated = rotate(tetrisState.current.shape);
+  const prev = tetrisState.current.shape;
+  tetrisState.current.shape = rotated;
+  if (collide(tetrisState.grid, tetrisState.current)) tetrisState.current.shape = prev;
+}
 
-      if (checkersSelected && checkersSelected.x === x && checkersSelected.y === y) {
-        cell.classList.add("selected");
-      }
+function stepTetris(timestamp) {
+  if (!tetrisState.running) return;
+  const delta = Math.min(50, (timestamp - tetrisState.lastTime) || 16);
+  tetrisState.lastTime = timestamp;
+  dropTetris(delta);
+  drawTetris();
+  requestAnimationFrame(stepTetris);
+}
 
-      if (checkersMoves.some((m) => m.x === x && m.y === y)) {
-        cell.classList.add("move-target");
-      }
+function startTetris() {
+  if (!tetrisCtx) return;
+  tetrisState.grid = newGrid();
+  tetrisState.score = 0;
+  tetrisState.running = true;
+  tetrisState.dropAcc = 0;
+  spawnTetrisPiece();
+  tetrisState.lastTime = performance.now();
+  tetrisStatusEl && (tetrisStatusEl.textContent = "Oynanıyor");
+  requestAnimationFrame(stepTetris);
+}
 
-      checkersBoardEl.appendChild(cell);
+function stopTetris() {
+  tetrisState.running = false;
+  tetrisStatusEl && (tetrisStatusEl.textContent = "Hazır");
+}
+
+function bindTetrisControls() {
+  window.addEventListener("keydown", (event) => {
+    if (activeGame !== "tetris") return;
+    const key = event.key.toLowerCase();
+    if (key === "arrowleft") moveTetris(-1);
+    if (key === "arrowright") moveTetris(1);
+    if (key === "arrowup") rotateTetris();
+    if (key === " " || key === "arrowdown") {
+      tetrisState.current && (tetrisState.current.y += 1);
     }
-  }
+  });
+  tetrisStart?.addEventListener("click", () => startTetris());
+}
+
+function initTetris() {
+  if (!tetrisCanvas || tetrisCtx) return;
+  tetrisCtx = tetrisCanvas.getContext("2d");
+  bindTetrisControls();
+  drawTetris();
 }
 
 function updateLayout(category) {
@@ -995,18 +1138,22 @@ function setActiveGame(game) {
     panel.classList.toggle("hidden", panel.dataset.game !== game);
   });
 
-  if (game === "snake") {
-    initSnake();
+  if (game === "runner") {
+    initRunner();
   } else {
-    stopSnakeGame("snakeStoppedStatus");
+    stopRunner("runnerReadyStatus");
   }
 
-  if (game === "tictactoe") {
-    resetTtt();
+  if (game === "driver") {
+    initDriver();
+  } else {
+    stopDriver();
   }
 
-  if (game === "checkers") {
-    resetCheckers();
+  if (game === "tetris") {
+    initTetris();
+  } else {
+    stopTetris();
   }
 }
 
@@ -1040,9 +1187,11 @@ function toggleSections(category) {
   }
 
   if (showGame) {
-    setActiveGame(activeGame || "snake");
+    setActiveGame(activeGame || "runner");
   } else {
-    stopSnakeGame("snakeStoppedStatus");
+    stopRunner("runnerReadyStatus");
+    stopDriver();
+    stopTetris();
   }
 
   updateLayout(category);
@@ -1087,27 +1236,8 @@ function scrollToGroup(group) {
 
 function renderGroupNav(groups) {
   if (!groupNav || !groupNavButtons) return;
-
-  const titles = GROUP_TITLES[activeCategory] || {};
-  const visibleGroups = groups.filter((group) => titles[group]);
-
+  groupNav.classList.add("hidden");
   groupNavButtons.innerHTML = "";
-
-  if (!visibleGroups.length || activeCategory === "hiddenback") {
-    groupNav.classList.add("hidden");
-    return;
-  }
-
-  visibleGroups.forEach((group) => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "filter-chip";
-    btn.textContent = translateGroupTitle(activeCategory, group);
-    btn.addEventListener("click", () => scrollToGroup(group));
-    groupNavButtons.appendChild(btn);
-  });
-
-  groupNav.classList.remove("hidden");
 }
 
 function createCard(item) {
@@ -1117,7 +1247,7 @@ function createCard(item) {
   card.className = "bg-white border border-hb-border rounded-2xl p-4 sm:p-5 flex flex-col gap-3 shadow-[0_6px_18px_rgba(0,0,0,0.04)] card-fade";
 
   card.innerHTML = `
-    <div class="rounded-xl overflow-hidden bg-neutral-200 aspect-[4/3]">
+    <div class="rounded-xl overflow-hidden bg-neutral-200 aspect-square">
       <img src="${item.img}" alt="${translated.title}" class="w-full h-full object-cover">
     </div>
     <div class="flex flex-col gap-2">
@@ -1252,43 +1382,8 @@ catButtons.forEach((btn) => {
 gameTabButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
     const { game } = btn.dataset;
-    setActiveGame(game || "snake");
+    setActiveGame(game || "runner");
   });
-});
-
-tttCells.forEach((cell) => {
-  cell.addEventListener("click", () => {
-    const index = Number(cell.dataset.index);
-    handleTttClick(index);
-  });
-});
-
-tttReset?.addEventListener("click", resetTtt);
-
-checkersReset?.addEventListener("click", resetCheckers);
-
-checkersBoardEl?.addEventListener("click", (event) => {
-  const target = event.target.closest(".checker-cell");
-  if (!target || checkersFinished) return;
-
-  const x = Number(target.dataset.x);
-  const y = Number(target.dataset.y);
-  const piece = checkersBoard[y][x];
-
-  if (checkersSelected && checkersMoves.some((m) => m.x === x && m.y === y)) {
-    moveCheckersPiece(x, y);
-    return;
-  }
-
-  if (piece && isCurrentPlayerPiece(piece)) {
-    checkersSelected = { x, y };
-    checkersMoves = collectMoves(x, y);
-  } else {
-    checkersSelected = null;
-    checkersMoves = [];
-  }
-
-  renderCheckersBoard();
 });
 
 filterChips.forEach((chip) => {

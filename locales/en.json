@@ -44,6 +44,9 @@
     "filtersLabel": "Filters",
     "checkerRed": "Red",
     "checkerBlack": "Black",
+    "runnerReadyStatus": "Ready",
+    "runnerRunningStatus": "Running",
+    "runnerCrashedStatus": "Crashed",
     "caffeineLabel": "caffeine"
   },
   "groups": {
