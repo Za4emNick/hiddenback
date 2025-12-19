@@ -43,7 +43,8 @@
     "filterDessert": "Tatlı",
     "filtersLabel": "Filtreler",
     "checkerRed": "Kırmızı",
-    "checkerBlack": "Siyah"
+    "checkerBlack": "Siyah",
+    "caffeineLabel": "kafein"
   },
   "groups": {
     "kahvalti": {

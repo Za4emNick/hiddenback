@@ -43,7 +43,8 @@
     "filterDessert": "Dessert",
     "filtersLabel": "Filters",
     "checkerRed": "Red",
-    "checkerBlack": "Black"
+    "checkerBlack": "Black",
+    "caffeineLabel": "caffeine"
   },
   "groups": {
     "kahvalti": {

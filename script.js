@@ -38,6 +38,7 @@ const DEFAULT_TEXT = {
   filtersLabel: "Filtreler",
   checkerRed: "Kırmızı",
   checkerBlack: "Siyah",
+  caffeineLabel: "kafein",
 };
 
 let uiText = { ...DEFAULT_TEXT };
