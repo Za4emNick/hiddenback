@@ -23,11 +23,6 @@ const GROUP_TITLES = {
 };
 
 const DEFAULT_TEXT = {
-  snakeReadyStatus: "Hazır",
-  snakeStartedStatus: "Başladı",
-  snakeStoppedStatus: "Durdu",
-  snakeGameOverStatus: "Oyun bitti",
-  snakePlayingStatus: "Oynanıyor",
   runnerReadyStatus: "Hazır",
   runnerRunningStatus: "Koşuyor",
   runnerCrashedStatus: "Çarptı",
@@ -162,7 +157,6 @@ async function applyLanguage(lang) {
   refreshUiText();
   applyStaticTranslations();
   renderItems();
-  updateSnakeHUD();
   loadRunnerBest();
   updateRunnerHUD();
   localStorage.setItem("hb-lang", currentLang);
@@ -418,6 +412,9 @@ const runnerState = {
 
 let runnerCtx = null;
 let runnerLoop = null;
+let driverCtx = null;
+let driverLoop = null;
+let tetrisCtx = null;
 
 const DIR_MAP = {
   up: { x: 0, y: -1 },
