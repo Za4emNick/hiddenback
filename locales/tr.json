@@ -46,12 +46,14 @@
     "checkerBlack": "Siyah"
   },
   "groups": {
-    "kahvalti": {},
-    "bowl": {
-      "smoothie": "Smoothie Bowl",
-      "savory": "Bowl"
+    "kahvalti": {
+      "smoothie": "Smoothie Bowl"
     },
-    "lezzetler": {},
+    "bowl": {},
+    "lezzetler": {
+      "vegetarian": "Vejetaryen",
+      "chicken": "Tavuklu"
+    },
     "tatli": {},
     "matcha": {},
     "soguk": {
@@ -83,6 +85,10 @@
     "balli_fincan_sut": {
       "title": "Ballı Fincan Süt",
       "desc": "Bal ile sıcak süt."
+    },
+    "extra_sut_pot": {
+      "title": "Ekstra Süt Pot",
+      "desc": "Ekstra süt potu."
     },
     "bowl": {
       "title": "Acaí Bowl",

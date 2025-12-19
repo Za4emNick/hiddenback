@@ -46,12 +46,14 @@
     "checkerBlack": "Black"
   },
   "groups": {
-    "kahvalti": {},
-    "bowl": {
-      "smoothie": "Smoothie Bowls",
-      "savory": "Savory Bowls"
+    "kahvalti": {
+      "smoothie": "Smoothie Bowls"
     },
-    "lezzetler": {},
+    "bowl": {},
+    "lezzetler": {
+      "vegetarian": "Vegetarian",
+      "chicken": "Chicken"
+    },
     "tatli": {},
     "matcha": {},
     "soguk": {
@@ -83,6 +85,10 @@
     "balli_fincan_sut": {
       "title": "Honey milk",
       "desc": "Steamed milk with honey."
+    },
+    "extra_sut_pot": {
+      "title": "Extra Milk Pot",
+      "desc": "Extra serving of milk."
     },
     "bowl": {
       "title": "Açaí Bowl",
