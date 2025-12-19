@@ -32,11 +32,6 @@
     "instagramHeading": "Кадры в прямом эфире"
   },
   "ui": {
-    "snakeReadyStatus": "Готово",
-    "snakeStartedStatus": "Старт",
-    "snakeStoppedStatus": "Стоп",
-    "snakeGameOverStatus": "Игра окончена",
-    "snakePlayingStatus": "Играем",
     "filterVeg": "Вегетарианское",
     "filterSpicy": "Острое",
     "filterCheese": "С сыром",
@@ -44,6 +39,9 @@
     "filtersLabel": "Фильтры",
     "checkerRed": "Красные",
     "checkerBlack": "Черные",
+    "runnerReadyStatus": "Готов",
+    "runnerRunningStatus": "Бежит",
+    "runnerCrashedStatus": "Столкнулся",
     "caffeineLabel": "кофеина"
   },
   "groups": {
