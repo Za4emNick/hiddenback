@@ -87,6 +87,10 @@
       "title": "Ballı Fincan Süt",
       "desc": "Bal ile sıcak süt."
     },
+    "extra_sut_pot": {
+      "title": "Ekstra Süt Pot",
+      "desc": "Ekstra süt potu."
+    },
     "bowl": {
       "title": "Acaí Bowl",
       "desc": "Acai özü, muz, böğürtlen, frambuaz ve granola."

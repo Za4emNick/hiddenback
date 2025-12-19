@@ -87,6 +87,10 @@
       "title": "Honey milk",
       "desc": "Steamed milk with honey."
     },
+    "extra_sut_pot": {
+      "title": "Extra Milk Pot",
+      "desc": "Extra serving of milk."
+    },
     "bowl": {
       "title": "Açaí Bowl",
       "desc": "Açaí puree, banana, blackberry, raspberry, and granola."
