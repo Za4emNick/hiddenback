@@ -198,6 +198,8 @@ const ITEMS = [
   { cat: "kahvalti", title: "Kruvasan", price: 180, desc: "Tereyağlı kruvasan.", img: itemImg("kruvasan") },
   { cat: "kahvalti", title: "Kruvasan Çikolata & Çilek", price: 230, desc: "Çikolata ve taze çilekle sunulan kruvasan.", img: itemImg("kruvasan_cikolata_ve_cilek") },
   { cat: "kahvalti", title: "Menemen", price: 190, desc: "Yaz domatesiyle menemen, beyaz peynir ve ekşi maya ekmek.", img: itemImg("menemen") },
+  { cat: "kahvalti", title: "Ekmek Üstü", price: 240, desc: "Ekşi maya ekmek üstü krem peynir, çırpılmış yumurta ve avokado.", img: itemImg("ekmek_ustu") },
+  { cat: "kahvalti", title: "Patates Tava", price: 160, desc: "Klasik kızarmış patates.", img: itemImg("patates_tava") },
   { cat: "kahvalti", group: "smoothie", title: "Acaí Bowl", price: 220, desc: "Acai özü, muz, böğürtlen, frambuaz ve granola.", img: itemImg("bowl") },
   { cat: "kahvalti", group: "smoothie", title: "Berry Bowl", price: 200, desc: "Süzme yoğurt, bal, granola ve çilek.", img: itemImg("bowl1") },
   
@@ -217,8 +219,9 @@ const ITEMS = [
   { cat: "lezzetler", title: "Burritos Tavuk Dürüm", price: 280, desc: "Tortilla ekmeğinde tavuk dilimleri, burritos sos, renkli biberler, mantar, mısır, cheddar peyniri, patates kızartması ve Akdeniz yeşilliği.", img: itemImg("burritos_tavuk_durum") },
   { cat: "lezzetler", title: "Fettucine Alfredo", price: 280, desc: "Sotelenmiş tavuk dilimleri, fettuccine makarna, mantar, renkli biberler, pesto sos, krema ve parmesan peyniri.", img: itemImg("fettucine_alfredo") },
   { cat: "lezzetler", title: "Köri Soslu Tavuk", price: 290, desc: "Köri soslu tavuk, mantar, renkli biberler, basmati pilav ve Akdeniz yeşillikleri.", img: itemImg("kori_soslu_tavuk") },
-  { cat: "kahvalti", title: "Ekmek Üstü", price: 240, desc: "Ekşi maya ekmek üstü krem peynir, çırpılmış yumurta ve avokado.", img: itemImg("ekmek_ustu") },
-  { cat: "kahvalti", title: "Patates Tava", price: 160, desc: "Klasik kızarmış patates.", img: itemImg("patates_tava") },
+  { cat: "lezzetler", title: "Sandviç", price: 220, desc: "Ekşi maya ekmekte cheddar, taze kaşar, krem peynir, dana jambon, haşlanmış yumurta ve lolorosso.", img: itemImg("sandvic") },
+  { cat: "lezzetler", title: "Ekmek Üstü", price: 240, desc: "Ekşi maya ekmek üstü krem peynir, çırpılmış yumurta ve avokado.", img: itemImg("ekmek_ustu") },
+  { cat: "lezzetler", title: "Patates Tava", price: 160, desc: "Klasik kızarmış patates.", img: itemImg("patates_tava") },
 
   // ──────────── TATLILAR ────────────
   { cat: "tatli", title: "Brownie Pasta", price: 260, desc: "İki dilim brownie arasında pasta kreması ve çilek dilimleri.", img: itemImg("brownie_pasta") },
@@ -1234,27 +1237,8 @@ function scrollToGroup(group) {
 
 function renderGroupNav(groups) {
   if (!groupNav || !groupNavButtons) return;
-
-  const titles = GROUP_TITLES[activeCategory] || {};
-  const visibleGroups = groups.filter((group) => titles[group]);
-
+  groupNav.classList.add("hidden");
   groupNavButtons.innerHTML = "";
-
-  if (!visibleGroups.length || activeCategory === "hiddenback" || activeCategory === "lezzetler") {
-    groupNav.classList.add("hidden");
-    return;
-  }
-
-  visibleGroups.forEach((group) => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "filter-chip";
-    btn.textContent = translateGroupTitle(activeCategory, group);
-    btn.addEventListener("click", () => scrollToGroup(group));
-    groupNavButtons.appendChild(btn);
-  });
-
-  groupNav.classList.remove("hidden");
 }
 
 function createCard(item) {
