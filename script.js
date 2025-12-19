@@ -754,21 +754,21 @@ function drawKolobok(x, y) {
 
   runnerCtx.fillStyle = gradient;
   runnerCtx.strokeStyle = "#0b0b0b";
-  runnerCtx.lineWidth = 2.5;
+  runnerCtx.lineWidth = 2;
   runnerCtx.beginPath();
   runnerCtx.arc(x, y, r, 0, Math.PI * 2);
   runnerCtx.fill();
   runnerCtx.stroke();
 
   runnerCtx.fillStyle = "#0b0b0b";
-  runnerCtx.font = `${r * 1.05}px 'Courier New', monospace`;
+  runnerCtx.font = `${r * 0.8}px 'Courier New', monospace`;
   runnerCtx.textAlign = "center";
   runnerCtx.textBaseline = "middle";
-  runnerCtx.fillText("X  X", x, y - r * 0.35);
+  runnerCtx.fillText("X X", x, y - r * 0.38);
 
-  runnerCtx.lineWidth = 2.2;
+  runnerCtx.lineWidth = 1.8;
   runnerCtx.beginPath();
-  runnerCtx.arc(x, y + r * 0.25, r * 0.55, 0, Math.PI, false);
+  runnerCtx.arc(x, y + r * 0.25, r * 0.4, 0, Math.PI, false);
   runnerCtx.stroke();
 }
 

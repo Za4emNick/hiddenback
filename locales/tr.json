@@ -44,6 +44,9 @@
     "filtersLabel": "Filtreler",
     "checkerRed": "Kırmızı",
     "checkerBlack": "Siyah",
+    "runnerReadyStatus": "Hazır",
+    "runnerRunningStatus": "Koşuyor",
+    "runnerCrashedStatus": "Çarptı",
     "caffeineLabel": "kafein"
   },
   "groups": {
