@@ -308,8 +308,6 @@ const ITEMS = [
   { cat: "sicak", group: "kahve", title: "Türk Kahvesi (Double)", price: 170, desc: "Çift porsiyon Türk kahvesi.", img: itemImg("turk_kahvesi_double"), suppressDesc: true },
   { cat: "sicak", group: "sicakicecek", title: "Sıcak Çikolata", price: 180, desc: "Yoğun sıcak çikolata.", img: itemImg("sicak_cikolata"), suppressDesc: true },
   { cat: "sicak", group: "sicakicecek", title: "Sahlep", price: 180, desc: "Kışın vazgeçilmezi sahlep.", img: itemImg("sahlep"), suppressDesc: true },
-  { cat: "sicak", group: "sicakicecek", title: "Ekstra Sut pot", price: 30, desc: "Ekstra süt potu.", img: itemImg("extra_sut_pot"), suppressDesc: true },
-  { cat: "sicak", group: "kahve", title: "Espresso Shot", price: 50, desc: "Tek shot espresso.", img: itemImg("espresso_shot"), suppressDesc: true },
   { cat: "sicak", group: "sicakicecek", title: "Fincan Süt", price: 120, desc: "Sıcak süt.", img: itemImg("fincan_sut"), suppressDesc: true },
   { cat: "sicak", group: "kahve", title: "Sütlü Filtre Kahve", price: 190, desc: "Süt eklenmiş filtre kahve.", img: itemImg("sutlu_filtre_kahve"), suppressDesc: true },
   { cat: "sicak", group: "sicakicecek", title: "Ballı Fincan Süt", price: 160, desc: "Bal ile sıcak süt.", img: itemImg("balli_fincan_sut"), suppressDesc: true },
@@ -619,6 +617,26 @@ function stepRunner(timestamp) {
     runnerState.y = runnerState.ground;
     runnerState.velocityY = 0;
   }
+  if (cleared > 0) tetrisState.score += cleared * 100;
+}
+
+function drawTetris() {
+  if (!tetrisCtx || !tetrisCanvas) return;
+  const { width, height } = tetrisCanvas;
+  tetrisCtx.clearRect(0, 0, width, height);
+  tetrisCtx.fillStyle = "#0f172a";
+  tetrisCtx.fillRect(0, 0, width, height);
+
+  const c = tetrisState.cellSize;
+  const colors = {
+    I: "#22d3ee",
+    O: "#fbbf24",
+    T: "#a855f7",
+    L: "#fb7185",
+    J: "#3b82f6",
+    S: "#34d399",
+    Z: "#f97316",
+  };
 
   runnerState.spawnTimer -= delta;
   runnerState.starTimer -= delta;
@@ -665,6 +683,7 @@ function stepRunner(timestamp) {
     drawRunnerScene(true);
     return;
   }
+}
 
   drawRunnerScene();
   runnerLoop = requestAnimationFrame(stepRunner);
