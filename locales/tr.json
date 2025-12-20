@@ -503,6 +503,10 @@
       "title": "Sandviç",
       "desc": "Ekşi maya ekmek, cheddar, taze kaşar, krem peynir, dana jambon, haşlanmış yumurta ve lolorosso."
     },
+    "brioche": {
+      "title": "Brioche French Tost",
+      "desc": "Karamelize brioş ve mevsim meyveleriyle, akçaağaç şurubundan Fransız tost dokunuşu."
+    },
     "sekersiz_hurmali_i_ncirli_kek": {
       "title": "Şekersiz Hurmalı İncirli Kek",
       "desc": "Şekersiz hurmalı ve incirli kek."
