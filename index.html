@@ -1071,11 +1071,11 @@
             </button>
             <button class="game-tab-btn" data-game="car">
               <span class="icon" aria-hidden="true">🚗</span>
-              <span>Хиденбек Гонка</span>
+              <span>HiddenBack Race</span>
             </button>
             <button class="game-tab-btn" data-game="tetris">
               <span class="icon" aria-hidden="true">🧱</span>
-              <span>Хиденбек Тетрис</span>
+              <span>HiddenBack Tetris</span>
             </button>
           </div>
 
@@ -1099,8 +1099,8 @@
                 </div>
 
                 <div class="rounded-2xl border border-hb-border bg-gray-50 p-4 flex flex-col gap-2">
-                  <h3 class="text-lg font-semibold">HiddenBack Run</h3>
-                  <p class="text-sm text-hb-muted leading-relaxed">
+                  <h3 class="text-lg font-semibold" data-i18n="games.runnerTitle">HiddenBack Run</h3>
+                  <p class="text-sm text-hb-muted leading-relaxed" data-i18n="games.runnerDesc">
                     Hiddenboy restoranımıza yetişmeye çalışıyor. Ona engelleri aşmasında yardım et; onu ilk ulaştıran oyuncu menüden dilediği bir yemeği hediye kazanır.
                   </p>
                   <div class="runner-legend">
@@ -1108,12 +1108,12 @@
                     <span class="runner-pill">⬛ Engeller</span>
                     <span class="runner-pill">⬜ Yıldız parçaları</span>
                   </div>
-                  <p class="runner-hint">Zıplamak için boşluk, W, ↑ veya dokunma (mobil) kullanın.</p>
+                  <p class="runner-hint" data-i18n="games.runnerHint">Zıplamak için boşluk, W, ↑ veya dokunma (mobil) kullanın.</p>
                 </div>
               </div>
 
               <div class="flex flex-col items-center gap-3">
-                <canvas id="runner-canvas" width="520" height="220"></canvas>
+                <canvas id="runner-canvas" width="1040" height="280" class="w-full max-w-5xl"></canvas>
                 <button id="runner-start" type="button"
                         class="px-5 py-2 rounded-full border border-hb-border text-sm font-semibold bg-black text-white shadow-sm">
                   <span>Başlat / Yeniden dene</span>
@@ -1138,16 +1138,16 @@
                 </div>
 
                 <div class="rounded-2xl border border-hb-border bg-gray-50 p-4 flex flex-col gap-2">
-                  <h3 class="text-lg font-semibold">Хиденбек Гонка</h3>
-                  <p class="text-sm text-hb-muted leading-relaxed">
+                  <h3 class="text-lg font-semibold" data-i18n="games.raceTitle">HiddenBack Race</h3>
+                  <p class="text-sm text-hb-muted leading-relaxed" data-i18n="games.raceDesc">
                     Наша машина мчится к Hiddenback. Помоги увернуться от препятствий: двигайся влево и вправо, чтобы добраться до кафе. Говорят, кто довезёт его — получит подарок!
                   </p>
                   <div class="runner-legend">
-                    <span class="runner-pill">🚗 Мы</span>
-                    <span class="runner-pill">⬛ Препятствия</span>
-                    <span class="runner-pill">⬜ Дорога</span>
+                    <span class="runner-pill" data-i18n="games.raceUs">🚗 Мы</span>
+                    <span class="runner-pill" data-i18n="games.raceObstacles">⬛ Препятствия</span>
+                    <span class="runner-pill" data-i18n="games.raceRoad">⬜ Дорога</span>
                   </div>
-                  <p class="runner-hint">Стрелки ← → или A / D, на телефоне — тапайте по сторонам экрана.</p>
+                  <p class="runner-hint" data-i18n="games.raceHint">Стрелки ← → или A / D, на телефоне — тапайте по сторонам экрана.</p>
                 </div>
               </div>
 
@@ -1178,20 +1178,20 @@
                 </div>
 
                 <div class="rounded-2xl border border-hb-border bg-gray-50 p-4 flex flex-col gap-2">
-                  <h3 class="text-lg font-semibold">Хиденбек Тетрис</h3>
-                  <p class="text-sm text-hb-muted leading-relaxed">
+                  <h3 class="text-lg font-semibold" data-i18n="games.tetrisTitle">HiddenBack Tetris</h3>
+                  <p class="text-sm text-hb-muted leading-relaxed" data-i18n="games.tetrisDesc">
                     Классика из детства: собирай линии и помоги кирпичикам сложиться в слово Hiddenback. Управление: ← → для движения, ↑ для поворота, ↓ чтобы ускорить падение.
                   </p>
                   <div class="runner-legend">
-                    <span class="runner-pill">🧱 Фигуры</span>
-                    <span class="runner-pill">⬜ Поле</span>
+                    <span class="runner-pill" data-i18n="games.tetrisBlocks">🧱 Фигуры</span>
+                    <span class="runner-pill" data-i18n="games.tetrisBoard">⬜ Поле</span>
                   </div>
-                  <p class="runner-hint">Набери максимум очков, чтобы доказать, что ты фанат Hiddenback.</p>
+                  <p class="runner-hint" data-i18n="games.tetrisHint">Набери максимум очков, чтобы доказать, что ты фанат Hiddenback.</p>
                 </div>
               </div>
 
               <div class="flex flex-col items-center gap-3 w-full">
-                <canvas id="tetris-canvas" width="240" height="440" class="w-full max-w-xs bg-gray-900 border border-hb-border rounded-2xl"></canvas>
+                <canvas id="tetris-canvas" width="200" height="320" class="w-full max-w-xs bg-gray-900 border border-hb-border rounded-2xl"></canvas>
                 <div class="flex gap-2">
                   <button id="tetris-start" type="button"
                           class="px-5 py-2 rounded-full border border-hb-border text-sm font-semibold bg-black text-white shadow-sm">
@@ -1295,6 +1295,16 @@
   >
     ↑
   </button>
+
+  <footer class="mt-8 pb-6 text-center text-xs text-hb-muted">
+    <p>
+      <span data-i18n="footer.credit">Site yapıldı Dmitrii Bondarev</span>
+      ·
+      <a href="https://bond-dev.vercel.app/" class="underline underline-offset-2" target="_blank" rel="noreferrer">bond-dev.vercel.app</a>
+      ·
+      <span data-i18n="footer.copyright">© 2025 Hiddenback</span>
+    </p>
+  </footer>
 
   <aside
     id="mobile-drawer"

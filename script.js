@@ -411,6 +411,8 @@ const runnerState = {
   gravity: 0.0024,
   jump: -0.82,
   speed: 0.35,
+  baseSpeed: 0.35,
+  speedTimer: 0,
   obstacles: [],
   stars: [],
   running: false,
@@ -436,6 +438,8 @@ const carState = {
   lane: 1,
   lanes: 3,
   speed: 0.35,
+  baseSpeed: 0.35,
+  speedTimer: 0,
   distance: 0,
   best: 0,
   obstacles: [],
@@ -450,7 +454,7 @@ let carLoop = null;
 const tetrisConfig = {
   cols: 10,
   rows: 20,
-  block: 22,
+  block: 18,
 };
 
 const TETROMINOES = [
@@ -467,7 +471,9 @@ const tetrisState = {
   running: false,
   grid: [],
   piece: null,
-  dropInterval: 850,
+  dropInterval: 280,
+  minInterval: 80,
+  speedTimer: 0,
   dropTimer: 0,
   lastTime: 0,
   score: 0,
@@ -507,6 +513,8 @@ function resetRunnerState() {
     runnerState.ground = runnerCanvas.height - 50;
     runnerState.x = Math.min(runnerState.x, runnerCanvas.width * 0.25);
   }
+  runnerState.speed = runnerState.baseSpeed;
+  runnerState.speedTimer = 0;
   runnerState.y = runnerState.ground;
   runnerState.velocityY = 0;
   runnerState.obstacles = [];
@@ -695,6 +703,11 @@ function stepRunner(timestamp) {
     .filter((star) => star.x > -20);
 
   runnerState.distance += travel * 0.2;
+  runnerState.speedTimer += delta;
+  if (runnerState.speedTimer >= 5000) {
+    runnerState.speed *= 1.12;
+    runnerState.speedTimer = 0;
+  }
   updateRunnerHUD();
 
   const playerLeft = runnerState.x - runnerState.radius + 4;
@@ -761,6 +774,8 @@ function resetCarState() {
   carState.running = false;
   carState.lastTime = 0;
   carState.status = "Hazır";
+  carState.speed = carState.baseSpeed;
+  carState.speedTimer = 0;
   updateCarHUD();
   drawCarScene();
 }
@@ -815,8 +830,17 @@ function drawCarScene() {
   }
   carCtx.setLineDash([]);
 
-  carCtx.fillStyle = "#0ea5e9";
-  carCtx.fillRect(carState.lane * laneWidth + laneWidth * 0.2, height - 90, laneWidth * 0.6, 70);
+  const carX = carState.lane * laneWidth + laneWidth * 0.2;
+  const carWidth = laneWidth * 0.6;
+  const carHeight = 70;
+  const carY = height - 90;
+
+  if (hiddenLogo.complete) {
+    carCtx.drawImage(hiddenLogo, carX, carY, carWidth, carHeight);
+  } else {
+    carCtx.fillStyle = "#0ea5e9";
+    carCtx.fillRect(carX, carY, carWidth, carHeight);
+  }
 
   carState.obstacles.forEach((ob) => {
     carCtx.fillStyle = ob.color;
@@ -877,6 +901,12 @@ function stepCar(timestamp) {
     stopCar("Çarpıştı");
     drawCarScene();
     return;
+  }
+
+  carState.speedTimer += delta;
+  if (carState.speedTimer >= 5000) {
+    carState.speed *= 1.12;
+    carState.speedTimer = 0;
   }
 
   updateCarHUD();
@@ -1047,6 +1077,12 @@ function stepTetris(timestamp) {
   const delta = (timestamp - tetrisState.lastTime) || 16;
   tetrisState.lastTime = timestamp;
   tetrisState.dropTimer += delta;
+  tetrisState.speedTimer += delta;
+
+  if (tetrisState.speedTimer >= 5000) {
+    tetrisState.dropInterval = Math.max(tetrisState.minInterval, Math.floor(tetrisState.dropInterval * 0.82));
+    tetrisState.speedTimer = 0;
+  }
 
   if (tetrisState.dropTimer > tetrisState.dropInterval) {
     tetrisDrop();
@@ -1063,7 +1099,9 @@ function startTetris() {
   tetrisState.grid = createEmptyGrid();
   tetrisState.piece = randomTetromino();
   tetrisState.dropTimer = 0;
+  tetrisState.speedTimer = 0;
   tetrisState.lastTime = performance.now();
+  tetrisState.dropInterval = 280;
   tetrisState.score = 0;
   tetrisState.lines = 0;
   if (tetrisScoreEl) tetrisScoreEl.textContent = "0";
@@ -1079,6 +1117,9 @@ function stopTetris() {
 function initTetris() {
   if (!tetrisCanvas || tetrisCtx) return;
   tetrisCtx = tetrisCanvas.getContext("2d");
+  const blockByWidth = Math.floor(tetrisCanvas.width / tetrisConfig.cols);
+  const blockByHeight = Math.floor(tetrisCanvas.height / tetrisConfig.rows);
+  tetrisConfig.block = Math.max(12, Math.min(blockByWidth, blockByHeight));
   tetrisState.grid = createEmptyGrid();
   tetrisState.piece = randomTetromino();
   drawTetrisScene();
