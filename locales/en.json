@@ -459,6 +459,10 @@
       "title": "Sandwich",
       "desc": "Sourdough with cheddar, cream cheese, ham, egg, and greens."
     },
+    "brioche": {
+      "title": "Brioche French Toast",
+      "desc": "Caramelized brioche French toast with seasonal berries and maple syrup."
+    },
     "sanfransisco": {
       "title": "San Francisco",
       "desc": "Citrus and berry mocktail."

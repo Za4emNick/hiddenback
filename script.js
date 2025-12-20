@@ -183,6 +183,7 @@ const ITEMS = [
   { cat: "kahvalti", title: "Ekmek Üstü Yumurta & Avokado", price: 240, desc: "Ekşi maya ekmek üstü taze peynir, çırpılmış yumurta, avokado ve mini smoothie bowl.", img: itemImg("ekmek_ustu_yumurta_ve_avokado") },
   { cat: "kahvalti", title: "Kruvasan Bowl", price: 260, desc: "Tereyağlı kruvasan yanında çırpılmış yumurta, avokado ve mini smoothie bowl.", img: itemImg("kruvasan_bowl") },
   { cat: "kahvalti", title: "Sandviç", price: 220, desc: "Ekşi maya ekmekte cheddar, taze kaşar, krem peynir, dana jambon, haşlanmış yumurta ve lolorosso.", img: itemImg("sandvic") },
+  { cat: "kahvalti", title: "Brioche French Tost", price: 250, desc: "Karamelize brioş, mevsim meyveleri ve akçaağaç şurubuyla Fransız tost.", img: itemImg("brioche") },
   { cat: "kahvalti", title: "Dana Jambon Tost", price: 220, desc: "Taze kaşar peyniri, dana jambon, patates kızartması ve Akdeniz yeşillikleri.", img: itemImg("dana_jambon_tost") },
   { cat: "kahvalti", title: "Tavuklu Tost", price: 280, desc: "Ekşi maya ekmek, kremalı tavuk, patates kızartması ve akdeniz yeşillikleri", img: itemImg("tavuklu_tost") },
   { cat: "kahvalti", title: "Tatlı & Tuzlu Ekmek Üstü", price: 220, desc: "Bir dilim krem peynirli, dana jambonlu ve göz yumurtalı; diğer dilim çikolata, muz ve böğürtlenli.", img: itemImg("tatli_ve_tuzlu_ekmek_ustu") },
@@ -1322,8 +1323,24 @@ function scrollToGroup(group) {
 
 function renderGroupNav(groups) {
   if (!groupNav || !groupNavButtons) return;
-  groupNav.classList.add("hidden");
   groupNavButtons.innerHTML = "";
+
+  if (!groups.length) {
+    groupNav.classList.add("hidden");
+    return;
+  }
+
+  groupNav.classList.remove("hidden");
+
+  groups.forEach((group) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className =
+      "px-3 py-1 rounded-full border border-hb-border bg-white text-[11px] font-semibold whitespace-nowrap transition hover:bg-black hover:text-white";
+    btn.textContent = translateGroupTitle(activeCategory, group);
+    btn.addEventListener("click", () => scrollToGroup(group));
+    groupNavButtons.appendChild(btn);
+  });
 }
 
 function createCard(item) {
