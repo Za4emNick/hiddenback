@@ -1079,7 +1079,7 @@
             </button>
           </div>
 
-          <p class="text-sm text-hb-muted leading-relaxed">
+          <p class="text-sm text-hb-muted leading-relaxed" data-i18n="games.intro">
             Games sekmesinden oyunu seç, kuralları oku ve hemen oyna.
           </p>
 
@@ -1088,13 +1088,13 @@
               <div class="flex flex-col gap-3">
                 <div class="flex items-center gap-3 text-sm">
                   <div class="px-3 py-2 rounded-xl bg-gray-100 border border-hb-border">
-                    <span>Mesafe</span>: <span id="runner-distance" class="font-semibold">0 m</span>
+                    <span data-i18n="games.distance">Mesafe</span>: <span id="runner-distance" class="font-semibold">0 m</span>
                   </div>
                   <div class="px-3 py-2 rounded-xl bg-gray-100 border border-hb-border">
-                    <span>Rekor</span>: <span id="runner-best" class="font-semibold">0 m</span>
+                    <span data-i18n="games.best">Rekor</span>: <span id="runner-best" class="font-semibold">0 m</span>
                   </div>
                   <div class="px-3 py-2 rounded-xl bg-gray-100 border border-hb-border">
-                    <span>Durum</span>: <span id="runner-status" class="font-semibold">Hazır</span>
+                    <span data-i18n="games.status">Durum</span>: <span id="runner-status" class="font-semibold">Hazır</span>
                   </div>
                 </div>
 
@@ -1113,10 +1113,10 @@
               </div>
 
               <div class="flex flex-col items-center gap-3">
-                <canvas id="runner-canvas" width="1040" height="280" class="w-full max-w-5xl"></canvas>
+                <canvas id="runner-canvas" width="1040" height="840" class="w-full max-w-5xl"></canvas>
                 <button id="runner-start" type="button"
                         class="px-5 py-2 rounded-full border border-hb-border text-sm font-semibold bg-black text-white shadow-sm">
-                  <span>Başlat / Yeniden dene</span>
+                  <span data-i18n="games.start">Başlat / Yeniden dene</span>
                 </button>
               </div>
             </div>
@@ -1127,13 +1127,13 @@
               <div class="flex flex-col gap-3">
                 <div class="flex items-center gap-3 text-sm">
                   <div class="px-3 py-2 rounded-xl bg-gray-100 border border-hb-border">
-                    <span>Mesafe</span>: <span id="car-distance" class="font-semibold">0 m</span>
+                    <span data-i18n="games.distance">Mesafe</span>: <span id="car-distance" class="font-semibold">0 m</span>
                   </div>
                   <div class="px-3 py-2 rounded-xl bg-gray-100 border border-hb-border">
-                    <span>Rekor</span>: <span id="car-best" class="font-semibold">0 m</span>
+                    <span data-i18n="games.best">Rekor</span>: <span id="car-best" class="font-semibold">0 m</span>
                   </div>
                   <div class="px-3 py-2 rounded-xl bg-gray-100 border border-hb-border">
-                    <span>Durum</span>: <span id="car-status" class="font-semibold">Hazır</span>
+                    <span data-i18n="games.status">Durum</span>: <span id="car-status" class="font-semibold">Hazır</span>
                   </div>
                 </div>
 
@@ -1151,17 +1151,17 @@
                 </div>
               </div>
 
-              <div class="flex flex-col items-center gap-3 w-full">
-                <canvas id="car-canvas" width="360" height="420" class="w-full max-w-md bg-gray-100 border border-hb-border rounded-2xl"></canvas>
-                <div class="flex gap-2">
-                  <button id="car-start" type="button"
-                          class="px-5 py-2 rounded-full border border-hb-border text-sm font-semibold bg-black text-white shadow-sm">
-                    <span>Başlat / Yeniden dene</span>
-                  </button>
-                  <button id="car-move-left" type="button" class="px-3 py-2 rounded-full border border-hb-border text-sm font-semibold bg-white">←</button>
-                  <button id="car-move-right" type="button" class="px-3 py-2 rounded-full border border-hb-border text-sm font-semibold bg-white">→</button>
+                <div class="flex flex-col items-center gap-3 w-full">
+                  <canvas id="car-canvas" width="360" height="420" class="w-full max-w-md bg-gray-100 border border-hb-border rounded-2xl"></canvas>
+                  <div class="flex gap-2">
+                    <button id="car-start" type="button"
+                            class="px-5 py-2 rounded-full border border-hb-border text-sm font-semibold bg-black text-white shadow-sm">
+                    <span data-i18n="games.start">Başlat / Yeniden dene</span>
+                    </button>
+                    <button id="car-move-left" type="button" class="px-3 py-2 rounded-full border border-hb-border text-sm font-semibold bg-white">←</button>
+                    <button id="car-move-right" type="button" class="px-3 py-2 rounded-full border border-hb-border text-sm font-semibold bg-white">→</button>
+                  </div>
                 </div>
-              </div>
             </div>
           </section>
 
@@ -1170,10 +1170,10 @@
               <div class="flex flex-col gap-3">
                 <div class="flex items-center gap-3 text-sm">
                   <div class="px-3 py-2 rounded-xl bg-gray-100 border border-hb-border">
-                    <span>Счёт</span>: <span id="tetris-score" class="font-semibold">0</span>
+                    <span data-i18n="games.tetrisScore">Счёт</span>: <span id="tetris-score" class="font-semibold">0</span>
                   </div>
                   <div class="px-3 py-2 rounded-xl bg-gray-100 border border-hb-border">
-                    <span>Линии</span>: <span id="tetris-lines" class="font-semibold">0</span>
+                    <span data-i18n="games.tetrisLines">Линии</span>: <span id="tetris-lines" class="font-semibold">0</span>
                   </div>
                 </div>
 
@@ -1195,9 +1195,9 @@
                 <div class="flex gap-2">
                   <button id="tetris-start" type="button"
                           class="px-5 py-2 rounded-full border border-hb-border text-sm font-semibold bg-black text-white shadow-sm">
-                    <span>Başlat / Yeniden dene</span>
+                    <span data-i18n="games.start">Başlat / Yeniden dene</span>
                   </button>
-                  <button id="tetris-rotate" type="button" class="px-3 py-2 rounded-full border border-hb-border text-sm font-semibold bg-white">⟳</button>
+                  <button id="tetris-rotate" type="button" class="px-3 py-2 rounded-full border border-hb-border text-sm font-semibold bg-white" data-i18n="games.rotate">⟳</button>
                 </div>
               </div>
             </div>
@@ -1298,11 +1298,11 @@
 
   <footer class="mt-8 pb-6 text-center text-xs text-hb-muted">
     <p>
-      <span data-i18n="footer.credit">Site yapıldı Dmitrii Bondarev</span>
-      ·
-      <a href="https://bond-dev.vercel.app/" class="underline underline-offset-2" target="_blank" rel="noreferrer">bond-dev.vercel.app</a>
-      ·
       <span data-i18n="footer.copyright">© 2025 Hiddenback</span>
+      ·
+      <span data-i18n="footer.creditPrefix">Site yapıldı</span>
+      <a href="https://bond-dev.vercel.app/" class="underline underline-offset-2 font-semibold" target="_blank" rel="noreferrer" data-i18n="footer.creditName">Dmitrii Bondarev</a>
+      <span class="text-hb-muted">(bond-dev.vercel.app)</span>
     </p>
   </footer>
 

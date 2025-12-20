@@ -467,7 +467,7 @@ const tetrisState = {
   running: false,
   grid: [],
   piece: null,
-  dropInterval: 280,
+  dropInterval: 370,
   minInterval: 80,
   speedTimer: 0,
   dropTimer: 0,
@@ -506,8 +506,14 @@ function updateRunnerHUD(statusKey = "") {
 
 function resetRunnerState() {
   if (runnerCanvas) {
-    runnerState.ground = runnerCanvas.height - 50;
+    const scaleH = runnerCanvas.height / 220;
+    const scaleW = runnerCanvas.width / 520;
+    runnerState.radius = 20 * scaleH;
+    runnerState.ground = runnerCanvas.height - 50 * scaleH;
     runnerState.x = Math.min(runnerState.x, runnerCanvas.width * 0.25);
+    runnerState.gravity = 0.0024 * scaleH;
+    runnerState.jump = -0.82 * scaleH;
+    runnerState.baseSpeed = 0.35 * scaleW;
   }
   runnerState.speed = runnerState.baseSpeed;
   runnerState.speedTimer = 0;
@@ -526,8 +532,10 @@ function resetRunnerState() {
 
 function spawnRunnerObstacle() {
   if (!runnerCanvas) return;
-  const height = 28 + Math.random() * 40;
-  const width = 26 + Math.random() * 24;
+  const scaleH = runnerCanvas.height / 220;
+  const scaleW = runnerCanvas.width / 520;
+  const height = (28 + Math.random() * 40) * scaleH;
+  const width = (26 + Math.random() * 24) * scaleW;
   const y = runnerState.ground - height;
   runnerState.obstacles.push({
     x: runnerCanvas.width + width + 20,
@@ -540,10 +548,11 @@ function spawnRunnerObstacle() {
 
 function spawnRunnerStar() {
   if (!runnerCanvas) return;
+  const scaleH = runnerCanvas.height / 220;
   runnerState.stars.push({
     x: runnerCanvas.width + 20,
     y: 20 + Math.random() * 80,
-    size: 3 + Math.random() * 3,
+    size: (3 + Math.random() * 3) * scaleH,
     glow: Math.random() * 0.4 + 0.4,
   });
 }
@@ -626,7 +635,8 @@ function drawRunnerScene(showPrompt = false) {
     runnerCtx.fillStyle = "#e5e7eb";
     runnerCtx.font = "600 16px Inter, sans-serif";
     runnerCtx.textAlign = "center";
-    runnerCtx.fillText("Başlat / Yeniden dene ile koşuya başla", width / 2, height / 2);
+    const prompt = resolveTranslation("games.runnerPrompt") || "Başlat / Yeniden dene ile koşuya başla";
+    runnerCtx.fillText(prompt, width / 2, height / 2);
   }
 }
 
@@ -1076,7 +1086,7 @@ function stepTetris(timestamp) {
   tetrisState.speedTimer += delta;
 
   if (tetrisState.speedTimer >= 5000) {
-    tetrisState.dropInterval = Math.max(tetrisState.minInterval, Math.floor(tetrisState.dropInterval * 0.82));
+    tetrisState.dropInterval = Math.max(tetrisState.minInterval, Math.floor(tetrisState.dropInterval * 0.91));
     tetrisState.speedTimer = 0;
   }
 
@@ -1097,7 +1107,7 @@ function startTetris() {
   tetrisState.dropTimer = 0;
   tetrisState.speedTimer = 0;
   tetrisState.lastTime = performance.now();
-  tetrisState.dropInterval = 280;
+  tetrisState.dropInterval = 370;
   tetrisState.score = 0;
   tetrisState.lines = 0;
   if (tetrisScoreEl) tetrisScoreEl.textContent = "0";
