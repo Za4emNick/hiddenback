@@ -44,6 +44,36 @@
     "runnerCrashedStatus": "Çarptı",
     "caffeineLabel": "kafein"
   },
+  "games": {
+    "runnerTitle": "HiddenBack Run",
+    "runnerDesc": "Hiddenboy kafeye yetişmeye çalışıyor. Engelleri aşmasına yardım et; ilk ulaştıran menüden bir ikram kazanır.",
+    "runnerHint": "Zıplamak için boşluk, W, ↑ veya dokunma (mobil) kullanın.",
+    "runnerPrompt": "Başlat / Yeniden dene ile koşuya başla.",
+    "distance": "Mesafe",
+    "best": "Rekor",
+    "status": "Durum",
+    "start": "Başlat / Yeniden dene",
+    "intro": "Oyunu seç, kuralları oku ve hemen oyna.",
+    "raceTitle": "HiddenBack Race",
+    "raceDesc": "Aracımız Hiddenback’e gidiyor. Şerit değiştirerek engellerden kaç ve kafeye ulaş. Söylentiye göre başarırsan hediye var!",
+    "raceHint": "← → veya A / D kullan. Telefonda ekranın sol/sağına dokun.",
+    "raceUs": "🚗 Biz",
+    "raceObstacles": "⬛ Engeller",
+    "raceRoad": "⬜ Yol",
+    "tetrisTitle": "HiddenBack Tetris",
+    "tetrisDesc": "Klasik tetris: satırları doldur, tuğlalar Hiddenback’i yazsın. Kontroller: ← → hareket, ↑ döndür, ↓ hızlandır.",
+    "tetrisHint": "En yüksek puanı al ve Hiddenback hayranı olduğunu kanıtla.",
+    "tetrisBlocks": "🧱 Bloklar",
+    "tetrisBoard": "⬜ Tahta",
+    "tetrisScore": "Skor",
+    "tetrisLines": "Satır",
+    "rotate": "Döndür"
+  },
+  "footer": {
+    "creditPrefix": "Site yapıldı",
+    "creditName": "Dmitrii Bondarev",
+    "copyright": "© 2025 Hiddenback"
+  },
   "groups": {
     "kahvalti": {
       "smoothie": "Smoothie Bowl"

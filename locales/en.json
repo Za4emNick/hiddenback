@@ -44,6 +44,36 @@
     "runnerCrashedStatus": "Crashed",
     "caffeineLabel": "caffeine"
   },
+  "games": {
+    "runnerTitle": "HiddenBack Run",
+    "runnerDesc": "Hiddenboy is rushing to our cafe. Help them dodge obstacles; the first to arrive wins a treat from the menu.",
+    "runnerHint": "Use Space, W, ↑ or tap (mobile) to jump.",
+    "runnerPrompt": "Press Start / Retry to begin the run.",
+    "distance": "Distance",
+    "best": "Best",
+    "status": "Status",
+    "start": "Start / Retry",
+    "intro": "Pick a game, read the rules, and play right away.",
+    "raceTitle": "HiddenBack Race",
+    "raceDesc": "Your car speeds toward Hiddenback. Slide left and right to dodge obstacles and reach the cafe. Rumor says finishers get a gift!",
+    "raceHint": "Use ← → or A / D. On mobile, tap the left/right side of the screen.",
+    "raceUs": "🚗 Us",
+    "raceObstacles": "⬛ Obstacles",
+    "raceRoad": "⬜ Road",
+    "tetrisTitle": "HiddenBack Tetris",
+    "tetrisDesc": "A classic: stack lines and let the bricks spell Hiddenback. Controls: ← → move, ↑ rotate, ↓ to drop faster.",
+    "tetrisHint": "Score as many points as you can to prove you’re a Hiddenback fan.",
+    "tetrisBlocks": "🧱 Blocks",
+    "tetrisBoard": "⬜ Board",
+    "tetrisScore": "Score",
+    "tetrisLines": "Lines",
+    "rotate": "Rotate"
+  },
+  "footer": {
+    "creditPrefix": "Site built by",
+    "creditName": "Dmitrii Bondarev",
+    "copyright": "© 2025 Hiddenback"
+  },
   "groups": {
     "kahvalti": {
       "smoothie": "Smoothie Bowls"
