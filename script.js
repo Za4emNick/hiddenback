@@ -330,11 +330,24 @@ const container = document.getElementById("items-container");
 const instagramBlock = document.getElementById("instagram-block");
 const gamesSection = document.getElementById("games-section");
 const layoutRoot = document.getElementById("layout-root");
+const siteHeader = document.querySelector("header");
 const runnerCanvas = document.getElementById("runner-canvas");
 const runnerStart = document.getElementById("runner-start");
 const runnerDistanceEl = document.getElementById("runner-distance");
 const runnerBestEl = document.getElementById("runner-best");
 const runnerStatusEl = document.getElementById("runner-status");
+const carCanvas = document.getElementById("car-canvas");
+const carStartBtn = document.getElementById("car-start");
+const carLeftBtn = document.getElementById("car-move-left");
+const carRightBtn = document.getElementById("car-move-right");
+const carDistanceEl = document.getElementById("car-distance");
+const carBestEl = document.getElementById("car-best");
+const carStatusEl = document.getElementById("car-status");
+const tetrisCanvas = document.getElementById("tetris-canvas");
+const tetrisStartBtn = document.getElementById("tetris-start");
+const tetrisRotateBtn = document.getElementById("tetris-rotate");
+const tetrisScoreEl = document.getElementById("tetris-score");
+const tetrisLinesEl = document.getElementById("tetris-lines");
 
 const gameTabButtons = document.querySelectorAll(".game-tab-btn");
 const gamePanels = document.querySelectorAll(".game-panel");
@@ -417,6 +430,51 @@ const DIR_MAP = {
   left: { x: -1, y: 0 },
   right: { x: 1, y: 0 },
 };
+
+const carState = {
+  running: false,
+  lane: 1,
+  lanes: 3,
+  speed: 0.35,
+  distance: 0,
+  best: 0,
+  obstacles: [],
+  spawnTimer: 0,
+  lastTime: 0,
+  status: "Hazır",
+};
+
+let carCtx = null;
+let carLoop = null;
+
+const tetrisConfig = {
+  cols: 10,
+  rows: 20,
+  block: 22,
+};
+
+const TETROMINOES = [
+  { shape: [[1, 1, 1, 1]], color: "#38bdf8" }, // I
+  { shape: [[1, 1], [1, 1]], color: "#facc15" }, // O
+  { shape: [[0, 1, 0], [1, 1, 1]], color: "#22c55e" }, // T
+  { shape: [[1, 0, 0], [1, 1, 1]], color: "#a855f7" }, // J
+  { shape: [[0, 0, 1], [1, 1, 1]], color: "#f97316" }, // L
+  { shape: [[1, 1, 0], [0, 1, 1]], color: "#ef4444" }, // S
+  { shape: [[0, 1, 1], [1, 1, 0]], color: "#0ea5e9" }, // Z
+];
+
+const tetrisState = {
+  running: false,
+  grid: [],
+  piece: null,
+  dropInterval: 850,
+  dropTimer: 0,
+  lastTime: 0,
+  score: 0,
+  lines: 0,
+};
+
+let tetrisCtx = null;
 // ─────────────────────────────
 //  GAMES: HIDDENBACK RUN
 // ─────────────────────────────
@@ -691,6 +749,341 @@ function initRunner() {
   resetRunnerState();
 }
 
+// ─────────────────────────────
+//  GAME 2: CAR RACE
+// ─────────────────────────────
+
+function resetCarState() {
+  carState.lane = 1;
+  carState.distance = 0;
+  carState.spawnTimer = 600;
+  carState.obstacles = [];
+  carState.running = false;
+  carState.lastTime = 0;
+  carState.status = "Hazır";
+  updateCarHUD();
+  drawCarScene();
+}
+
+function spawnCarObstacle() {
+  const lane = Math.floor(Math.random() * carState.lanes);
+  const width = (carCanvas.width / carState.lanes) * 0.5;
+  carState.obstacles.push({
+    lane,
+    y: -80,
+    width,
+    height: 70 + Math.random() * 30,
+    color: Math.random() > 0.5 ? "#0ea5e9" : "#f97316",
+  });
+}
+
+function updateCarHUD(statusText) {
+  if (typeof statusText === "string") carState.status = statusText;
+  if (carDistanceEl) carDistanceEl.textContent = `${Math.floor(carState.distance)} m`;
+  if (carBestEl) carBestEl.textContent = `${Math.floor(carState.best)} m`;
+  if (carStatusEl) carStatusEl.textContent = carState.status;
+}
+
+function moveCar(direction) {
+  if (!carState.running) return;
+  if (direction === "left") {
+    carState.lane = Math.max(0, carState.lane - 1);
+  } else if (direction === "right") {
+    carState.lane = Math.min(carState.lanes - 1, carState.lane + 1);
+  }
+  drawCarScene();
+}
+
+function drawCarScene() {
+  if (!carCtx || !carCanvas) return;
+  const { width, height } = carCanvas;
+  carCtx.clearRect(0, 0, width, height);
+
+  carCtx.fillStyle = "#111827";
+  carCtx.fillRect(0, 0, width, height);
+
+  const laneWidth = width / carState.lanes;
+  carCtx.strokeStyle = "rgba(255,255,255,0.18)";
+  carCtx.lineWidth = 2;
+  for (let i = 1; i < carState.lanes; i += 1) {
+    const x = i * laneWidth;
+    carCtx.setLineDash([10, 12]);
+    carCtx.beginPath();
+    carCtx.moveTo(x, 0);
+    carCtx.lineTo(x, height);
+    carCtx.stroke();
+  }
+  carCtx.setLineDash([]);
+
+  carCtx.fillStyle = "#0ea5e9";
+  carCtx.fillRect(carState.lane * laneWidth + laneWidth * 0.2, height - 90, laneWidth * 0.6, 70);
+
+  carState.obstacles.forEach((ob) => {
+    carCtx.fillStyle = ob.color;
+    carCtx.fillRect(ob.lane * laneWidth + laneWidth * 0.25, ob.y, laneWidth * 0.5, ob.height);
+  });
+}
+
+function stopCar(status = "Durdu") {
+  carState.running = false;
+  if (carLoop) cancelAnimationFrame(carLoop);
+  carLoop = null;
+  if (carState.distance > carState.best) {
+    carState.best = carState.distance;
+  }
+  updateCarHUD(status);
+}
+
+function stepCar(timestamp) {
+  if (!carState.running || !carCanvas) return;
+  const delta = Math.min(50, (timestamp - carState.lastTime) || 16);
+  carState.lastTime = timestamp;
+
+  carState.distance += delta * 0.25;
+  carState.spawnTimer -= delta;
+
+  if (carState.spawnTimer <= 0) {
+    spawnCarObstacle();
+    carState.spawnTimer = 720 + Math.random() * 420;
+  }
+
+  const travel = delta * carState.speed;
+  carState.obstacles = carState.obstacles
+    .map((ob) => ({ ...ob, y: ob.y + travel }))
+    .filter((ob) => ob.y < carCanvas.height + 100);
+
+  const laneWidth = carCanvas.width / carState.lanes;
+  const carRect = {
+    left: carState.lane * laneWidth + laneWidth * 0.2,
+    right: carState.lane * laneWidth + laneWidth * 0.8,
+    top: carCanvas.height - 90,
+    bottom: carCanvas.height - 20,
+  };
+
+  const collided = carState.obstacles.some((ob) => {
+    const obLeft = ob.lane * laneWidth + laneWidth * 0.25;
+    const obRight = obLeft + laneWidth * 0.5;
+    const obTop = ob.y;
+    const obBottom = ob.y + ob.height;
+    return (
+      carRect.right > obLeft &&
+      carRect.left < obRight &&
+      carRect.bottom > obTop &&
+      carRect.top < obBottom
+    );
+  });
+
+  if (collided) {
+    stopCar("Çarpıştı");
+    drawCarScene();
+    return;
+  }
+
+  updateCarHUD();
+  drawCarScene();
+  carLoop = requestAnimationFrame(stepCar);
+}
+
+function startCar() {
+  if (!carCtx) return;
+  resetCarState();
+  carState.running = true;
+  carState.status = "Yolda";
+  carState.lastTime = performance.now();
+  carLoop = requestAnimationFrame(stepCar);
+  updateCarHUD("Yolda");
+}
+
+function initCarGame() {
+  if (!carCanvas || carCtx) return;
+  carCtx = carCanvas.getContext("2d");
+  resetCarState();
+}
+
+// ─────────────────────────────
+//  GAME 3: HIDDENBEK TETRIS
+// ─────────────────────────────
+
+function createEmptyGrid() {
+  return Array.from({ length: tetrisConfig.rows }, () => Array(tetrisConfig.cols).fill(null));
+}
+
+function randomTetromino() {
+  const base = TETROMINOES[Math.floor(Math.random() * TETROMINOES.length)];
+  return {
+    matrix: base.shape.map((row) => [...row]),
+    color: base.color,
+    x: 3,
+    y: 0,
+  };
+}
+
+function rotateMatrix(matrix) {
+  const sizeY = matrix.length;
+  const sizeX = matrix[0].length;
+  const res = Array.from({ length: sizeX }, () => Array(sizeY).fill(0));
+  for (let y = 0; y < sizeY; y += 1) {
+    for (let x = 0; x < sizeX; x += 1) {
+      res[x][sizeY - 1 - y] = matrix[y][x];
+    }
+  }
+  return res;
+}
+
+function tetrisCollides(grid, piece) {
+  for (let y = 0; y < piece.matrix.length; y += 1) {
+    for (let x = 0; x < piece.matrix[y].length; x += 1) {
+      if (!piece.matrix[y][x]) continue;
+      const newX = piece.x + x;
+      const newY = piece.y + y;
+      if (newX < 0 || newX >= tetrisConfig.cols || newY >= tetrisConfig.rows) return true;
+      if (newY >= 0 && grid[newY][newX]) return true;
+    }
+  }
+  return false;
+}
+
+function mergePiece(grid, piece) {
+  piece.matrix.forEach((row, y) => {
+    row.forEach((val, x) => {
+      if (val) {
+        const gx = piece.x + x;
+        const gy = piece.y + y;
+        if (gy >= 0) grid[gy][gx] = piece.color;
+      }
+    });
+  });
+}
+
+function clearTetrisLines() {
+  let cleared = 0;
+  tetrisState.grid = tetrisState.grid.filter((row) => {
+    const full = row.every(Boolean);
+    if (full) cleared += 1;
+    return !full;
+  });
+  while (tetrisState.grid.length < tetrisConfig.rows) {
+    tetrisState.grid.unshift(Array(tetrisConfig.cols).fill(null));
+  }
+
+  if (cleared) {
+    tetrisState.lines += cleared;
+    tetrisState.score += cleared * 100;
+    if (tetrisScoreEl) tetrisScoreEl.textContent = tetrisState.score;
+    if (tetrisLinesEl) tetrisLinesEl.textContent = tetrisState.lines;
+  }
+}
+
+function drawTetrisScene() {
+  if (!tetrisCtx || !tetrisCanvas) return;
+  const { width, height } = tetrisCanvas;
+  tetrisCtx.fillStyle = "#0f172a";
+  tetrisCtx.fillRect(0, 0, width, height);
+
+  const block = tetrisConfig.block;
+  tetrisState.grid.forEach((row, y) => {
+    row.forEach((cell, x) => {
+      if (cell) {
+        tetrisCtx.fillStyle = cell;
+        tetrisCtx.fillRect(x * block + 1, y * block + 1, block - 2, block - 2);
+      }
+    });
+  });
+
+  if (tetrisState.piece) {
+    tetrisState.piece.matrix.forEach((row, y) => {
+      row.forEach((val, x) => {
+        if (val) {
+          tetrisCtx.fillStyle = tetrisState.piece.color;
+          tetrisCtx.fillRect(
+            (tetrisState.piece.x + x) * block + 1,
+            (tetrisState.piece.y + y) * block + 1,
+            block - 2,
+            block - 2
+          );
+        }
+      });
+    });
+  }
+}
+
+function tetrisMove(dir) {
+  if (!tetrisState.running || !tetrisState.piece) return;
+  const next = { ...tetrisState.piece, x: tetrisState.piece.x + dir };
+  if (!tetrisCollides(tetrisState.grid, next)) {
+    tetrisState.piece = next;
+    drawTetrisScene();
+  }
+}
+
+function tetrisRotate() {
+  if (!tetrisState.running || !tetrisState.piece) return;
+  const rotated = rotateMatrix(tetrisState.piece.matrix);
+  const candidate = { ...tetrisState.piece, matrix: rotated };
+  if (!tetrisCollides(tetrisState.grid, candidate)) {
+    tetrisState.piece = candidate;
+    drawTetrisScene();
+  }
+}
+
+function tetrisDrop(fast = false) {
+  if (!tetrisState.piece) return;
+  const next = { ...tetrisState.piece, y: tetrisState.piece.y + 1 };
+  if (!tetrisCollides(tetrisState.grid, next)) {
+    tetrisState.piece = next;
+    tetrisState.dropTimer = fast ? 0 : tetrisState.dropTimer;
+    return;
+  }
+  mergePiece(tetrisState.grid, tetrisState.piece);
+  clearTetrisLines();
+  tetrisState.piece = randomTetromino();
+  if (tetrisCollides(tetrisState.grid, tetrisState.piece)) {
+    stopTetris();
+  }
+}
+
+function stepTetris(timestamp) {
+  if (!tetrisState.running) return;
+  const delta = (timestamp - tetrisState.lastTime) || 16;
+  tetrisState.lastTime = timestamp;
+  tetrisState.dropTimer += delta;
+
+  if (tetrisState.dropTimer > tetrisState.dropInterval) {
+    tetrisDrop();
+    tetrisState.dropTimer = 0;
+  }
+
+  drawTetrisScene();
+  requestAnimationFrame(stepTetris);
+}
+
+function startTetris() {
+  if (!tetrisCtx) return;
+  tetrisState.running = true;
+  tetrisState.grid = createEmptyGrid();
+  tetrisState.piece = randomTetromino();
+  tetrisState.dropTimer = 0;
+  tetrisState.lastTime = performance.now();
+  tetrisState.score = 0;
+  tetrisState.lines = 0;
+  if (tetrisScoreEl) tetrisScoreEl.textContent = "0";
+  if (tetrisLinesEl) tetrisLinesEl.textContent = "0";
+  drawTetrisScene();
+  requestAnimationFrame(stepTetris);
+}
+
+function stopTetris() {
+  tetrisState.running = false;
+}
+
+function initTetris() {
+  if (!tetrisCanvas || tetrisCtx) return;
+  tetrisCtx = tetrisCanvas.getContext("2d");
+  tetrisState.grid = createEmptyGrid();
+  tetrisState.piece = randomTetromino();
+  drawTetrisScene();
+}
+
 function updateLayout(category) {
   const isHome = category === "hiddenback";
   layoutRoot?.classList.toggle("home-layout", isHome);
@@ -770,18 +1163,37 @@ function updateBackToTop() {
   backToTopBtn.classList.toggle("hidden", !shouldShow);
 }
 
-function setActiveGame(game) {
-  activeGame = "runner";
+function updateMobileHeaderHeight() {
+  if (!siteHeader) return;
+
+  const height = siteHeader.offsetHeight || 0;
+  document.documentElement.style.setProperty("--mobile-header-height", `${height}px`);
+}
+
+function setActiveGame(game = "runner") {
+  activeGame = game;
 
   gameTabButtons.forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.game === "runner");
+    btn.classList.toggle("active", btn.dataset.game === game);
   });
 
   gamePanels.forEach((panel) => {
-    panel.classList.toggle("hidden", panel.dataset.game !== "runner");
+    panel.classList.toggle("hidden", panel.dataset.game !== game);
   });
 
-  initRunner();
+  if (game === "runner") {
+    stopCar("Hazır");
+    stopTetris();
+    initRunner();
+  } else if (game === "car") {
+    stopRunner("runnerReadyStatus");
+    stopTetris();
+    initCarGame();
+  } else if (game === "tetris") {
+    stopRunner("runnerReadyStatus");
+    stopCar("Hazır");
+    initTetris();
+  }
 }
 
 function openDrawer() {
@@ -817,6 +1229,8 @@ function toggleSections(category) {
     setActiveGame(activeGame || "runner");
   } else {
     stopRunner("runnerReadyStatus");
+    stopCar("Hazır");
+    stopTetris();
   }
 
   updateLayout(category);
@@ -1006,7 +1420,7 @@ catButtons.forEach((btn) => {
 
 gameTabButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
-    setActiveGame("runner");
+    setActiveGame(btn.dataset.game || "runner");
   });
 });
 
@@ -1056,10 +1470,17 @@ function handleNav(destination) {
   btn.addEventListener("click", () => handleNav(btn.dataset.nav));
 });
 
+carStartBtn?.addEventListener("click", () => startCar());
+carLeftBtn?.addEventListener("click", () => moveCar("left"));
+carRightBtn?.addEventListener("click", () => moveCar("right"));
+tetrisStartBtn?.addEventListener("click", () => startTetris());
+tetrisRotateBtn?.addEventListener("click", () => tetrisRotate());
+
 drawerOverlay?.addEventListener("click", closeDrawer);
 drawerClose?.addEventListener("click", closeDrawer);
 
 window.addEventListener("resize", () => {
+  updateMobileHeaderHeight();
   updateDrawerTrigger();
   updateMobileTopMenu(MENU_CATEGORIES.has(activeCategory));
   if (!isMobileView()) {
@@ -1072,6 +1493,35 @@ window.addEventListener("resize", () => {
 window.addEventListener("scroll", () => {
   updateMenuArrow();
   updateBackToTop();
+});
+
+window.addEventListener("keydown", (event) => {
+  if (activeGame === "car" && carState.running) {
+    if (["arrowleft", "a"].includes(event.key.toLowerCase())) {
+      event.preventDefault();
+      moveCar("left");
+    } else if (["arrowright", "d"].includes(event.key.toLowerCase())) {
+      event.preventDefault();
+      moveCar("right");
+    }
+  }
+
+  if (activeGame === "tetris" && tetrisState.running) {
+    const key = event.key.toLowerCase();
+    if (key === "arrowleft" || key === "a") {
+      event.preventDefault();
+      tetrisMove(-1);
+    } else if (key === "arrowright" || key === "d") {
+      event.preventDefault();
+      tetrisMove(1);
+    } else if (key === "arrowup" || key === "w") {
+      event.preventDefault();
+      tetrisRotate();
+    } else if (key === "arrowdown" || key === "s") {
+      event.preventDefault();
+      tetrisDrop(true);
+    }
+  }
 });
 
 modal?.addEventListener("click", (event) => event.stopPropagation());
@@ -1111,6 +1561,7 @@ document.querySelectorAll(".intro-lang-btn").forEach((btn) => {
 
 (async () => {
   await initLanguage();
+  updateMobileHeaderHeight();
   setCategory(activeCategory);
   updateMenuArrow();
   updateBackToTop();
