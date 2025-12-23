@@ -315,6 +315,96 @@ const ITEMS = [
   { cat: "sicak", group: "dunya", title: "Yeşil Çay", price: 190, desc: "Yumuşak içimli yeşil çay.", img: itemImg("yesil_cay") }
 ];
 
+// ==== EXPORT ALL ITEMS -> GOOGLE SHEETS (TSV) ====
+function exportItemsToSheetsTSV() {
+  // Заголовки под Google Sheets
+  const headers = ["id", "cat", "group", "title", "price", "desc", "active", "sort"];
+
+  const rows = ITEMS.map((item, idx) => {
+    const id = getItemId(item);
+    const cat = item.cat || "";
+    const group = item.group || "";
+    const title = item.title || "";
+    const price = typeof item.price === "number" ? item.price : "";
+    const desc = item.desc || "";
+    const active = item.active === false ? "FALSE" : "TRUE";
+    const sort = item.sort ?? idx + 1;
+
+    // TSV: табы между колонками, строки через \n
+    return [id, cat, group, title, price, desc, active, sort]
+      .map((v) => String(v).replaceAll("\t", " ").replaceAll("\n", " "))
+      .join("\t");
+  });
+
+  const tsv = [headers.join("\t"), ...rows].join("\n");
+
+  // Скопировать в буфер
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard
+      .writeText(tsv)
+      .then(() => alert("✅ Export copied! Paste into Google Sheets (cell A1)."))
+      .catch(() => {
+        console.log(tsv);
+        alert("⚠️ Could not copy automatically. TSV printed in Console.");
+      });
+  } else {
+    console.log(tsv);
+    alert("⚠️ Clipboard not supported. TSV printed in Console.");
+  }
+
+  return tsv;
+}
+
+// Быстрый доступ из консоли:
+window.exportItemsToSheetsTSV = exportItemsToSheetsTSV;
+
+// ==== APPLY FULL SHEET DATA TO EXISTING ITEMS BY id ====
+const MENU_API_URL = window.MENU_API_URL || ""; // вставляется в index.html
+
+async function fetchSheetItems() {
+  if (!MENU_API_URL) return [];
+  const res = await fetch(`${MENU_API_URL}?t=${Date.now()}`, { cache: "no-store" });
+  if (!res.ok) return [];
+  const data = await res.json();
+  return Array.isArray(data.items) ? data.items : [];
+}
+
+function applySheetItemsToLocalItems(sheetItems) {
+  const map = new Map();
+  sheetItems.forEach((row) => {
+    const id = String(row.id || "").trim();
+    if (!id) return;
+
+    map.set(id, {
+      price: row.price,
+      desc: row.desc,
+      active: row.active,
+    });
+  });
+
+  ITEMS.forEach((item) => {
+    const id = getItemId(item);
+    const row = map.get(id);
+    if (!row) return;
+
+    // price
+    if (row.price !== "" && row.price != null) {
+      const p = Number(String(row.price).replace(",", "."));
+      if (Number.isFinite(p)) item.price = p;
+    }
+
+    // desc
+    if (typeof row.desc === "string") {
+      item.desc = row.desc;
+    }
+
+    // active
+    const a = String(row.active).toLowerCase();
+    if (a === "true" || row.active === true) item.active = true;
+    if (a === "false" || row.active === false) item.active = false;
+  });
+}
+
 // ─────────────────────────────
 //  RENDERING & INTERACTION LOGIC
 // ─────────────────────────────
@@ -1386,6 +1476,7 @@ function renderItems() {
   const renderedGroups = [];
 
   ITEMS.filter((item) => item.cat === activeCategory)
+    .filter((item) => item.active !== false)
     .filter(applyFilters)
     .forEach((item) => {
       const groupTitle = translateGroupTitle(activeCategory, item.group);
@@ -1622,6 +1713,15 @@ document.querySelectorAll(".intro-lang-btn").forEach((btn) => {
 });
 
 (async () => {
+  // 1) подгружаем таблицу и применяем обновления
+  try {
+    const sheetItems = await fetchSheetItems();
+    applySheetItemsToLocalItems(sheetItems);
+  } catch (e) {
+    console.warn("Sheet sync failed", e);
+  }
+
+  // 2) дальше всё как было
   await initLanguage();
   updateMobileHeaderHeight();
   setCategory(activeCategory);
