@@ -61,8 +61,8 @@
     "raceObstacles": "⬛ Obstacles",
     "raceRoad": "⬜ Road",
     "tetrisTitle": "HiddenBack Tetris",
-    "tetrisDesc": "A classic: stack lines and let the bricks spell Hiddenback. Controls: ← → move, ↑ rotate, ↓ to drop faster.",
-    "tetrisHint": "Score as many points as you can to prove you’re a Hiddenback fan.",
+    "tetrisDesc": "A classic: stack lines and let the bricks spell Hiddenback. Controls: ← → move, ↑ rotate, ↓ to drop faster; on mobile, use the arrows or swipe (tap to rotate).",
+    "tetrisHint": "Score as many points as you can. Swipe left/right or tap the on-screen arrows on mobile.",
     "tetrisBlocks": "🧱 Blocks",
     "tetrisBoard": "⬜ Board",
     "tetrisScore": "Score",
@@ -78,7 +78,10 @@
     "kahvalti": {
       "smoothie": "Smoothie Bowls"
     },
-    "bowl": {},
+    "bowl": {
+      "smoothie": "Smoothie Bowls",
+      "bowl": "Bowls"
+    },
     "lezzetler": {
       "vegetarian": "Vegetarian",
       "chicken": "Chicken"
