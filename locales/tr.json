@@ -61,8 +61,8 @@
     "raceObstacles": "⬛ Engeller",
     "raceRoad": "⬜ Yol",
     "tetrisTitle": "HiddenBack Tetris",
-    "tetrisDesc": "Klasik tetris: satırları doldur, tuğlalar Hiddenback’i yazsın. Kontroller: ← → hareket, ↑ döndür, ↓ hızlandır.",
-    "tetrisHint": "En yüksek puanı al ve Hiddenback hayranı olduğunu kanıtla.",
+    "tetrisDesc": "Klasik tetris: satırları doldur, tuğlalar Hiddenback’i yazsın. Kontroller: ← → hareket, ↑ döndür, ↓ hızlandır; mobilde ekrandaki okları veya kaydırmayı kullan (dokunuş döndürür).",
+    "tetrisHint": "En yüksek puanı al. Telefonda sola/sağa kaydır veya ekrandaki okları kullan.",
     "tetrisBlocks": "🧱 Bloklar",
     "tetrisBoard": "⬜ Tahta",
     "tetrisScore": "Skor",
@@ -78,7 +78,9 @@
     "kahvalti": {
       "smoothie": "Smoothie Bowl"
     },
-    "bowl": {},
+    "bowl": {
+      "smoothie": "Smoothie Bowl"
+    },
     "lezzetler": {
       "vegetarian": "Vejetaryen",
       "chicken": "Tavuklu"
