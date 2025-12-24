@@ -4,7 +4,7 @@
 
 const GROUP_TITLES = {
   kahvalti: { smoothie: "Smoothie Bowl" },
-  bowl: {},
+  bowl: { smoothie: "Smoothie Bowl" },
   lezzetler: {},
   tatli: {},
   matcha: {},
@@ -198,7 +198,8 @@ const ITEMS = [
   { cat: "kahvalti", group: "smoothie", title: "Berry Bowl", price: 200, desc: "Süzme yoğurt, bal, granola ve çilek.", img: itemImg("bowl1") },
   
   // ──────────── BOWL ────────────
-  { id: "smoothie_bowl", cat: "bowl", title: "Smoothie Bowl", price: 220, desc: "Yoğurt, mevsim meyveleri ve granola ile hafif ve ferah bir bowl.", img: itemImg("bowl1") },
+  { id: "bowl", cat: "bowl", group: "smoothie", title: "Acaí Bowl", price: 220, desc: "Acai özü, muz, böğürtlen, frambuaz ve granola.", img: itemImg("bowl") },
+  { id: "bowl1", cat: "bowl", group: "smoothie", title: "Berry Bowl", price: 200, desc: "Süzme yoğurt, bal, granola ve çilek.", img: itemImg("bowl1") },
   { cat: "bowl", title: "Basmatı Bowl", price: 260, desc: "Izgara tavuk göğsü, basmati pilavı, brokoli, havuç, Akdeniz yeşilliği ve zeytinyağı.", img: itemImg("bowl2") },
   { cat: "bowl", title: "Vegan Bowl", price: 220, desc: "Kavrulmuş nohut, mantar, avokado, bebek turp, Akdeniz yeşilliği, havuç ve zeytinyağı.", img: itemImg("bowl3") },
   { cat: "bowl", title: "Ton Balıklı Bowl", price: 260, desc: "Esmer pirinç, ton balığı, brokoli, havuç, Akdeniz yeşilliği, zeytinyağı ve salatalık turşusu.", img: itemImg("bowl4") },
@@ -1287,7 +1288,7 @@ function updateDrawerTrigger() {
 function updateMobileTopMenu(showMenu) {
   if (!mobileTopMenu) return;
 
-  const shouldShow = showMenu && isMobileView();
+  const shouldShow = showMenu;
   mobileTopMenu.classList.toggle("hidden", !shouldShow);
   if (shouldShow) {
     updateMenuArrow();

@@ -78,7 +78,9 @@
     "kahvalti": {
       "smoothie": "Смузи-боулы"
     },
-    "bowl": {},
+    "bowl": {
+      "smoothie": "Смузи-боулы"
+    },
     "lezzetler": {
       "vegetarian": "Вегетарианское",
       "chicken": "Куриное"

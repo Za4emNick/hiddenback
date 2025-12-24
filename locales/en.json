@@ -78,7 +78,9 @@
     "kahvalti": {
       "smoothie": "Smoothie Bowls"
     },
-    "bowl": {},
+    "bowl": {
+      "smoothie": "Smoothie Bowls"
+    },
     "lezzetler": {
       "vegetarian": "Vegetarian",
       "chicken": "Chicken"
