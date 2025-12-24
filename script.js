@@ -193,7 +193,6 @@ const ITEMS = [
   { cat: "kahvalti", title: "Kruvasan Çikolata & Çilek", price: 230, img: itemImg("kruvasan_cikolata_ve_cilek") },
   { cat: "kahvalti", title: "Menemen", price: 190, desc: "Yaz domatesiyle menemen, beyaz peynir ve ekşi maya ekmek.", img: itemImg("menemen") },
   { cat: "kahvalti", title: "Patates Tava", price: 160, desc: "Klasik kızarmış patates.", img: itemImg("patates_tava") },
-  { id: "smoothie_bowl", cat: "kahvalti", group: "smoothie", title: "Smoothie Bowl", price: 220, desc: "Yoğurt, mevsim meyveleri ve granola ile hazırlanan bol dolgulu smoothie bowl.", img: itemImg("bowl1") },
   { cat: "kahvalti", group: "smoothie", title: "Acaí Bowl", price: 220, desc: "Acai özü, muz, böğürtlen, frambuaz ve granola.", img: itemImg("bowl") },
   { cat: "kahvalti", group: "smoothie", title: "Berry Bowl", price: 200, desc: "Süzme yoğurt, bal, granola ve çilek.", img: itemImg("bowl1") },
   
