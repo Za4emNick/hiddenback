@@ -193,10 +193,12 @@ const ITEMS = [
   { cat: "kahvalti", title: "Kruvasan Çikolata & Çilek", price: 230, img: itemImg("kruvasan_cikolata_ve_cilek") },
   { cat: "kahvalti", title: "Menemen", price: 190, desc: "Yaz domatesiyle menemen, beyaz peynir ve ekşi maya ekmek.", img: itemImg("menemen") },
   { cat: "kahvalti", title: "Patates Tava", price: 160, desc: "Klasik kızarmış patates.", img: itemImg("patates_tava") },
+  { id: "smoothie_bowl", cat: "kahvalti", group: "smoothie", title: "Smoothie Bowl", price: 220, desc: "Yoğurt, mevsim meyveleri ve granola ile hazırlanan bol dolgulu smoothie bowl.", img: itemImg("bowl1") },
   { cat: "kahvalti", group: "smoothie", title: "Acaí Bowl", price: 220, desc: "Acai özü, muz, böğürtlen, frambuaz ve granola.", img: itemImg("bowl") },
   { cat: "kahvalti", group: "smoothie", title: "Berry Bowl", price: 200, desc: "Süzme yoğurt, bal, granola ve çilek.", img: itemImg("bowl1") },
   
   // ──────────── BOWL ────────────
+  { id: "smoothie_bowl", cat: "bowl", title: "Smoothie Bowl", price: 220, desc: "Yoğurt, mevsim meyveleri ve granola ile hafif ve ferah bir bowl.", img: itemImg("bowl1") },
   { cat: "bowl", title: "Basmatı Bowl", price: 260, desc: "Izgara tavuk göğsü, basmati pilavı, brokoli, havuç, Akdeniz yeşilliği ve zeytinyağı.", img: itemImg("bowl2") },
   { cat: "bowl", title: "Vegan Bowl", price: 220, desc: "Kavrulmuş nohut, mantar, avokado, bebek turp, Akdeniz yeşilliği, havuç ve zeytinyağı.", img: itemImg("bowl3") },
   { cat: "bowl", title: "Ton Balıklı Bowl", price: 260, desc: "Esmer pirinç, ton balığı, brokoli, havuç, Akdeniz yeşilliği, zeytinyağı ve salatalık turşusu.", img: itemImg("bowl4") },
@@ -431,6 +433,9 @@ const carStatusEl = document.getElementById("car-status");
 const tetrisCanvas = document.getElementById("tetris-canvas");
 const tetrisStartBtn = document.getElementById("tetris-start");
 const tetrisRotateBtn = document.getElementById("tetris-rotate");
+const tetrisLeftBtn = document.getElementById("tetris-left");
+const tetrisRightBtn = document.getElementById("tetris-right");
+const tetrisDropBtn = document.getElementById("tetris-drop");
 const tetrisScoreEl = document.getElementById("tetris-score");
 const tetrisLinesEl = document.getElementById("tetris-lines");
 
@@ -565,6 +570,7 @@ const tetrisState = {
   lines: 0,
 };
 
+const tetrisGesture = { startX: 0, startY: 0, active: false };
 let tetrisCtx = null;
 // ─────────────────────────────
 //  GAMES: HIDDENBACK RUN
@@ -1167,6 +1173,46 @@ function tetrisDrop(fast = false) {
   }
 }
 
+function tetrisPoint(evt) {
+  const touch = evt.changedTouches?.[0] || evt.touches?.[0] || evt;
+  return { x: touch?.clientX ?? 0, y: touch?.clientY ?? 0 };
+}
+
+function handleTetrisPointerStart(evt) {
+  if (evt.cancelable) evt.preventDefault();
+  const { x, y } = tetrisPoint(evt);
+  tetrisGesture.startX = x;
+  tetrisGesture.startY = y;
+  tetrisGesture.active = true;
+}
+
+function handleTetrisPointerEnd(evt) {
+  if (!tetrisGesture.active) return;
+  if (evt.cancelable) evt.preventDefault();
+  const { x, y } = tetrisPoint(evt);
+  const dx = x - tetrisGesture.startX;
+  const dy = y - tetrisGesture.startY;
+  tetrisGesture.active = false;
+
+  const absX = Math.abs(dx);
+  const absY = Math.abs(dy);
+  const threshold = 22;
+
+  if (absX < threshold && absY < threshold) {
+    tetrisRotate();
+    return;
+  }
+
+  if (absX > absY) {
+    if (dx > 0) tetrisMove(1);
+    else tetrisMove(-1);
+  } else if (dy > 0) {
+    tetrisDrop(true);
+  } else {
+    tetrisRotate();
+  }
+}
+
 function stepTetris(timestamp) {
   if (!tetrisState.running) return;
   const delta = (timestamp - tetrisState.lastTime) || 16;
@@ -1199,6 +1245,7 @@ function startTetris() {
   tetrisState.dropInterval = 370;
   tetrisState.score = 0;
   tetrisState.lines = 0;
+  tetrisGesture.active = false;
   if (tetrisScoreEl) tetrisScoreEl.textContent = "0";
   if (tetrisLinesEl) tetrisLinesEl.textContent = "0";
   drawTetrisScene();
@@ -1207,6 +1254,7 @@ function startTetris() {
 
 function stopTetris() {
   tetrisState.running = false;
+  tetrisGesture.active = false;
 }
 
 function initTetris() {
@@ -1628,6 +1676,21 @@ carLeftBtn?.addEventListener("click", () => moveCar("left"));
 carRightBtn?.addEventListener("click", () => moveCar("right"));
 tetrisStartBtn?.addEventListener("click", () => startTetris());
 tetrisRotateBtn?.addEventListener("click", () => tetrisRotate());
+tetrisLeftBtn?.addEventListener("click", () => tetrisMove(-1));
+tetrisRightBtn?.addEventListener("click", () => tetrisMove(1));
+tetrisDropBtn?.addEventListener("click", () => tetrisDrop(true));
+
+if (tetrisCanvas) {
+  tetrisCanvas.addEventListener("pointerdown", (evt) => {
+    if (evt.pointerType === "mouse" && !isMobileView()) return;
+    handleTetrisPointerStart(evt);
+  });
+  tetrisCanvas.addEventListener("pointerup", (evt) => {
+    if (evt.pointerType === "mouse" && !isMobileView()) return;
+    handleTetrisPointerEnd(evt);
+  });
+  tetrisCanvas.addEventListener("touchmove", (evt) => evt.preventDefault(), { passive: false });
+}
 
 drawerOverlay?.addEventListener("click", closeDrawer);
 drawerClose?.addEventListener("click", closeDrawer);
