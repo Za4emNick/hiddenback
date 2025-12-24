@@ -130,6 +130,10 @@
       "title": "Berry Bowl",
       "desc": "Greek yogurt, honey, granola, and strawberries."
     },
+    "smoothie_bowl": {
+      "title": "Smoothie Bowl",
+      "desc": "Greek yogurt, seasonal fruit, and crunchy granola."
+    },
     "bowl2": {
       "title": "Basmati Bowl",
       "desc": "Grilled chicken breast, basmati rice, broccoli, carrot, greens, and olive oil."
