@@ -129,6 +129,10 @@
       "title": "Berry Bowl",
       "desc": "Süzme yoğurt, bal, granola ve çilek."
     },
+    "smoothie_bowl": {
+      "title": "Smoothie Bowl",
+      "desc": "Yoğurt, mevsim meyveleri ve granola ile hazırlanan smoothie bowl."
+    },
     "bowl2": {
       "title": "Basmatı Bowl",
       "desc": "Izgara tavuk göğsü, basmati pilavı, brokoli, havuç, Akdeniz yeşilliği ve zeytinyağı."
