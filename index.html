@@ -792,6 +792,156 @@
       fill:#ffffff;
       flex:0 0 auto;
     }
+    /* Instagram widget dark theme */
+    #instagram-block{
+      background:#000000;
+      border-color:#0a0a0a;
+    }
+    #instagram-block .sk-instagram-feed{
+      background:#000000 !important;
+      color:#ffffff !important;
+      padding: 8px 0;
+    }
+    #instagram-block .sk-instagram-feed *{
+      color:#ffffff !important;
+    }
+    #instagram-block .sk-instagram-feed a[href*="sociablekit"]{
+      display:none !important;
+    }
+
+    /* === INSTAGRAM WIDGET: BLACK MODE === */
+    /* Общий контейнер виджета */
+    .instagram-widget,
+    .instagram-widget * {
+      background: #000 !important;
+      border: none !important;
+      box-shadow: none !important;
+      color: #fff !important;
+    }
+
+    /* iframe если используется embed */
+    .instagram-widget iframe {
+      background: #000 !important;
+      border: none !important;
+    }
+
+    /* === GRID === */
+    .instagram-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr); /* десктоп */
+      gap: 6px;
+      background: #000;
+    }
+
+    /* Фото */
+    .instagram-grid img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 0;
+      display: block;
+    }
+
+    /* === MOBILE: 3 ФОТО В РЯД === */
+    @media (max-width: 768px) {
+      .instagram-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+      }
+    }
+
+    /* Instagram widget dark theme */
+    #instagram-block{
+      background:#000000;
+      border-color:#0a0a0a;
+    }
+    #instagram-block .sk-instagram-feed{
+      background:#000000 !important;
+      color:#ffffff !important;
+      padding: 8px 0;
+    }
+    #instagram-block .sk-instagram-feed *{
+      color:#ffffff !important;
+    }
+    #instagram-block .sk-instagram-feed a[href*="sociablekit"]{
+      display:none !important;
+    }
+
+    /* === BLACK BACKGROUND ONLY (НЕ ТРОГАЕМ ФОТО) === */
+    /* Чёрный фон контейнера */
+    .instagram-widget {
+      background: #000 !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    /* Всё окружение — чёрное */
+    .instagram-widget *:not(img) {
+      background: #000 !important;
+      border: none !important;
+      box-shadow: none !important;
+      color: #fff !important;
+    }
+
+    /* iframe */
+    .instagram-widget iframe {
+      background: #000 !important;
+      border: none !important;
+    }
+
+    /* === GRID === */
+    .instagram-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      background: #000;
+    }
+
+    /* ФОТО — БЕЗ ИЗМЕНЕНИЙ */
+    .instagram-grid img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      filter: none !important;
+      mix-blend-mode: normal !important;
+      opacity: 1 !important;
+      border-radius: 0;
+      background: transparent !important;
+      display: block;
+    }
+
+    /* === MOBILE: 3 В РЯД === */
+    @media (max-width: 768px) {
+      .instagram-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+      }
+    }
+
+    /* === УБРАТЬ ЛИШНИЙ UI === */
+    .instagram-widget header,
+    .instagram-widget footer,
+    .instagram-widget svg,
+    .instagram-widget a:not(img) {
+      display: none !important;
+    }
+
+    /* Instagram widget dark theme */
+    #instagram-block{
+      background:#000000;
+      border-color:#0a0a0a;
+    }
+    #instagram-block .sk-instagram-feed{
+      background:#000000 !important;
+      color:#ffffff !important;
+      padding: 8px 0;
+    }
+    #instagram-block .sk-instagram-feed *{
+      color:#ffffff !important;
+    }
+    #instagram-block .sk-instagram-feed a[href*="sociablekit"]{
+      display:none !important;
+    }
 
     /* Instagram widget dark theme */
     #instagram-block{
