@@ -750,266 +750,84 @@
       color: rgba(255,255,255,0.8);
     }
 
-    /* Instagram embed overrides */
-    .hb-ig {
-      color: #e5e7eb;
-    }
-    .hb-ig-title{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-weight:800;
-      color:#ffffff;
-      font-size:20px;
-      margin: 0 0 14px 0;
-      letter-spacing: .2px;
-    }
-    .hb-ig-label{
-      font-weight:500;
-      color:#ffffff;
-    }
-    .hb-ig-btn{
-      padding: 6px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.3);
-      color: #ffffff;
-      background: rgba(255,255,255,0.08);
-      font-weight:600;
-      font-size: 14px;
-      line-height: 1.2;
-      transition: background 0.16s ease, border-color 0.16s ease, transform 0.12s ease;
-    }
-    .hb-ig-btn:hover,
-    .hb-ig-btn:focus-visible{
-      background: rgba(255,255,255,0.14);
-      border-color: rgba(255,255,255,0.5);
-      transform: translateY(-1px);
-      outline: none;
-    }
-    .hb-ig-icon{
-      width:22px;
-      height:22px;
-      fill:#ffffff;
-      flex:0 0 auto;
-    }
-    /* Instagram widget dark theme */
-    #instagram-block{
-      background:#000000;
-      border-color:#0a0a0a;
-    }
-    #instagram-block .sk-instagram-feed{
-      background:#000000 !important;
-      color:#ffffff !important;
-      padding: 8px 0;
-    }
-    #instagram-block .sk-instagram-feed *{
-      color:#ffffff !important;
-    }
-    #instagram-block .sk-instagram-feed a[href*="sociablekit"]{
-      display:none !important;
-    }
+    /* =============================== */
+    /*    HIDDENBACK INSTAGRAM – CLEAN  */
+    /* =============================== */
 
-    /* === INSTAGRAM WIDGET: BLACK MODE === */
-    /* Общий контейнер виджета */
-    .instagram-widget,
-    .instagram-widget * {
-      background: #000 !important;
-      border: none !important;
-      box-shadow: none !important;
-      color: #fff !important;
-    }
-
-    /* iframe если используется embed */
-    .instagram-widget iframe {
-      background: #000 !important;
-      border: none !important;
-    }
-
-    /* === GRID === */
-    .instagram-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr); /* десктоп */
-      gap: 6px;
+    .hb-instagram {
       background: #000;
+      padding: 12px;
     }
 
-    /* Фото */
-    .instagram-grid img {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
-      border-radius: 0;
-      display: block;
-    }
-
-    /* === MOBILE: 3 ФОТО В РЯД === */
-    @media (max-width: 768px) {
-      .instagram-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 4px;
-      }
-    }
-
-    /* Instagram widget dark theme */
-    #instagram-block{
-      background:#000000;
-      border-color:#0a0a0a;
-    }
-    #instagram-block .sk-instagram-feed{
-      background:#000000 !important;
-      color:#ffffff !important;
-      padding: 8px 0;
-    }
-    #instagram-block .sk-instagram-feed *{
-      color:#ffffff !important;
-    }
-    #instagram-block .sk-instagram-feed a[href*="sociablekit"]{
-      display:none !important;
-    }
-
-    /* === BLACK BACKGROUND ONLY (НЕ ТРОГАЕМ ФОТО) === */
-    /* Чёрный фон контейнера */
-    .instagram-widget {
-      background: #000 !important;
-      border: none !important;
-      box-shadow: none !important;
-    }
-
-    /* Всё окружение — чёрное */
-    .instagram-widget *:not(img) {
-      background: #000 !important;
-      border: none !important;
-      box-shadow: none !important;
-      color: #fff !important;
-    }
-
-    /* iframe */
-    .instagram-widget iframe {
-      background: #000 !important;
-      border: none !important;
-    }
-
-    /* === GRID === */
-    .instagram-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
-      background: #000;
-    }
-
-    /* ФОТО — БЕЗ ИЗМЕНЕНИЙ */
-    .instagram-grid img {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
-      filter: none !important;
-      mix-blend-mode: normal !important;
-      opacity: 1 !important;
-      border-radius: 0;
-      background: transparent !important;
-      display: block;
-    }
-
-    /* === MOBILE: 3 В РЯД === */
-    @media (max-width: 768px) {
-      .instagram-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 4px;
-      }
-    }
-
-    /* === УБРАТЬ ЛИШНИЙ UI === */
-    .instagram-widget header,
-    .instagram-widget footer,
-    .instagram-widget svg,
-    .instagram-widget a:not(img) {
+    /* --- УБИРАЕМ ВСЮ ШАПКУ И ПРОФИЛЬ --- */
+    .hb-instagram header,
+    .hb-instagram .sk-header,
+    .hb-instagram .sk-profile,
+    .hb-instagram .sk-profile-header,
+    .hb-instagram .sk-instagram-profile,
+    .hb-instagram .sk-instagram-profile-header,
+    .hb-instagram .sk-instagram-profile-info,
+    .hb-instagram .sk-instagram-profile-avatar,
+    .hb-instagram .sk-instagram-profile-stats,
+    .hb-instagram .sk-instagram-profile-bio,
+    .hb-instagram .sk-instagram-profile-follow,
+    .hb-instagram .sk-instagram-profile-button,
+    .hb-instagram .sk-branding,
+    .hb-instagram .sk-footer,
+    .hb-instagram a[href*="sociablekit.com"] {
       display: none !important;
     }
 
-    /* Instagram widget dark theme */
-    #instagram-block{
-      background:#000000;
-      border-color:#0a0a0a;
-    }
-    #instagram-block .sk-instagram-feed{
-      background:#000000 !important;
-      color:#ffffff !important;
-      padding: 8px 0;
-    }
-    #instagram-block .sk-instagram-feed *{
-      color:#ffffff !important;
-    }
-    #instagram-block .sk-instagram-feed a[href*="sociablekit"]{
-      display:none !important;
+    /* --- УБИРАЕМ ФОНЫ И ЛИНИИ --- */
+    .hb-instagram *,
+    .hb-instagram *::before,
+    .hb-instagram *::after {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
     }
 
-    /* Instagram widget dark theme */
-    #instagram-block{
-      background:#000000;
-      border-color:#0a0a0a;
-    }
-    #instagram-block .sk-instagram-feed{
-      background:#000000 !important;
-      color:#ffffff !important;
-      padding: 8px 0;
-    }
-    #instagram-block .sk-instagram-feed *{
-      color:#ffffff !important;
-    }
-    #instagram-block .sk-instagram-feed a[href*="sociablekit"]{
-      display:none !important;
+    /* =============================== */
+    /*    ПРИНУДИТЕЛЬНО ДЕЛАЕМ GRID     */
+    /* =============================== */
+
+    /* контейнер ленты */
+    .hb-instagram .sk-instagram-feed,
+    .hb-instagram .sk-instagram-posts,
+    .hb-instagram .sk-instagram-media {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 6px !important;
     }
 
-    /* Instagram widget dark theme */
-    #instagram-block{
-      background:#000000;
-      border-color:#0a0a0a;
+    /* каждая карточка */
+    .hb-instagram .sk-instagram-post,
+    .hb-instagram .sk-instagram-media-item {
+      width: 100% !important;
+      max-width: 100% !important;
     }
-    #instagram-block .sk-instagram-feed{
-      background:#000000 !important;
-      color:#ffffff !important;
-      padding: 8px 0;
+
+    /* =============================== */
+    /*           КАРТИНКИ              */
+    /* =============================== */
+
+    .hb-instagram img {
+      width: 100% !important;
+      height: 100% !important;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 6px;
+      display: block;
     }
-    #instagram-block .sk-instagram-feed *{
-      color:#ffffff !important;
-    }
-    #instagram-block .sk-instagram-feed a[href*="sociablekit"]{
-      display:none !important;
-    }
-    /* Mobile: make Instagram cards smaller (2 per row) */
+
+    /* =============================== */
+    /*            МОБИЛКА              */
+    /* =============================== */
     @media (max-width: 768px) {
-      #instagram-block .sk-instagram-feed {
-        display: grid !important;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 8px;
-      }
-      #instagram-block .sk-instagram-feed img {
-        width: 100% !important;
-        height: auto !important;
-        object-fit: cover;
-        display: block;
+      .hb-instagram {
+        padding: 8px;
       }
     }
-
-    /* Instagram widget dark theme */
-    #instagram-block{
-      background:#000000;
-      border-color:#0a0a0a;
-    }
-    #instagram-block .sk-instagram-feed{
-      background:#000000 !important;
-      color:#ffffff !important;
-      padding: 8px 0;
-    }
-    #instagram-block .sk-instagram-feed *{
-      color:#ffffff !important;
-    }
-    #instagram-block .sk-instagram-feed a[href*="sociablekit"]{
-      display:none !important;
-    }
-
-    /* Hide obvious promo/extra blocks (best-effort) */
-    .hb-ig .tabs-inofd{ display:none !important; }
 
   </style>
 </head>
@@ -1235,19 +1053,12 @@
       <!-- Instagram bloğu (yalnızca HiddenBack; JS ile göstereceğiz/gizleyeceğiz) -->
       <div id="instagram-block"
            class="bg-[#0b0b0f] border border-[#1f1f24] rounded-2xl p-4 sm:p-5 text-white">
-        <!-- Instagram block (bottom of hakkimizda) -->
-        <div class="hb-ig">
-          <div class="hb-ig-title">
-            <!-- Instagram icon (inline SVG) -->
-            <svg class="hb-ig-icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9Zm4.5 4.3A5.7 5.7 0 1 1 6.3 14 5.7 5.7 0 0 1 12 8.3Zm0 2A3.7 3.7 0 1 0 15.7 14 3.7 3.7 0 0 0 12 10.3ZM18 6.8a1.1 1.1 0 1 1-1.1-1.1A1.1 1.1 0 0 1 18 6.8Z"></path>
-            </svg>
-
-            <span class="hb-ig-label">@hiddenbackk</span>
-            <a class="hb-ig-btn" href="https://www.instagram.com/hiddenbackk/" target="_blank" rel="noreferrer">Instagram</a>
-          </div>
-
+        <!-- HiddenBack Instagram (SociableKit) -->
+        <div class="hb-instagram">
+          <div class="sk-instagram-feed" data-embed-id="25637471"></div>
         </div>
+
+        <script src="https://widgets.sociablekit.com/instagram-feed/widget.js" defer></script>
       </div>
 
       <!-- GAMES -->
