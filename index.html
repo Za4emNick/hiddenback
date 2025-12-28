@@ -793,6 +793,15 @@
       flex:0 0 auto;
     }
 
+    /* Hide SociableKit promo line if present */
+    .hb-ig a[href*="sociablekit.com"],
+    .hb-ig .sk-powered-by,
+    .hb-ig .sk-embed-footer,
+    .hb-ig .sk-footer,
+    .hb-ig .sk-branding {
+      display: none !important;
+    }
+
     /* Hide obvious promo/extra blocks (best-effort) */
     .hb-ig .tabs-inofd{ display:none !important; }
 
