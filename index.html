@@ -943,6 +943,23 @@
       display:none !important;
     }
 
+    /* Instagram widget dark theme */
+    #instagram-block{
+      background:#000000;
+      border-color:#0a0a0a;
+    }
+    #instagram-block .sk-instagram-feed{
+      background:#000000 !important;
+      color:#ffffff !important;
+      padding: 8px 0;
+    }
+    #instagram-block .sk-instagram-feed *{
+      color:#ffffff !important;
+    }
+    #instagram-block .sk-instagram-feed a[href*="sociablekit"]{
+      display:none !important;
+    }
+
     /* Hide obvious promo/extra blocks (best-effort) */
     .hb-ig .tabs-inofd{ display:none !important; }
 
@@ -1192,9 +1209,7 @@
             <a class="hb-ig-btn" href="https://www.instagram.com/hiddenbackk/" target="_blank" rel="noreferrer">Instagram</a>
           </div>
 
-          <div class="instagram-widget">
-            <div class="sk-instagram-feed instagram-grid" data-embed-id="25635227"></div>
-          </div>
+          <div class="sk-instagram-feed" data-embed-id="25635227"></div>
           <script src="https://widgets.sociablekit.com/instagram-feed/widget.js" defer></script>
         </div>
       </div>
