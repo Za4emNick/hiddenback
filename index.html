@@ -809,6 +809,64 @@
       display:none !important;
     }
 
+    /* === INSTAGRAM WIDGET: BLACK MODE === */
+    /* Общий контейнер виджета */
+    .instagram-widget,
+    .instagram-widget * {
+      background: #000 !important;
+      border: none !important;
+      box-shadow: none !important;
+      color: #fff !important;
+    }
+
+    /* iframe если используется embed */
+    .instagram-widget iframe {
+      background: #000 !important;
+      border: none !important;
+    }
+
+    /* === GRID === */
+    .instagram-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr); /* десктоп */
+      gap: 6px;
+      background: #000;
+    }
+
+    /* Фото */
+    .instagram-grid img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 0;
+      display: block;
+    }
+
+    /* === MOBILE: 3 ФОТО В РЯД === */
+    @media (max-width: 768px) {
+      .instagram-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+      }
+    }
+
+    /* Instagram widget dark theme */
+    #instagram-block{
+      background:#000000;
+      border-color:#0a0a0a;
+    }
+    #instagram-block .sk-instagram-feed{
+      background:#000000 !important;
+      color:#ffffff !important;
+      padding: 8px 0;
+    }
+    #instagram-block .sk-instagram-feed *{
+      color:#ffffff !important;
+    }
+    #instagram-block .sk-instagram-feed a[href*="sociablekit"]{
+      display:none !important;
+    }
+
     /* Hide obvious promo/extra blocks (best-effort) */
     .hb-ig .tabs-inofd{ display:none !important; }
 
@@ -1058,7 +1116,9 @@
             <a class="hb-ig-btn" href="https://www.instagram.com/hiddenbackk/" target="_blank" rel="noreferrer">Instagram</a>
           </div>
 
-          <div class="sk-instagram-feed" data-embed-id="25635227"></div>
+          <div class="instagram-widget">
+            <div class="sk-instagram-feed instagram-grid" data-embed-id="25635227"></div>
+          </div>
           <script src="https://widgets.sociablekit.com/instagram-feed/widget.js" defer></script>
         </div>
       </div>
