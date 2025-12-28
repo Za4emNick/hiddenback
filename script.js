@@ -377,11 +377,14 @@ function applySheetItemsToLocalItems(sheetItems) {
     const id = String(row.id || "").trim();
     if (!id) return;
 
-    map.set(id, {
-      price: row.price,
-      desc: row.desc,
-      active: row.active,
-    });
+  map.set(id, {
+    price: row.price,
+    desc: row.desc,
+    title: row.title,   // ✅ добавили
+    sort: row.sort,     // ✅ опционально (если хочешь менять порядок из таблицы)
+    active: row.active,
+  });
+
   });
 
   ITEMS.forEach((item) => {
@@ -399,6 +402,17 @@ function applySheetItemsToLocalItems(sheetItems) {
     if (typeof row.desc === "string") {
       item.desc = row.desc;
     }
+    // title
+    if (typeof row.title === "string" && row.title.trim()) {
+      item.title = row.title.trim();
+    }
+    
+    // sort (если хочешь управлять порядком из таблицы)
+    if (row.sort !== "" && row.sort != null) {
+      const s = Number(String(row.sort).replace(",", "."));
+      if (Number.isFinite(s)) item.sort = s;
+    }  
+
 
     // active
     const a = String(row.active).toLowerCase();
@@ -1526,6 +1540,7 @@ function renderItems() {
   ITEMS.filter((item) => item.cat === activeCategory)
     .filter((item) => item.active !== false)
     .filter(applyFilters)
+    .sort((a, b) => (a.sort ?? 9999) - (b.sort ?? 9999))  // ✅ добавили
     .forEach((item) => {
       const groupTitle = translateGroupTitle(activeCategory, item.group);
       if (groupTitle && !addedGroup.has(item.group)) {
