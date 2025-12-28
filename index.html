@@ -793,6 +793,23 @@
       flex:0 0 auto;
     }
 
+    /* Instagram widget dark theme */
+    #instagram-block{
+      background:#000000;
+      border-color:#0a0a0a;
+    }
+    #instagram-block .sk-instagram-feed{
+      background:#000000 !important;
+      color:#ffffff !important;
+      padding: 8px 0;
+    }
+    #instagram-block .sk-instagram-feed *{
+      color:#ffffff !important;
+    }
+    #instagram-block .sk-instagram-feed a[href*="sociablekit"]{
+      display:none !important;
+    }
+
     /* Hide obvious promo/extra blocks (best-effort) */
     .hb-ig .tabs-inofd{ display:none !important; }
 
@@ -1042,50 +1059,8 @@
             <a class="hb-ig-btn" href="https://www.instagram.com/hiddenbackk/" target="_blank" rel="noreferrer">Instagram</a>
           </div>
 
-          <!-- Your Socactive widget code -->
-          <style>.instawall-root360{min-height:80px;margin:0 auto}</style>
-          <script>
-            window['instawall360']={
-              "token":"rrhcmKHBqra7JqwI0ehXgeIURiD6FmZfxD+1rGJOA0EV+9ZTJi8fwUG6e3SKBrn+GU1vXI0wyMT8F+ZTfDHcqw8JlJh5sPOAMmGFzcfvP+NTKMY6nKF6/eX/BNvIZJU=",
-              "root_tagid":"instawall-root360",
-              "card_padding":"5",
-              "card_border_radius":"5",
-              "card_count":"3",
-              "layout_max_width":"1128",
-              "count_post":"12",
-              "header_text_size":"20",
-              "header_text_color":"#000000",
-              "header_logo_size":"50",
-              "header_button_text":"Подписаться",
-              "header_button_text_size":"12",
-              "header_button_text_color":"#ffffff",
-              "header_button_background_color":"#0095f6",
-              "hide_groupname":"1",
-              "hide_text":"0",
-              "hide_shadow":"1",
-              "show_header":"0",
-              "show_header_logo":"1",
-              "show_header_button":"1"
-            };
-          </script>
-
-          <div id="instawall-root360" class="instawall instawall-root360"></div>
-
-          <script>
-            (function(d, s, id){
-              var js, dfjs = d.getElementsByTagName(s)[0];
-              if (d.getElementById(id)) {return;}
-              js = d.createElement(s);
-              js.id = id;
-              js.setAttribute("data-scriptid", "360");
-              js.src = "https://socactive.com/widgets/instawall/i.js?id=360&r="+Math.random();
-              dfjs.parentNode.insertBefore(js, dfjs);
-            }(document, "script", "instawall-export360"));
-          </script>
-
-          <!-- Keep this hidden / remove entirely (you already had it) -->
-          <style>.tabs-inofd{margin-top:-22px;opacity:0;padding-left:6px;}</style>
-          <div class="tabs-inofd"><a href="https://ev2.ru/city/1" target="_blank">Афиша</a></div>
+          <div class="sk-instagram-feed" data-embed-id="25635227"></div>
+          <script src="https://widgets.sociablekit.com/instagram-feed/widget.js" defer></script>
         </div>
       </div>
 
