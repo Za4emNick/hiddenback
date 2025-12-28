@@ -52,16 +52,20 @@
     // нормализация и фильтры
     return items
       .map((x) => ({
-        id: x.id,
-        category: String(x.category ?? "other").trim().toLowerCase(),
-        name: String(x.name ?? "").trim(),
-        description: String(x.description ?? "").trim(),
+        id: String(x.id ?? "").trim(),
+        category: String(x.cat ?? "other").trim().toLowerCase(),     // было x.category
+        name: String(x.title ?? "").trim(),                          // было x.name
+        description: String(x.desc ?? "").trim(),                    // было x.description
         price: x.price,
-        active: String(x.active).toLowerCase() === "true" || x.active === true,
+        active:
+          x.active === true ||
+          String(x.active ?? "").trim().toLowerCase() === "true" ||
+          String(x.active ?? "").trim().toLowerCase() === "yes",
         sort: Number(x.sort) || 0,
       }))
       .filter((x) => x.active && x.name)
       .sort((a, b) => (a.sort || 0) - (b.sort || 0));
+
   }
 
   function groupByCategory(items) {
