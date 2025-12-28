@@ -91,11 +91,15 @@ function applyStaticTranslations() {
 function translateMenuItem(item) {
   const itemId = getItemId(item);
   const menuEntry = translations.menu?.[itemId] || {};
+  const useMenuTranslation = currentLang !== DEFAULT_LANG; // DEFAULT_LANG = "tr"
+
   return {
     ...item,
     id: itemId,
-    title: menuEntry.title || item.title,
-    desc: item.suppressDesc ? "" : (menuEntry.desc || item.desc),
+    title: useMenuTranslation ? (menuEntry.title || item.title) : item.title,
+    desc: item.suppressDesc
+      ? "" // если suppressDesc=true, описание скрыто всегда
+      : (useMenuTranslation ? (menuEntry.desc || item.desc) : item.desc),
   };
 }
 
@@ -373,18 +377,18 @@ async function fetchSheetItems() {
 
 function applySheetItemsToLocalItems(sheetItems) {
   const map = new Map();
+
   sheetItems.forEach((row) => {
     const id = String(row.id || "").trim();
     if (!id) return;
 
-  map.set(id, {
-    price: row.price,
-    desc: row.desc,
-    title: row.title,   // ✅ добавили
-    sort: row.sort,     // ✅ опционально (если хочешь менять порядок из таблицы)
-    active: row.active,
-  });
-
+    map.set(id, {
+      price: row.price,
+      desc: row.desc,
+      title: row.title,
+      sort: row.sort,
+      active: row.active,
+    });
   });
 
   ITEMS.forEach((item) => {
@@ -398,24 +402,25 @@ function applySheetItemsToLocalItems(sheetItems) {
       if (Number.isFinite(p)) item.price = p;
     }
 
-    // desc
-    if (typeof row.desc === "string") {
-      item.desc = row.desc;
+    // title (ВСЕГДА строкой)
+    if (row.title !== undefined && row.title !== null) {
+      const t = String(row.title).trim();
+      if (t) item.title = t;
     }
-    // title
-    if (typeof row.title === "string" && row.title.trim()) {
-      item.title = row.title.trim();
+
+    // desc (ВСЕГДА строкой)
+    if (row.desc !== undefined && row.desc !== null) {
+      item.desc = String(row.desc).trim();
     }
-    
-    // sort (если хочешь управлять порядком из таблицы)
+
+    // sort (если нужен порядок из таблицы)
     if (row.sort !== "" && row.sort != null) {
       const s = Number(String(row.sort).replace(",", "."));
       if (Number.isFinite(s)) item.sort = s;
-    }  
-
+    }
 
     // active
-    const a = String(row.active).toLowerCase();
+    const a = String(row.active).trim().toLowerCase();
     if (a === "true" || row.active === true) item.active = true;
     if (a === "false" || row.active === false) item.active = false;
   });
@@ -1540,7 +1545,7 @@ function renderItems() {
   ITEMS.filter((item) => item.cat === activeCategory)
     .filter((item) => item.active !== false)
     .filter(applyFilters)
-    .sort((a, b) => (a.sort ?? 9999) - (b.sort ?? 9999))  // ✅ добавили
+    .sort((a, b) => (a.sort ?? 9999) - (b.sort ?? 9999))
     .forEach((item) => {
       const groupTitle = translateGroupTitle(activeCategory, item.group);
       if (groupTitle && !addedGroup.has(item.group)) {
@@ -1794,6 +1799,7 @@ document.querySelectorAll(".intro-lang-btn").forEach((btn) => {
   // 1) подгружаем таблицу и применяем обновления
   try {
     const sheetItems = await fetchSheetItems();
+    console.log("SHEET ITEMS:", sheetItems.length, sheetItems[0]);
     applySheetItemsToLocalItems(sheetItems);
   } catch (e) {
     console.warn("Sheet sync failed", e);
