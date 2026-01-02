@@ -3,7 +3,7 @@
 // ─────────────────────────────
 
 const GROUP_TITLES = {
-  kahvalti: { smoothie: "Smoothie Bowl" },
+  kahvalti: { kahvalti: "Kahvaltı", smoothie: "Smoothie Bowl" },
   bowl: { smoothie: "Smoothie Bowl", bowl: "Bowl" },
   lezzetler: {},
   tatli: {},
@@ -43,13 +43,51 @@ let translations = {};
 const hiddenLogo = new Image();
 hiddenLogo.src = "logo-x-x.jpg";
 
+function normStr(v) {
+  return String(v ?? "").trim();
+}
+
+function baseIdFromAny(item) {
+  const raw = normStr(item?.id) || normStr(item?.rawId) || normStr(item?.title);
+  return raw
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9ğüşöçıİ\s_-]+/gi, "")
+    .replace(/\s+/g, "_")
+    .replace(/_+/g, "_")
+    .replace(/^_+|_+$/g, "");
+}
+
+function normalizedGroup(cat, group) {
+  const c = normStr(cat).toLowerCase();
+  const g = normStr(group);
+  if (!g && c === "kahvalti") return "kahvalti";
+  return g || "";
+}
+
+function makeUniqueId(item) {
+  const base = baseIdFromAny(item);
+  const cat = normStr(item?.cat).toLowerCase();
+  const grp = normalizedGroup(cat, item?.group).toLowerCase();
+  return [base, cat, grp].filter(Boolean).join("__");
+}
+
+function getBaseFromUniqueId(uid) {
+  return String(uid || "").split("__")[0];
+}
+
+function enrichItems(items) {
+  return items.map((it) => {
+    const obj = { ...it };
+    obj.baseId = baseIdFromAny(obj);
+    obj.group = normalizedGroup(obj.cat, obj.group);
+    obj.uid = makeUniqueId(obj);
+    return obj;
+  });
+}
+
 function getItemId(item) {
-  if (item.id) return item.id;
-  if (item.img) {
-    const last = item.img.split("/").pop() || "";
-    return last.replace(/\.\w+$/, "");
-  }
-  return item.title?.toLowerCase().replace(/[^a-z0-9]+/gi, "_") || "";
+  return item?.uid || makeUniqueId(item);
 }
 
 function refreshUiText() {
@@ -89,13 +127,14 @@ function applyStaticTranslations() {
 }
 
 function translateMenuItem(item) {
-  const itemId = getItemId(item);
+  const itemId = item.uid;
   const menuEntry = translations.menu?.[itemId] || {};
   const useMenuTranslation = currentLang !== DEFAULT_LANG; // DEFAULT_LANG = "tr"
 
   return {
     ...item,
     id: itemId,
+    img: itemImg(item),
     title: useMenuTranslation ? (menuEntry.title || item.title) : item.title,
     desc: item.suppressDesc
       ? "" // если suppressDesc=true, описание скрыто всегда
@@ -175,13 +214,19 @@ async function initLanguage() {
   }
 }
 
-const itemImg = (name) => `images/items/${name}.webp`;
+function itemImg(input) {
+  if (typeof input === "string") {
+    return `images/items/${input}.webp`;
+  }
+  const base = input?.baseId || getBaseFromUniqueId(input?.uid) || baseIdFromAny(input);
+  return `images/items/${base}.webp`;
+}
 
 // ─────────────────────────────
 //  MENU ITEMS — GÜNCEL LISTE
 // ─────────────────────────────
 
-const ITEMS = [
+const RAW_ITEMS = [
   // ──────────── KAHVALTI ────────────
   { cat: "kahvalti", title: "Mini Kahvaltı", price: 280, desc: "Göz yumurta, beyaz peynir, mini smoothie bowl, zeytinler, domates, salatalık, patates kızartması, ekşi maya ekmek ve çay.", img: itemImg("mini_kahvalti") },
   { cat: "kahvalti", title: "Ekmek Üstü Yumurta & Avokado", price: 240, desc: "Ekşi maya ekmek üstü taze peynir, çırpılmış yumurta, avokado ve mini smoothie bowl.", img: itemImg("ekmek_ustu_yumurta_ve_avokado") },
@@ -321,13 +366,15 @@ const ITEMS = [
   { cat: "sicak", group: "dunya", title: "Yeşil Çay", price: 190, desc: "Yumuşak içimli yeşil çay.", img: itemImg("yesil_cay") }
 ];
 
+let ITEMS = enrichItems(RAW_ITEMS);
+
 // ==== EXPORT ALL ITEMS -> GOOGLE SHEETS (TSV) ====
 function exportItemsToSheetsTSV() {
   // Заголовки под Google Sheets
   const headers = ["id", "cat", "group", "title", "price", "desc", "active", "sort"];
 
   const rows = ITEMS.map((item, idx) => {
-    const id = getItemId(item);
+    const id = item.uid;
     const cat = item.cat || "";
     const group = item.group || "";
     const title = item.title || "";
@@ -365,66 +412,62 @@ function exportItemsToSheetsTSV() {
 window.exportItemsToSheetsTSV = exportItemsToSheetsTSV;
 
 // ==== APPLY FULL SHEET DATA TO EXISTING ITEMS BY id ====
-const MENU_API_URL = window.MENU_API_URL || ""; // вставляется в index.html
+const SHEET_API_URL = window.MENU_API_URL || ""; // вставляется в index.html
 const DEBUG_SORT = false;
 
 async function fetchSheetItems() {
-  if (!MENU_API_URL) return [];
-  const res = await fetch(`${MENU_API_URL}?t=${Date.now()}`, { cache: "no-store" });
-  if (!res.ok) return [];
+  // ВАЖНО: сюда вставь свой URL веб-аппа Apps Script
+  const url = SHEET_API_URL; // или строкой: "https://script.google.com/macros/s/...../exec"
+
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) throw new Error("Sheet API error: " + res.status);
+
   const data = await res.json();
-  return Array.isArray(data.items) ? data.items : [];
-}
+  const items = Array.isArray(data?.items) ? data.items : [];
 
-function applySheetItemsToLocalItems(sheetItems) {
-  const map = new Map();
+  const map = {};
+  for (const row of items) {
+    const uid = (row?.uid ?? row?.id ?? "").toString().trim();
+    if (!uid) continue;
 
-  sheetItems.forEach((row) => {
-    const id = String(row.id || "").trim();
-    if (!id) return;
+    // фиксируем uid, чтобы дальше всё матчило
+    row.uid = uid;
 
-    map.set(id, {
-      price: row.price,
-      desc: row.desc,
-      title: row.title,
-      sort: toNum(row.sort ?? row.order_by, 0),
-      active: row.active,
-    });
-  });
+    // активность (если нет колонки active — считаем true)
+    const a = row.active;
+    row.active = a === true || String(a).toLowerCase() === "true" || a === 1 || String(a) === "1" || a === "" || a == null;
 
-  ITEMS.forEach((item) => {
-    const id = getItemId(item);
-    const row = map.get(id);
-    if (!row) return;
-
-    // price
+    // цена в число
     if (row.price !== "" && row.price != null) {
       const p = Number(String(row.price).replace(",", "."));
-      if (Number.isFinite(p)) item.price = p;
+      if (Number.isFinite(p)) row.price = p;
     }
 
-    // title (ВСЕГДА строкой)
-    if (row.title !== undefined && row.title !== null) {
-      const t = String(row.title).trim();
-      if (t) item.title = t;
-    }
+    map[uid] = row; // ключ = uid
+  }
 
-    // desc (ВСЕГДА строкой)
-    if (row.desc !== undefined && row.desc !== null) {
-      item.desc = String(row.desc).trim();
-    }
+  return map; // <-- ВАЖНО: возвращаем map как было ожидаемо
+}
 
-    // sort (если нужен порядок из таблицы)
-    const sortSource = row.sort ?? row.order_by;
-    if (sortSource !== "" && sortSource != null) {
-      const s = toNum(sortSource, 0);
-      if (Number.isFinite(s)) item.sort = s;
-    }
+function applySheetToLocal(localItems, sheetItems) {
+  const map = Object.create(null);
 
-    // active
-    const a = String(row.active).trim().toLowerCase();
-    if (a === "true" || row.active === true) item.active = true;
-    if (a === "false" || row.active === false) item.active = false;
+  sheetItems.forEach((row) => {
+    if (!row || !row.uid) return;
+    map[row.uid] = row;
+  });
+
+  return localItems.map((item) => {
+    const row = map[item.uid];
+    if (!row) return item;
+
+    return {
+      ...item,
+      ...row,
+      baseId: item.baseId || row.baseId,
+      uid: item.uid,
+      group: normalizedGroup(row.cat ?? item.cat, row.group ?? item.group),
+    };
   });
 }
 
@@ -1511,10 +1554,12 @@ function createCard(item) {
   const tagLabels = getTagLabels();
   const card = document.createElement("article");
   card.className = "bg-white border border-hb-border rounded-2xl p-4 sm:p-5 flex flex-col gap-3 shadow-[0_6px_18px_rgba(0,0,0,0.04)] card-fade";
+  card.dataset.uid = translated.uid;
+  card.id = `item-${translated.uid}`;
 
   card.innerHTML = `
     <div class="rounded-xl overflow-hidden bg-neutral-200 aspect-square">
-      <img src="${item.img}" alt="${translated.title}" class="w-full h-full object-cover">
+      <img src="${translated.img}" alt="${translated.title}" class="w-full h-full object-cover">
     </div>
     <div class="flex flex-col gap-2">
       <div class="flex items-start justify-between gap-2">
@@ -1553,19 +1598,39 @@ function renderItems() {
   ITEMS.filter((item) => item.cat === activeCategory)
     .filter((item) => item.active !== false)
     .filter(applyFilters)
-    .sort((a, b) => toNum(a.sort, 9999) - toNum(b.sort, 9999))
+    .sort((a, b) => {
+      const aSort = toNum(a.sort, 9999);
+      const bSort = toNum(b.sort, 9999);
+
+      // only special ordering for kahvalti
+      if (activeCategory !== "kahvalti") return aSort - bSort;
+
+      const aGroup = (a.group && String(a.group).trim()) ? String(a.group).trim() : "kahvalti";
+      const bGroup = (b.group && String(b.group).trim()) ? String(b.group).trim() : "kahvalti";
+
+      const rank = (g) => (g === "kahvalti" ? 0 : g === "smoothie" ? 1 : 9);
+      const groupDiff = rank(aGroup) - rank(bGroup);
+      if (groupDiff !== 0) return groupDiff;
+
+      return aSort - bSort;
+    })
     .forEach((item) => {
-      const groupTitle = translateGroupTitle(activeCategory, item.group);
-      if (groupTitle && !addedGroup.has(item.group)) {
+      const normalizedGroup =
+        activeCategory === "kahvalti"
+          ? ((item.group && String(item.group).trim()) ? String(item.group).trim() : "kahvalti")
+          : item.group;
+
+      const groupTitle = translateGroupTitle(activeCategory, normalizedGroup);
+      if (groupTitle && !addedGroup.has(normalizedGroup)) {
         const heading = document.createElement("h3");
         heading.className =
           "col-span-full mt-6 mb-3 text-sm sm:text-base font-semibold uppercase tracking-[0.18em] text-hb-muted pl-1";
         heading.textContent = groupTitle;
-        heading.dataset.group = item.group;
-        heading.id = `group-${item.group}`;
+        heading.dataset.group = normalizedGroup;
+        heading.id = `group-${normalizedGroup}`;
         container.appendChild(heading);
-        addedGroup.add(item.group);
-        renderedGroups.push(item.group);
+        addedGroup.add(normalizedGroup);
+        renderedGroups.push(normalizedGroup);
       }
 
       container.appendChild(createCard(item));
@@ -1806,14 +1871,25 @@ document.querySelectorAll(".intro-lang-btn").forEach((btn) => {
 (async () => {
   // 1) подгружаем таблицу и применяем обновления
   try {
-    const sheetItems = await fetchSheetItems();
+    const sheetItemsMap = await fetchSheetItems();
+    let sheetItems = enrichItems(Object.values(sheetItemsMap || {}));
     console.log("SHEET ITEMS:", sheetItems.length, sheetItems[0]);
-    applySheetItemsToLocalItems(sheetItems);
+    ITEMS = applySheetToLocal(ITEMS, sheetItems);
+    console.log("EXAMPLE ITEM ID:", ITEMS[0]?.uid, ITEMS[0]?.title);
+    const dupCheck = Object.entries(
+      ITEMS.reduce((m, it) => {
+        const id = it.uid;
+        m[id] = (m[id] || 0) + 1;
+        return m;
+      }, {})
+    ).filter(([, count]) => count > 1);
+    console.table(dupCheck.map(([uid, count]) => ({ uid, count })));
+    console.log("SHEET COUNT", sheetItems.length, "LOCAL COUNT", ITEMS.length);
     if (DEBUG_SORT) {
       console.log(
         "SORT DEBUG:",
         ITEMS.slice(0, 15).map((item) => ({
-          id: getItemId(item),
+          id: item.uid,
           cat: item.cat,
           group: item.group,
           sort: toNum(item.sort, 9999),
