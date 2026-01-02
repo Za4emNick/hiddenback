@@ -412,15 +412,41 @@ function exportItemsToSheetsTSV() {
 window.exportItemsToSheetsTSV = exportItemsToSheetsTSV;
 
 // ==== APPLY FULL SHEET DATA TO EXISTING ITEMS BY id ====
-const MENU_API_URL = window.MENU_API_URL || ""; // вставляется в index.html
+const SHEET_API_URL = window.MENU_API_URL || ""; // вставляется в index.html
 const DEBUG_SORT = false;
 
 async function fetchSheetItems() {
-  if (!MENU_API_URL) return [];
-  const res = await fetch(`${MENU_API_URL}?t=${Date.now()}`, { cache: "no-store" });
-  if (!res.ok) return [];
+  // ВАЖНО: сюда вставь свой URL веб-аппа Apps Script
+  const url = SHEET_API_URL; // или строкой: "https://script.google.com/macros/s/...../exec"
+
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) throw new Error("Sheet API error: " + res.status);
+
   const data = await res.json();
-  return Array.isArray(data.items) ? data.items : [];
+  const items = Array.isArray(data?.items) ? data.items : [];
+
+  const map = {};
+  for (const row of items) {
+    const uid = (row?.uid ?? row?.id ?? "").toString().trim();
+    if (!uid) continue;
+
+    // фиксируем uid, чтобы дальше всё матчило
+    row.uid = uid;
+
+    // активность (если нет колонки active — считаем true)
+    const a = row.active;
+    row.active = a === true || String(a).toLowerCase() === "true" || a === 1 || String(a) === "1" || a === "" || a == null;
+
+    // цена в число
+    if (row.price !== "" && row.price != null) {
+      const p = Number(String(row.price).replace(",", "."));
+      if (Number.isFinite(p)) row.price = p;
+    }
+
+    map[uid] = row; // ключ = uid
+  }
+
+  return map; // <-- ВАЖНО: возвращаем map как было ожидаемо
 }
 
 function applySheetToLocal(localItems, sheetItems) {
@@ -1845,9 +1871,8 @@ document.querySelectorAll(".intro-lang-btn").forEach((btn) => {
 (async () => {
   // 1) подгружаем таблицу и применяем обновления
   try {
-    const sheetItemsRaw = await fetchSheetItems();
-    let sheetItems = Array.isArray(sheetItemsRaw) ? sheetItemsRaw : [];
-    sheetItems = enrichItems(sheetItems);
+    const sheetItemsMap = await fetchSheetItems();
+    let sheetItems = enrichItems(Object.values(sheetItemsMap || {}));
     console.log("SHEET ITEMS:", sheetItems.length, sheetItems[0]);
     ITEMS = applySheetToLocal(ITEMS, sheetItems);
     console.log("EXAMPLE ITEM ID:", ITEMS[0]?.uid, ITEMS[0]?.title);
