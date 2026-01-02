@@ -420,8 +420,7 @@ const SHEET_API_URL = window.MENU_API_URL || ""; // вставляется в in
 const DEBUG_SORT = false;
 
 async function fetchSheetItems() {
-  // ВАЖНО: сюда вставь свой URL веб-аппа Apps Script
-  const url = SHEET_API_URL; // или строкой: "https://script.google.com/macros/s/...../exec"
+  const url = SHEET_API_URL;
 
   const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) throw new Error("Sheet API error: " + res.status);
@@ -429,50 +428,73 @@ async function fetchSheetItems() {
   const data = await res.json();
   const items = Array.isArray(data?.items) ? data.items : [];
 
-  const map = {};
+  const map = Object.create(null);
   for (const row of items) {
-    const uid = (row?.uid ?? row?.id ?? "").toString().trim();
+    const uid = String(row?.uid ?? row?.id ?? "").trim();
     if (!uid) continue;
 
-    // фиксируем uid, чтобы дальше всё матчило
-    row.uid = uid;
+    row.uid = uid; // ✅ фиксируем uid
 
-    // активность (если нет колонки active — считаем true)
+    // active
     const a = row.active;
-    row.active = a === true || String(a).toLowerCase() === "true" || a === 1 || String(a) === "1" || a === "" || a == null;
+    row.active =
+      a === true ||
+      String(a).toLowerCase() === "true" ||
+      a === 1 ||
+      String(a) === "1" ||
+      a === "" ||
+      a == null;
 
-    // цена в число
+    // price -> number
     if (row.price !== "" && row.price != null) {
       const p = Number(String(row.price).replace(",", "."));
       if (Number.isFinite(p)) row.price = p;
     }
 
-    map[uid] = row; // ключ = uid
+    // sort -> number (чтобы сортировка заработала)
+    if (row.sort !== "" && row.sort != null) {
+      const s = Number(String(row.sort).replace(",", "."));
+      if (Number.isFinite(s)) row.sort = s;
+    }
+
+    map[uid] = row;
   }
 
-  return map; // <-- ВАЖНО: возвращаем map как было ожидаемо
+  return map;
 }
 
 function applySheetToLocal(localItems, sheetItems) {
   const map = Object.create(null);
 
   sheetItems.forEach((row) => {
-    if (!row || !row.uid) return;
-    map[row.uid] = row;
+    const uid = String(row?.uid ?? row?.id ?? "").trim();
+    if (!uid) return;
+    row.uid = uid;
+    map[uid] = row;
   });
 
-  return localItems.map((item) => {
+  const updated = localItems.map((item) => {
     const row = map[item.uid];
     if (!row) return item;
 
     return {
       ...item,
       ...row,
-      baseId: item.baseId || row.baseId,
+
+      // ✅ важное оставляем локальным
       uid: item.uid,
+      baseId: item.baseId,
+      img: item.img,
+
       group: normalizedGroup(row.cat ?? item.cat, row.group ?? item.group),
     };
   });
+
+  // ✅ дебаг: сколько реально заматчилось
+  const matched = updated.filter((it) => map[it.uid]).length;
+  console.log("SHEET MATCHED:", matched, "of", updated.length);
+
+  return updated;
 }
 
 // ─────────────────────────────
