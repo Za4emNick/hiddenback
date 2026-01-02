@@ -1557,24 +1557,39 @@ function renderItems() {
   ITEMS.filter((item) => item.cat === activeCategory)
     .filter((item) => item.active !== false)
     .filter(applyFilters)
-    .sort((a, b) => toNum(a.sort, 9999) - toNum(b.sort, 9999))
+    .sort((a, b) => {
+      const aSort = toNum(a.sort, 9999);
+      const bSort = toNum(b.sort, 9999);
+
+      // only special ordering for kahvalti
+      if (activeCategory !== "kahvalti") return aSort - bSort;
+
+      const aGroup = (a.group && String(a.group).trim()) ? String(a.group).trim() : "kahvalti";
+      const bGroup = (b.group && String(b.group).trim()) ? String(b.group).trim() : "kahvalti";
+
+      const rank = (g) => (g === "kahvalti" ? 0 : g === "smoothie" ? 1 : 9);
+      const groupDiff = rank(aGroup) - rank(bGroup);
+      if (groupDiff !== 0) return groupDiff;
+
+      return aSort - bSort;
+    })
     .forEach((item) => {
-      const groupKey =
+      const normalizedGroup =
         activeCategory === "kahvalti"
-          ? (!item.group ? "kahvalti" : item.group === "smoothie" ? "smoothie" : item.group)
+          ? ((item.group && String(item.group).trim()) ? String(item.group).trim() : "kahvalti")
           : item.group;
 
-      const groupTitle = translateGroupTitle(activeCategory, groupKey);
-      if (groupTitle && !addedGroup.has(groupKey)) {
+      const groupTitle = translateGroupTitle(activeCategory, normalizedGroup);
+      if (groupTitle && !addedGroup.has(normalizedGroup)) {
         const heading = document.createElement("h3");
         heading.className =
           "col-span-full mt-6 mb-3 text-sm sm:text-base font-semibold uppercase tracking-[0.18em] text-hb-muted pl-1";
         heading.textContent = groupTitle;
-        heading.dataset.group = groupKey;
-        heading.id = `group-${groupKey}`;
+        heading.dataset.group = normalizedGroup;
+        heading.id = `group-${normalizedGroup}`;
         container.appendChild(heading);
-        addedGroup.add(groupKey);
-        renderedGroups.push(groupKey);
+        addedGroup.add(normalizedGroup);
+        renderedGroups.push(normalizedGroup);
       }
 
       container.appendChild(createCard(item));
