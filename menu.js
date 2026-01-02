@@ -38,6 +38,12 @@
     return String(Math.round(n));
   }
 
+  function toNum(value, fallback = 0) {
+    if (value === null || value === undefined || value === "") return fallback;
+    const n = Number(String(value).trim().replace(",", "."));
+    return Number.isFinite(n) ? n : fallback;
+  }
+
   async function fetchMenuItems() {
     if (!MENU_API_URL || MENU_API_URL.includes("PASTE_YOUR")) {
       throw new Error("MENU_API_URL is not set. Paste Apps Script URL in index.html");
@@ -61,10 +67,10 @@
           x.active === true ||
           String(x.active ?? "").trim().toLowerCase() === "true" ||
           String(x.active ?? "").trim().toLowerCase() === "yes",
-        sort: Number(x.sort) || 0,
+        sort: toNum(x.sort ?? x.order_by, 0),
       }))
       .filter((x) => x.active && x.name)
-      .sort((a, b) => (a.sort || 0) - (b.sort || 0));
+      .sort((a, b) => toNum(a.sort, 0) - toNum(b.sort, 0));
 
   }
 

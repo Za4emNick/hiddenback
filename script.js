@@ -366,6 +366,7 @@ window.exportItemsToSheetsTSV = exportItemsToSheetsTSV;
 
 // ==== APPLY FULL SHEET DATA TO EXISTING ITEMS BY id ====
 const MENU_API_URL = window.MENU_API_URL || ""; // вставляется в index.html
+const DEBUG_SORT = false;
 
 async function fetchSheetItems() {
   if (!MENU_API_URL) return [];
@@ -386,7 +387,7 @@ function applySheetItemsToLocalItems(sheetItems) {
       price: row.price,
       desc: row.desc,
       title: row.title,
-      sort: row.sort,
+      sort: toNum(row.sort ?? row.order_by, 0),
       active: row.active,
     });
   });
@@ -414,8 +415,9 @@ function applySheetItemsToLocalItems(sheetItems) {
     }
 
     // sort (если нужен порядок из таблицы)
-    if (row.sort !== "" && row.sort != null) {
-      const s = Number(String(row.sort).replace(",", "."));
+    const sortSource = row.sort ?? row.order_by;
+    if (sortSource !== "" && sortSource != null) {
+      const s = toNum(sortSource, 0);
       if (Number.isFinite(s)) item.sort = s;
     }
 
@@ -510,6 +512,12 @@ const getTagLabels = () => ({
 });
 
 const formatPrice = (price) => (typeof price === "number" ? `${price}₺` : "" );
+
+function toNum(value, fallback = 0) {
+  if (value === null || value === undefined || value === "") return fallback;
+  const n = Number(String(value).trim().replace(",", "."));
+  return Number.isFinite(n) ? n : fallback;
+}
 
 const runnerState = {
   x: 82,
@@ -1545,7 +1553,7 @@ function renderItems() {
   ITEMS.filter((item) => item.cat === activeCategory)
     .filter((item) => item.active !== false)
     .filter(applyFilters)
-    .sort((a, b) => (a.sort ?? 9999) - (b.sort ?? 9999))
+    .sort((a, b) => toNum(a.sort, 9999) - toNum(b.sort, 9999))
     .forEach((item) => {
       const groupTitle = translateGroupTitle(activeCategory, item.group);
       if (groupTitle && !addedGroup.has(item.group)) {
@@ -1801,6 +1809,17 @@ document.querySelectorAll(".intro-lang-btn").forEach((btn) => {
     const sheetItems = await fetchSheetItems();
     console.log("SHEET ITEMS:", sheetItems.length, sheetItems[0]);
     applySheetItemsToLocalItems(sheetItems);
+    if (DEBUG_SORT) {
+      console.log(
+        "SORT DEBUG:",
+        ITEMS.slice(0, 15).map((item) => ({
+          id: getItemId(item),
+          cat: item.cat,
+          group: item.group,
+          sort: toNum(item.sort, 9999),
+        }))
+      );
+    }
   } catch (e) {
     console.warn("Sheet sync failed", e);
   }
