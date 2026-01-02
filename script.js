@@ -3,7 +3,7 @@
 // ─────────────────────────────
 
 const GROUP_TITLES = {
-  kahvalti: { smoothie: "Smoothie Bowl" },
+  kahvalti: { kahvalti: "Kahvaltı", smoothie: "Smoothie Bowl" },
   bowl: { smoothie: "Smoothie Bowl", bowl: "Bowl" },
   lezzetler: {},
   tatli: {},
@@ -320,6 +320,10 @@ const ITEMS = [
   { cat: "sicak", group: "dunya", title: "Ihlamur & Melisa", price: 190, desc: "Kış aylarının vazgeçilmez bitki çayı.", img: itemImg("ihlamur") },
   { cat: "sicak", group: "dunya", title: "Yeşil Çay", price: 190, desc: "Yumuşak içimli yeşil çay.", img: itemImg("yesil_cay") }
 ];
+
+ITEMS.forEach((item) => {
+  if (!item.id) item.id = getItemId(item);
+});
 
 // ==== EXPORT ALL ITEMS -> GOOGLE SHEETS (TSV) ====
 function exportItemsToSheetsTSV() {
@@ -1555,17 +1559,22 @@ function renderItems() {
     .filter(applyFilters)
     .sort((a, b) => toNum(a.sort, 9999) - toNum(b.sort, 9999))
     .forEach((item) => {
-      const groupTitle = translateGroupTitle(activeCategory, item.group);
-      if (groupTitle && !addedGroup.has(item.group)) {
+      const groupKey =
+        activeCategory === "kahvalti"
+          ? (!item.group ? "kahvalti" : item.group === "smoothie" ? "smoothie" : item.group)
+          : item.group;
+
+      const groupTitle = translateGroupTitle(activeCategory, groupKey);
+      if (groupTitle && !addedGroup.has(groupKey)) {
         const heading = document.createElement("h3");
         heading.className =
           "col-span-full mt-6 mb-3 text-sm sm:text-base font-semibold uppercase tracking-[0.18em] text-hb-muted pl-1";
         heading.textContent = groupTitle;
-        heading.dataset.group = item.group;
-        heading.id = `group-${item.group}`;
+        heading.dataset.group = groupKey;
+        heading.id = `group-${groupKey}`;
         container.appendChild(heading);
-        addedGroup.add(item.group);
-        renderedGroups.push(item.group);
+        addedGroup.add(groupKey);
+        renderedGroups.push(groupKey);
       }
 
       container.appendChild(createCard(item));
@@ -1808,6 +1817,7 @@ document.querySelectorAll(".intro-lang-btn").forEach((btn) => {
   try {
     const sheetItems = await fetchSheetItems();
     console.log("SHEET ITEMS:", sheetItems.length, sheetItems[0]);
+    console.log("EXAMPLE ITEM ID:", ITEMS[0]?.id, ITEMS[0]?.title);
     applySheetItemsToLocalItems(sheetItems);
     if (DEBUG_SORT) {
       console.log(
