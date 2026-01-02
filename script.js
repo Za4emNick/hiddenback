@@ -134,7 +134,7 @@ function translateMenuItem(item) {
   return {
     ...item,
     uid,
-    img: itemImg(item),
+    img: item.img || itemImg(item),
     title: useMenuTranslation ? (menuEntry.title || item.title) : item.title,
     desc: item.suppressDesc
       ? "" // если suppressDesc=true, описание скрыто всегда
