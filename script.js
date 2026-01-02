@@ -43,13 +43,59 @@ let translations = {};
 const hiddenLogo = new Image();
 hiddenLogo.src = "logo-x-x.jpg";
 
-function getItemId(item) {
-  if (item.id) return item.id;
-  if (item.img) {
+function normStr(v) {
+  return String(v ?? "").trim();
+}
+
+function normGroup(cat, group) {
+  const g = normStr(group);
+  if (!g && cat === "kahvalti") return "kahvalti";
+  return g || "";
+}
+
+function slugifyBase(value) {
+  return normStr(value)
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9ğüşöçıİ\s_-]+/gi, "")
+    .replace(/\s+/g, "_")
+    .replace(/_+/g, "_")
+    .replace(/^_+|_+$/g, "");
+}
+
+function legacyGetItemId(item) {
+  if (item?.id) return item.id;
+  if (item?.img) {
     const last = item.img.split("/").pop() || "";
     return last.replace(/\.\w+$/, "");
   }
-  return item.title?.toLowerCase().replace(/[^a-z0-9]+/gi, "_") || "";
+  return item?.title?.toLowerCase().replace(/[^a-z0-9]+/gi, "_") || "";
+}
+
+function makeBaseSlug(item) {
+  const legacy = slugifyBase(legacyGetItemId(item));
+  if (legacy) return legacy;
+
+  return slugifyBase(normStr(item?.title)) || "item";
+}
+
+function getUniqueId(item) {
+  const cat = normStr(item?.cat).toLowerCase();
+  const group = normGroup(cat, item?.group).toLowerCase();
+  const baseSource = normStr(item?.id) || makeBaseSlug(item);
+  const base = slugifyBase(getBaseFromUniqueId(baseSource) || baseSource);
+  const parts = [base || "item"];
+  if (cat) parts.push(cat);
+  if (group) parts.push(group);
+  return parts.join("__");
+}
+
+function getBaseFromUniqueId(uid) {
+  return String(uid || "").split("__")[0];
+}
+
+function getItemId(item) {
+  return getUniqueId(item);
 }
 
 function refreshUiText() {
@@ -89,13 +135,14 @@ function applyStaticTranslations() {
 }
 
 function translateMenuItem(item) {
-  const itemId = getItemId(item);
+  const itemId = getUniqueId(item);
   const menuEntry = translations.menu?.[itemId] || {};
   const useMenuTranslation = currentLang !== DEFAULT_LANG; // DEFAULT_LANG = "tr"
 
   return {
     ...item,
     id: itemId,
+    img: item.img || itemImg(item),
     title: useMenuTranslation ? (menuEntry.title || item.title) : item.title,
     desc: item.suppressDesc
       ? "" // если suppressDesc=true, описание скрыто всегда
@@ -175,7 +222,14 @@ async function initLanguage() {
   }
 }
 
-const itemImg = (name) => `images/items/${name}.webp`;
+function itemImg(input) {
+  if (typeof input === "string") {
+    return `images/items/${input}.webp`;
+  }
+  const uid = getUniqueId(input);
+  const base = getBaseFromUniqueId(uid);
+  return `images/items/${base}.webp`;
+}
 
 // ─────────────────────────────
 //  MENU ITEMS — GÜNCEL LISTE
@@ -322,7 +376,7 @@ const ITEMS = [
 ];
 
 ITEMS.forEach((item) => {
-  if (!item.id) item.id = getItemId(item);
+  item.id = getUniqueId(item);
 });
 
 // ==== EXPORT ALL ITEMS -> GOOGLE SHEETS (TSV) ====
@@ -331,7 +385,7 @@ function exportItemsToSheetsTSV() {
   const headers = ["id", "cat", "group", "title", "price", "desc", "active", "sort"];
 
   const rows = ITEMS.map((item, idx) => {
-    const id = getItemId(item);
+    const id = getUniqueId(item);
     const cat = item.cat || "";
     const group = item.group || "";
     const title = item.title || "";
@@ -381,54 +435,52 @@ async function fetchSheetItems() {
 }
 
 function applySheetItemsToLocalItems(sheetItems) {
-  const map = new Map();
+  const map = Object.create(null);
 
   sheetItems.forEach((row) => {
-    const id = String(row.id || "").trim();
+    const id = normStr(row?.id);
     if (!id) return;
-
-    map.set(id, {
-      price: row.price,
-      desc: row.desc,
-      title: row.title,
-      sort: toNum(row.sort ?? row.order_by, 0),
-      active: row.active,
-    });
+    map[id] = row;
   });
 
   ITEMS.forEach((item) => {
-    const id = getItemId(item);
-    const row = map.get(id);
+    const uid = getUniqueId(item);
+    const row = map[uid];
     if (!row) return;
 
-    // price
-    if (row.price !== "" && row.price != null) {
-      const p = Number(String(row.price).replace(",", "."));
-      if (Number.isFinite(p)) item.price = p;
-    }
-
-    // title (ВСЕГДА строкой)
     if (row.title !== undefined && row.title !== null) {
-      const t = String(row.title).trim();
+      const t = normStr(row.title);
       if (t) item.title = t;
     }
 
-    // desc (ВСЕГДА строкой)
     if (row.desc !== undefined && row.desc !== null) {
-      item.desc = String(row.desc).trim();
+      item.desc = normStr(row.desc);
     }
 
-    // sort (если нужен порядок из таблицы)
+    if (row.price !== "" && row.price != null) {
+      const p = toNum(row.price, item.price ?? 0);
+      if (Number.isFinite(p)) item.price = p;
+    }
+
     const sortSource = row.sort ?? row.order_by;
     if (sortSource !== "" && sortSource != null) {
-      const s = toNum(sortSource, 0);
+      const s = toNum(sortSource, item.sort ?? 0);
       if (Number.isFinite(s)) item.sort = s;
     }
 
-    // active
-    const a = String(row.active).trim().toLowerCase();
-    if (a === "true" || row.active === true) item.active = true;
-    if (a === "false" || row.active === false) item.active = false;
+    if (row.group !== undefined && row.group !== null) {
+      item.group = row.group;
+    }
+
+    if (row.cat !== undefined && row.cat !== null) {
+      item.cat = row.cat;
+    }
+
+    if (row.active !== undefined && row.active !== null) {
+      const a = normStr(row.active).toLowerCase();
+      if (a === "true" || row.active === true) item.active = true;
+      if (a === "false" || row.active === false) item.active = false;
+    }
   });
 }
 
@@ -1518,7 +1570,7 @@ function createCard(item) {
 
   card.innerHTML = `
     <div class="rounded-xl overflow-hidden bg-neutral-200 aspect-square">
-      <img src="${item.img}" alt="${translated.title}" class="w-full h-full object-cover">
+      <img src="${translated.img}" alt="${translated.title}" class="w-full h-full object-cover">
     </div>
     <div class="flex flex-col gap-2">
       <div class="flex items-start justify-between gap-2">
@@ -1834,11 +1886,19 @@ document.querySelectorAll(".intro-lang-btn").forEach((btn) => {
     console.log("SHEET ITEMS:", sheetItems.length, sheetItems[0]);
     console.log("EXAMPLE ITEM ID:", ITEMS[0]?.id, ITEMS[0]?.title);
     applySheetItemsToLocalItems(sheetItems);
+    const dupCheck = Object.entries(
+      ITEMS.reduce((m, it) => {
+        const id = getUniqueId(it);
+        m[id] = (m[id] || 0) + 1;
+        return m;
+      }, {})
+    ).filter(([, count]) => count > 1);
+    console.log("DUP CHECK", dupCheck);
     if (DEBUG_SORT) {
       console.log(
         "SORT DEBUG:",
         ITEMS.slice(0, 15).map((item) => ({
-          id: getItemId(item),
+          id: getUniqueId(item),
           cat: item.cat,
           group: item.group,
           sort: toNum(item.sort, 9999),
