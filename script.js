@@ -467,34 +467,33 @@ function applySheetToLocal(localItems, sheetItems) {
   const map = Object.create(null);
 
   sheetItems.forEach((row) => {
-    const uid = String(row?.uid ?? row?.id ?? "").trim();
-    if (!uid) return;
-    row.uid = uid;
-    map[uid] = row;
+    const key = String(row?.uid ?? row?.id ?? "").trim();
+    if (!key) return;
+    map[key] = row;
   });
 
-  const updated = localItems.map((item) => {
-    const row = map[item.uid];
+  let matched = 0;
+
+  const merged = localItems.map((item) => {
+    const key = String(item.uid).trim();
+    const row = map[key];
     if (!row) return item;
+
+    matched++;
 
     return {
       ...item,
-      ...row,
-
-      // ✅ важное оставляем локальным
-      uid: item.uid,
-      baseId: item.baseId,
-      img: item.img,
-
-      group: normalizedGroup(row.cat ?? item.cat, row.group ?? item.group),
+      // 🔥 ТОЛЬКО ЧТО МОЖНО МЕНЯТЬ ИЗ ТАБЛИЦЫ
+      price: row.price ?? item.price,
+      desc: row.desc ?? item.desc,
+      title: row.title ?? item.title,
+      sort: row.sort ?? item.sort,
+      active: row.active ?? item.active,
     };
   });
 
-  // ✅ дебаг: сколько реально заматчилось
-  const matched = updated.filter((it) => map[it.uid]).length;
-  console.log("SHEET MATCHED:", matched, "of", updated.length);
-
-  return updated;
+  console.log("✅ SHEET APPLIED:", matched, "/", localItems.length);
+  return merged;
 }
 
 // ─────────────────────────────
@@ -1898,9 +1897,10 @@ document.querySelectorAll(".intro-lang-btn").forEach((btn) => {
   // 1) подгружаем таблицу и применяем обновления
   try {
     const sheetItemsMap = await fetchSheetItems();
-    let sheetItems = enrichItems(Object.values(sheetItemsMap || {}));
+    const sheetItems = Object.values(sheetItemsMap || {});
     console.log("SHEET ITEMS:", sheetItems.length, sheetItems[0]);
     ITEMS = applySheetToLocal(ITEMS, sheetItems);
+    renderItems();
     console.log("EXAMPLE ITEM ID:", ITEMS[0]?.uid, ITEMS[0]?.title);
     const dupCheck = Object.entries(
       ITEMS.reduce((m, it) => {
