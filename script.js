@@ -127,13 +127,13 @@ function applyStaticTranslations() {
 }
 
 function translateMenuItem(item) {
-  const itemId = item.uid;
-  const menuEntry = translations.menu?.[itemId] || {};
+  const uid = item.uid;
+  const menuEntry = translations.menu?.[uid] || {};
   const useMenuTranslation = currentLang !== DEFAULT_LANG; // DEFAULT_LANG = "tr"
 
   return {
     ...item,
-    id: itemId,
+    uid,
     img: itemImg(item),
     title: useMenuTranslation ? (menuEntry.title || item.title) : item.title,
     desc: item.suppressDesc
@@ -216,10 +216,14 @@ async function initLanguage() {
 
 function itemImg(input) {
   if (typeof input === "string") {
-    return `images/items/${input}.webp`;
+    return `/images/items/${encodeURIComponent(input)}.webp`;
   }
-  const base = input?.baseId || getBaseFromUniqueId(input?.uid) || baseIdFromAny(input);
-  return `images/items/${base}.webp`;
+
+  const id = normStr(input?.id) || normStr(input?.uid) || normStr(input?.rawId);
+  if (!id) return `/images/placeholder.webp`;
+
+  const base = getBaseFromUniqueId(id) || id;
+  return `/images/items/${encodeURIComponent(base)}.webp`;
 }
 
 // ─────────────────────────────
