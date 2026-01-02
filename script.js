@@ -194,7 +194,7 @@ const ITEMS = [
   { cat: "kahvalti", title: "Çırpılmış Yumurta", price: 180, desc: "Çırpılmış yumurta, beyaz peynir ve ekşi maya ekmek.", img: itemImg("cirpilmis_yumurta") },
   { cat: "kahvalti", title: "Omlet", price: 190, desc: "Taze otlu, sebzeli veya peynirli omlet; yanında yeşil salata ve ekşi maya ekmek.", img: itemImg("omlet") },
   { cat: "kahvalti", title: "Kruvasan", price: 180, img: itemImg("kruvasan") },
-  { cat: "kahvalti", title: "Kruvasan Çikolata & Çilek", price: 230, img: itemImg("kruvasan_cikolata_ve_cilek") },
+  { cat: "kahvalti", title: "Kruvasan Çikolata & Çilek", price: 260, img: itemImg("kruvasan_cikolata_ve_cilek") },
   { cat: "kahvalti", title: "Menemen", price: 190, desc: "Yaz domatesiyle menemen, beyaz peynir ve ekşi maya ekmek.", img: itemImg("menemen") },
   { cat: "kahvalti", title: "Patates Tava", price: 160, desc: "Klasik kızarmış patates.", img: itemImg("patates_tava") },
   { cat: "kahvalti", group: "smoothie", title: "Acaí Bowl", price: 220, desc: "Acai özü, muz, böğürtlen, frambuaz ve granola.", img: itemImg("bowl") },
