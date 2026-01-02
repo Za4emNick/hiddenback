@@ -47,14 +47,9 @@ function normStr(v) {
   return String(v ?? "").trim();
 }
 
-function normGroup(cat, group) {
-  const g = normStr(group);
-  if (!g && cat === "kahvalti") return "kahvalti";
-  return g || "";
-}
-
-function slugifyBase(value) {
-  return normStr(value)
+function baseIdFromAny(item) {
+  const raw = normStr(item?.id) || normStr(item?.rawId) || normStr(item?.title);
+  return raw
     .toLowerCase()
     .replace(/&/g, "and")
     .replace(/[^a-z0-9ğüşöçıİ\s_-]+/gi, "")
@@ -63,39 +58,36 @@ function slugifyBase(value) {
     .replace(/^_+|_+$/g, "");
 }
 
-function legacyGetItemId(item) {
-  if (item?.id) return item.id;
-  if (item?.img) {
-    const last = item.img.split("/").pop() || "";
-    return last.replace(/\.\w+$/, "");
-  }
-  return item?.title?.toLowerCase().replace(/[^a-z0-9]+/gi, "_") || "";
+function normalizedGroup(cat, group) {
+  const c = normStr(cat).toLowerCase();
+  const g = normStr(group);
+  if (!g && c === "kahvalti") return "kahvalti";
+  return g || "";
 }
 
-function makeBaseSlug(item) {
-  const legacy = slugifyBase(legacyGetItemId(item));
-  if (legacy) return legacy;
-
-  return slugifyBase(normStr(item?.title)) || "item";
-}
-
-function getUniqueId(item) {
+function makeUniqueId(item) {
+  const base = baseIdFromAny(item);
   const cat = normStr(item?.cat).toLowerCase();
-  const group = normGroup(cat, item?.group).toLowerCase();
-  const baseSource = normStr(item?.id) || makeBaseSlug(item);
-  const base = slugifyBase(getBaseFromUniqueId(baseSource) || baseSource);
-  const parts = [base || "item"];
-  if (cat) parts.push(cat);
-  if (group) parts.push(group);
-  return parts.join("__");
+  const grp = normalizedGroup(cat, item?.group).toLowerCase();
+  return [base, cat, grp].filter(Boolean).join("__");
 }
 
 function getBaseFromUniqueId(uid) {
   return String(uid || "").split("__")[0];
 }
 
+function enrichItems(items) {
+  return items.map((it) => {
+    const obj = { ...it };
+    obj.baseId = baseIdFromAny(obj);
+    obj.group = normalizedGroup(obj.cat, obj.group);
+    obj.uid = makeUniqueId(obj);
+    return obj;
+  });
+}
+
 function getItemId(item) {
-  return getUniqueId(item);
+  return item?.uid || makeUniqueId(item);
 }
 
 function refreshUiText() {
@@ -135,14 +127,14 @@ function applyStaticTranslations() {
 }
 
 function translateMenuItem(item) {
-  const itemId = getUniqueId(item);
+  const itemId = item.uid;
   const menuEntry = translations.menu?.[itemId] || {};
   const useMenuTranslation = currentLang !== DEFAULT_LANG; // DEFAULT_LANG = "tr"
 
   return {
     ...item,
     id: itemId,
-    img: item.img || itemImg(item),
+    img: itemImg(item),
     title: useMenuTranslation ? (menuEntry.title || item.title) : item.title,
     desc: item.suppressDesc
       ? "" // если suppressDesc=true, описание скрыто всегда
@@ -226,8 +218,7 @@ function itemImg(input) {
   if (typeof input === "string") {
     return `images/items/${input}.webp`;
   }
-  const uid = getUniqueId(input);
-  const base = getBaseFromUniqueId(uid);
+  const base = input?.baseId || getBaseFromUniqueId(input?.uid) || baseIdFromAny(input);
   return `images/items/${base}.webp`;
 }
 
@@ -235,7 +226,7 @@ function itemImg(input) {
 //  MENU ITEMS — GÜNCEL LISTE
 // ─────────────────────────────
 
-const ITEMS = [
+const RAW_ITEMS = [
   // ──────────── KAHVALTI ────────────
   { cat: "kahvalti", title: "Mini Kahvaltı", price: 280, desc: "Göz yumurta, beyaz peynir, mini smoothie bowl, zeytinler, domates, salatalık, patates kızartması, ekşi maya ekmek ve çay.", img: itemImg("mini_kahvalti") },
   { cat: "kahvalti", title: "Ekmek Üstü Yumurta & Avokado", price: 240, desc: "Ekşi maya ekmek üstü taze peynir, çırpılmış yumurta, avokado ve mini smoothie bowl.", img: itemImg("ekmek_ustu_yumurta_ve_avokado") },
@@ -375,9 +366,7 @@ const ITEMS = [
   { cat: "sicak", group: "dunya", title: "Yeşil Çay", price: 190, desc: "Yumuşak içimli yeşil çay.", img: itemImg("yesil_cay") }
 ];
 
-ITEMS.forEach((item) => {
-  item.id = getUniqueId(item);
-});
+let ITEMS = enrichItems(RAW_ITEMS);
 
 // ==== EXPORT ALL ITEMS -> GOOGLE SHEETS (TSV) ====
 function exportItemsToSheetsTSV() {
@@ -385,7 +374,7 @@ function exportItemsToSheetsTSV() {
   const headers = ["id", "cat", "group", "title", "price", "desc", "active", "sort"];
 
   const rows = ITEMS.map((item, idx) => {
-    const id = getUniqueId(item);
+    const id = item.uid;
     const cat = item.cat || "";
     const group = item.group || "";
     const title = item.title || "";
@@ -434,53 +423,25 @@ async function fetchSheetItems() {
   return Array.isArray(data.items) ? data.items : [];
 }
 
-function applySheetItemsToLocalItems(sheetItems) {
+function applySheetToLocal(localItems, sheetItems) {
   const map = Object.create(null);
 
   sheetItems.forEach((row) => {
-    const id = normStr(row?.id);
-    if (!id) return;
-    map[id] = row;
+    if (!row || !row.uid) return;
+    map[row.uid] = row;
   });
 
-  ITEMS.forEach((item) => {
-    const uid = getUniqueId(item);
-    const row = map[uid];
-    if (!row) return;
+  return localItems.map((item) => {
+    const row = map[item.uid];
+    if (!row) return item;
 
-    if (row.title !== undefined && row.title !== null) {
-      const t = normStr(row.title);
-      if (t) item.title = t;
-    }
-
-    if (row.desc !== undefined && row.desc !== null) {
-      item.desc = normStr(row.desc);
-    }
-
-    if (row.price !== "" && row.price != null) {
-      const p = toNum(row.price, item.price ?? 0);
-      if (Number.isFinite(p)) item.price = p;
-    }
-
-    const sortSource = row.sort ?? row.order_by;
-    if (sortSource !== "" && sortSource != null) {
-      const s = toNum(sortSource, item.sort ?? 0);
-      if (Number.isFinite(s)) item.sort = s;
-    }
-
-    if (row.group !== undefined && row.group !== null) {
-      item.group = row.group;
-    }
-
-    if (row.cat !== undefined && row.cat !== null) {
-      item.cat = row.cat;
-    }
-
-    if (row.active !== undefined && row.active !== null) {
-      const a = normStr(row.active).toLowerCase();
-      if (a === "true" || row.active === true) item.active = true;
-      if (a === "false" || row.active === false) item.active = false;
-    }
+    return {
+      ...item,
+      ...row,
+      baseId: item.baseId || row.baseId,
+      uid: item.uid,
+      group: normalizedGroup(row.cat ?? item.cat, row.group ?? item.group),
+    };
   });
 }
 
@@ -1567,6 +1528,8 @@ function createCard(item) {
   const tagLabels = getTagLabels();
   const card = document.createElement("article");
   card.className = "bg-white border border-hb-border rounded-2xl p-4 sm:p-5 flex flex-col gap-3 shadow-[0_6px_18px_rgba(0,0,0,0.04)] card-fade";
+  card.dataset.uid = translated.uid;
+  card.id = `item-${translated.uid}`;
 
   card.innerHTML = `
     <div class="rounded-xl overflow-hidden bg-neutral-200 aspect-square">
@@ -1882,23 +1845,26 @@ document.querySelectorAll(".intro-lang-btn").forEach((btn) => {
 (async () => {
   // 1) подгружаем таблицу и применяем обновления
   try {
-    const sheetItems = await fetchSheetItems();
+    const sheetItemsRaw = await fetchSheetItems();
+    let sheetItems = Array.isArray(sheetItemsRaw) ? sheetItemsRaw : [];
+    sheetItems = enrichItems(sheetItems);
     console.log("SHEET ITEMS:", sheetItems.length, sheetItems[0]);
-    console.log("EXAMPLE ITEM ID:", ITEMS[0]?.id, ITEMS[0]?.title);
-    applySheetItemsToLocalItems(sheetItems);
+    ITEMS = applySheetToLocal(ITEMS, sheetItems);
+    console.log("EXAMPLE ITEM ID:", ITEMS[0]?.uid, ITEMS[0]?.title);
     const dupCheck = Object.entries(
       ITEMS.reduce((m, it) => {
-        const id = getUniqueId(it);
+        const id = it.uid;
         m[id] = (m[id] || 0) + 1;
         return m;
       }, {})
     ).filter(([, count]) => count > 1);
-    console.log("DUP CHECK", dupCheck);
+    console.table(dupCheck.map(([uid, count]) => ({ uid, count })));
+    console.log("SHEET COUNT", sheetItems.length, "LOCAL COUNT", ITEMS.length);
     if (DEBUG_SORT) {
       console.log(
         "SORT DEBUG:",
         ITEMS.slice(0, 15).map((item) => ({
-          id: getUniqueId(item),
+          id: item.uid,
           cat: item.cat,
           group: item.group,
           sort: toNum(item.sort, 9999),
