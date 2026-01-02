@@ -230,6 +230,123 @@ function itemImg(input) {
 //  MENU ITEMS — GÜNCEL LISTE
 // ─────────────────────────────
 
+const STATIC_MENU_TSV = `id	cat	group	title	price	desc	active	sort
+mini_kahvaltı__kahvalti__kahvalti	kahvalti	kahvalti	Mini Kahvaltı	320	Göz yumurta, beyaz peynir, mini smoothie bowl, zeytinler, domates, salatalık, patates kızartması, ekşi maya ekmek ve çay.	TRUE	1
+ekmek_üstü_yumurta_and_avokado__kahvalti__kahvalti	kahvalti	kahvalti	Ekmek Üstü Yumurta & Avokado	280	Ekşi maya ekmek üstü taze peynir, çırpılmış yumurta, avokado ve mini smoothie bowl.	TRUE	2
+kruvasan_bowl__kahvalti__kahvalti	kahvalti	kahvalti	Kruvasan Bowl	290	Tereyağlı kruvasan yanında çırpılmış yumurta, avokado ve mini smoothie bowl.	TRUE	3
+sandviç__kahvalti__kahvalti	kahvalti	kahvalti	Sandviç	260	Ekşi maya ekmekte cheddar, taze kaşar, krem peynir, dana jambon, haşlanmış yumurta ve lolorosso.	TRUE	4
+brioche_french_tost__kahvalti__kahvalti	kahvalti	kahvalti	Brioche French Tost	220	Vanilya aromasıyla altın renginde kızartılmış brioche ekmek , yumuşak krem peynir ve böğürtlen frambuaz püresi	TRUE	5
+dana_jambon_tost__kahvalti__kahvalti	kahvalti	kahvalti	Dana Jambon Tost	240	Taze kaşar peyniri, dana jambon, patates kızartması ve Akdeniz yeşillikleri.	TRUE	6
+tavuklu_tost__kahvalti__kahvalti	kahvalti	kahvalti	Tavuklu Tost	310	Ekşi maya ekmek, kremalı tavuk, patates kızartması ve akdeniz yeşillikleri	TRUE	7
+tatlı_and_tuzlu_ekmek_üstü__kahvalti__kahvalti	kahvalti	kahvalti	Tatlı & Tuzlu Ekmek Üstü	220	Bir dilim krem peynirli, dana jambonlu ve göz yumurtalı; diğer dilim çikolata, muz.	TRUE	8
+çırpılmış_yumurta__kahvalti__kahvalti	kahvalti	kahvalti	Çırpılmış Yumurta	210	Çırpılmış yumurta, beyaz peynir ve ekşi maya ekmek.	TRUE	9
+omlet__kahvalti__kahvalti	kahvalti	kahvalti	Omlet	210	Taze otlu, sebzeli veya peynirli omlet; yanında yeşil salata ve ekşi maya ekmek.	TRUE	10
+kruvasan__kahvalti__kahvalti	kahvalti	kahvalti	Kruvasan	210		TRUE	11
+kruvasan_çikolata_and_çilek__kahvalti__kahvalti	kahvalti	kahvalti	Kruvasan Çikolata & Çilek	260		TRUE	12
+menemen__kahvalti__kahvalti	kahvalti	kahvalti	Menemen	210	Yaz domatesiyle menemen, beyaz peynir ve ekşi maya ekmek.	TRUE	13
+patates_tava__kahvalti__kahvalti	kahvalti	kahvalti	Patates Tava	180	Klasik kızarmış patates.	TRUE	14
+aca_bowl__kahvalti__smoothie	kahvalti	smoothie	Acaí Bowl	240	Acai özü, muz, böğürtlen, frambuaz ve granola.	TRUE	15
+berry_bowl__kahvalti__smoothie	kahvalti	smoothie	Berry Bowl	220	Süzme yoğurt, bal, granola ve çilek.	TRUE	16
+bowl__bowl__smoothie	bowl	smoothie	Acaí Bowl	240	Acai özü, muz, böğürtlen ,frambuaz ve özenle hazırlanmış granola.	TRUE	17
+bowl1__bowl__smoothie	bowl	smoothie	Berry Bowl	220	Süzme yoğurt, bal, özenle hazırlanmış granola ve çilek.	TRUE	18
+basmatı_bowl__bowl__bowl	bowl	bowl	Basmatı Bowl	290	Izgara tavuk göğsü, basmati pilavı, brokoli, havuç, Akdeniz yeşilliği ve zeytinyağı.	TRUE	19
+vegan_bowl__bowl__bowl	bowl	bowl	Vegan Bowl	270	Kavrulmuş nohut, mantar, avokado, bebek turp, Akdeniz yeşilliği, havuç ve zeytinyağı.	TRUE	20
+ton_balıklı_bowl__bowl__bowl	bowl	bowl	Ton Balıklı Bowl	280	Kinoa, ton balığı, brokoli, havuç, Akdeniz yeşilliği, zeytinyağı ve salatalık turşusu.	TRUE	21
+köfte_grill_bowl__bowl__bowl	bowl	bowl	Köfte Grill Bowl	290	Basmati pilavı, ızgara köfte, köz biber, lahana turşusu, Akdeniz yeşilliği, havuç ve zeytinyağı.	TRUE	22
+makarna_bowl__bowl__bowl	bowl	bowl	Makarna Bowl	290	Burgu makarna, yoğurt, salatalık turşusu, Meksika fasulyesi, Akdeniz yeşilliği, havuç ve zeytinyağı.	TRUE	23
+acı_tatlı_sos_tavuk_bowl__bowl__bowl	bowl	bowl	Acı Tatlı Sos Tavuk Bowl	290	Arpa şehriye, acı tatlı soslu tavuk göğsü, brokoli, Akdeniz yeşilliği, havuç ve zeytinyağı.	TRUE	24
+fresh_bowl__bowl__bowl	bowl	bowl	Fresh Bowl	260	Kinoa, avokado, çilek, havuç, Akdeniz yeşilliği ve zeytinyağı.	TRUE	25
+tavuklu_sezar_salata__lezzetler	lezzetler		Tavuklu Sezar Salata	280	Izgara tavuk göğsü, taze göbek marul, domates , kruton, sezar sos ve mısır.	TRUE	26
+yeşil_salata__lezzetler	lezzetler		Yeşil Salata	220	Taze göbek marul, lolorosso, havuç, turp, salatalık, domates ve beyaz peynir.	TRUE	27
+çıtır_tavuk__lezzetler	lezzetler		Çıtır Tavuk	320	Panelenmiş jülyen tavuk dilimleri, sweet chili sos, sezar sos ve patates kızartması.	TRUE	28
+burritos_tavuk_dürüm__lezzetler	lezzetler		Burritos Tavuk Dürüm	320	Tortilla ekmeğinde tavuk dilimleri, burritos sos, renkli biberler, mantar, cheddar peyniri, patates kızartması ve Akdeniz yeşilliği.	TRUE	29
+fettucine_alfredo__lezzetler	lezzetler		Fettucine Alfredo	320	Sotelenmiş tavuk dilimleri, fettucine makarna, mantar, renkli biberler, pesto sos, krema ve parmesan peyniri.	TRUE	30
+köri_soslu_tavuk__lezzetler	lezzetler		Köri Soslu Tavuk	320	Köri soslu tavuk, mantar, renkli biberler, basmati pilav ve Akdeniz yeşillikleri.	TRUE	31
+sandviç__lezzetler	lezzetler		Sandviç	260	Ekşi maya ekmekte cheddar, taze kaşar, krem peynir, dana jambon, haşlanmış yumurta ve lolorosso.	TRUE	32
+ekmek_üstü__lezzetler	lezzetler		Ekmek Üstü	280	Ekşi maya ekmek üstü krem peynir, çırpılmış yumurta ve avokado.	TRUE	33
+patates_tava__lezzetler	lezzetler		Patates Tava	180	Klasik kızarmış patates.	TRUE	34
+brownie_pasta__tatli	tatli		Brownie Pasta	290	İki dilim brownie arasına pasta kreması ve çilek dilimleri 	TRUE	35
+profiterol__tatli	tatli		Profiterol	260	Profiterol topları, pasta kreması , çikolata, antep fıstığı parçacıkları.	TRUE	36
+magnolia__tatli	tatli		Magnolia	260	Çilek , muz , çikolata , oreo veya karışık seçenekli magnolia.	TRUE	37
+tiramisu__tatli	tatli		Tiramisu	260	Klasik mascarpone kremalı tiramisu.	TRUE	38
+san_sebastian_cheesecake__tatli	tatli		San Sebastian Cheesecake	280	Karamelize yüzeyli san sebastian cheescake.	TRUE	39
+waffle__tatli	tatli		Waffle	270	Muz , çilek ,  yer fıstığı eklenebilir; hamur tarçın içerir.	TRUE	40
+pancake__tatli	tatli		Pancake	260	3 adet pancake, böğürtlen, çilek, muz ve çikolata.	TRUE	41
+brownie_cookie_2_adet__tatli	tatli		Brownie Cookie (2 Adet)	220		TRUE	42
+cheesecake__tatli	tatli		Cheesecake	260	Frambuaz, yaban mersini, limon , lotus , süt reçeli seçenekleriyle.	TRUE	43
+hidden_bowl__tatli	tatli		Hidden Bowl	270	Pasta kreması, lotus kırıkları, damla çikolata, pirinç patlakları , çilek , muz , çikolata sosu.	TRUE	44
+kruvasan_çikolata_and_çilek__tatli	tatli		Kruvasan Çikolata & Çilek	260	Çikolata ve çilekle tatlandırılmış kruvasan.	TRUE	45
+çikolata_tart__tatli	tatli		Çikolata Tart	220	Yoğun çikolata dolgulu tart.	TRUE	46
+cevizli_brownie__tatli	tatli		Cevizli Brownie	260	Çikolatalı , cevizli brownie , dondurma ile servis edilir.	TRUE	47
+chocolate_mousse__tatli	tatli		Chocolate Mousse	250	Çikolatalı mus, böğürtlen ve çilek ile servis edilir.	TRUE	48
+çikolatalı_sufle__tatli	tatli		Çikolatalı Sufle	270	Sıcak çikolatalı sufle.	TRUE	49
+meyveli_çikolatalı_brownie__tatli	tatli		Meyveli Çikolatalı Brownie	270	Brownie parçaları, lotus kırığı, damla çikolata, çilek, muz ve çikolata sosu.	TRUE	50
+şekersiz_hurmalı_incirli_kek__tatli	tatli		Şekersiz Hurmalı İncirli Kek	190	Şekersiz hurmalı ve incirli kek.	FALSE	51
+matcha_latte__matcha	matcha		Matcha Latte	230	Çilek aromalı matcha.	TRUE	52
+ice_matcha_latte__matcha	matcha		Ice Matcha Latte	240	Portakal ve mango ile matcha.	TRUE	53
+strawberry_matcha__matcha	matcha		Strawberry Matcha	260	Coca Cola, Fanta veya Sprite seçenekleri.	TRUE	54
+orange_mango_matcha__matcha	matcha		Orange Mango Matcha	260	Şeftali, limon, mango ve ananas seçenekleriyle.	TRUE	55
+coca_cola_fanta_sprite__soguk__sogukicecek	soguk	sogukicecek	Coca Cola / Fanta / Sprite	140	Coca Cola, Fanta veya Sprite seçenekleri.	TRUE	56
+fuse_tea__soguk__sogukicecek	soguk	sogukicecek	Fuse Tea	140	Enerji içeceği.	TRUE	57
+cappy__soguk__sogukicecek	soguk	sogukicecek	Cappy	140	Cam şişede su.	TRUE	58
+burn__soguk__sogukicecek	soguk	sogukicecek	Burn	190	Doğal, limon, elma veya karpuz-çilek aromalı seçenekler.	TRUE	59
+cam_şişe_su__soguk__sogukicecek	soguk	sogukicecek	Cam Şişe Su	60	Cam şişede su.	TRUE	60
+minera_maden_suyu_çeşitleri__soguk__sogukicecek	soguk	sogukicecek	Minera Maden Suyu Çeşitleri	120	Doğal, limon, elma veya karpuz-çilek aromalı seçenekler.	TRUE	61
+churchill__soguk__sogukicecek	soguk	sogukicecek	Churchill	140	Taze sıkılmış portakal suyu.	TRUE	62
+ayran__soguk__sogukicecek	soguk	sogukicecek	Ayran	110	Enerji içeceği.	TRUE	63
+taze_portakal_suyu__soguk__sogukicecek	soguk	sogukicecek	Taze Portakal Suyu	210	Buzlu beyaz çikolatalı mocha.	TRUE	64
+redbull__soguk__sogukicecek	soguk	sogukicecek	Redbull	220	Serinletici buzlu Americano.	TRUE	65
+ice_white_mocha__soguk__coldcoffee	soguk	coldcoffee	Ice White Mocha	240	Buzlu latte.	TRUE	66
+ice_americano__soguk__coldcoffee	soguk	coldcoffee	Ice Americano	200	Buzlu mocha.	TRUE	67
+ice_latte__soguk__coldcoffee	soguk	coldcoffee	Ice Latte	240	Çikolatalı frappe.	TRUE	68
+ice_mocha__soguk__coldcoffee	soguk	coldcoffee	Ice Mocha	240	Karamelli frappe.	TRUE	69
+chocolate_frappe__soguk__coldcoffee	soguk	coldcoffee	Chocolate Frappe	240	Karamelli buzlu latte.	TRUE	70
+caramel_frappe__soguk__coldcoffee	soguk	coldcoffee	Caramel Frappe	240	Vanilyalı buzlu latte.	TRUE	71
+ice_latte_karamel__soguk__coldcoffee	soguk	coldcoffee	Ice Latte Karamel	240	Tatlı soğuk Spanish latte.	TRUE	72
+ice_latte_vanilya__soguk__coldcoffee	soguk	coldcoffee	Ice Latte Vanilya	240	Buzlu karamelli macchiato.	TRUE	73
+ice_spanish_latte__soguk__coldcoffee	soguk	coldcoffee	Ice Spanish Latte	240	Fındık aromalı buzlu latte.	TRUE	74
+ice_caramel_macchiato__soguk__coldcoffee	soguk	coldcoffee	Ice Caramel Macchiato	240	Espresso ve dondurma ile affogato.	TRUE	75
+ice_latte_fındık__soguk__coldcoffee	soguk	coldcoffee	Ice Latte Fındık	210	Fındık aromalı buzlu latte.	TRUE	76
+affogato__soguk__coldcoffee	soguk	coldcoffee	Affogato	250	Çikolatalı milkshake.	TRUE	77
+milkshake_çilek__soguk__milkshake	soguk	milkshake	Milkshake Çilek	240	Çilekli milkshake.	TRUE	78
+milkshake_çikolata__soguk__milkshake	soguk	milkshake	Milkshake Çikolata	240	Çikolatalı milkshake.	TRUE	79
+milkshake_oreo__soguk__milkshake	soguk	milkshake	Milkshake Oreo	240	Karpuzlu frozen.	TRUE	80
+milkshake_muz__soguk__milkshake	soguk	milkshake	Milkshake Muz	240	Böğürtlenli frozen.	TRUE	81
+frozen_karpuz__soguk__frozen	soguk	frozen	Frozen Karpuz	220	Çilekli frozen.	TRUE	82
+frozen_böğürtlen__soguk__frozen	soguk	frozen	Frozen Böğürtlen	220	Böğürtlenli frozen.	TRUE	83
+frozen_çilek__soguk__frozen	soguk	frozen	Frozen Çilek	220	Çilekli frozen.	TRUE	84
+mojito__soguk__kokteyl	soguk	kokteyl	Mojito	220	Ananas suyu, böğürtlen şurubu, passion fruit ve turunç aroması.	TRUE	85
+sex_on_the_beach__soguk__kokteyl	soguk	kokteyl	Sex on The Beach	220	Ferahlatıcı cool lime.	TRUE	86
+purple_rain__soguk__kokteyl	soguk	kokteyl	Purple Rain	220	Taze demlenmiş çay.	TRUE	87
+cool_lime_yeni__soguk__kokteyl	soguk	kokteyl	Cool Lime (Yeni)	220	Fincanda demleme çay.	TRUE	88
+demleme_çay__sicak__sicakicecek	sicak	sicakicecek	Demleme Çay	60	Taze demlenmiş çay.	TRUE	89
+demleme_çay_fincan__sicak__sicakicecek	sicak	sicakicecek	Demleme Çay (Fincan)	90	Fincanda demleme çay.	TRUE	90
+filtre_kahve__sicak__kahve	sicak	kahve	Filtre Kahve	190	Çift shot espresso.	TRUE	91
+espresso__sicak__kahve	sicak	kahve	Espresso	120	Süt ve espresso katmanları.	TRUE	92
+double_espresso__sicak__kahve	sicak	kahve	Double Espresso	160	Karamelli macchiato.	TRUE	93
+latte_macchiato__sicak__kahve	sicak	kahve	Latte Macchiato	240	Espresso ve sıcak su.	TRUE	94
+caramel_macchiato__sicak__kahve	sicak	kahve	Caramel Macchiato	240	Espresso ve süt köpüğü.	TRUE	95
+americano__sicak__kahve	sicak	kahve	Americano	190	Klasik latte.	TRUE	96
+cappuccino__sicak__kahve	sicak	kahve	Cappuccino	220	Çikolatalı mocha.	TRUE	97
+cafe_latte__sicak__kahve	sicak	kahve	Cafe Latte	220	Beyaz çikolatalı mocha.	TRUE	98
+mocha__sicak__kahve	sicak	kahve	Mocha	230	Yoğun kahveli flat white.	TRUE	99
+white_chocolate_mocha__sicak__kahve	sicak	kahve	White Chocolate Mocha	230	Espresso ve az süt.	TRUE	100
+flat_white__sicak__kahve	sicak	kahve	Flat White	230	Klasik Türk kahvesi.	TRUE	101
+cortado__sicak__kahve	sicak	kahve	Cortado	230	Çift porsiyon Türk kahvesi.	TRUE	102
+turk_kahvesi__sicak__kahve	sicak	kahve	Türk Kahvesi	160	Klasik Türk kahvesi.	TRUE	103
+turk_kahvesi_double__sicak__kahve	sicak	kahve	Türk Kahvesi (Double)	190	Çift porsiyon Türk kahvesi.	TRUE	104
+sıcak_çikolata__sicak__sicakicecek	sicak	sicakicecek	Sıcak Çikolata	220	Yoğun sıcak çikolata.	TRUE	105
+sahlep__sicak__sicakicecek	sicak	sicakicecek	Salep	220	Süt eklenmiş filtre kahve.	TRUE	106
+fincan_süt__sicak__sicakicecek	sicak	sicakicecek	Fincan Süt	160	Sıcak süt.	TRUE	107
+sütlü_filtre_kahve__sicak__kahve	sicak	kahve	Sütlü Filtre Kahve	190	Süt eklenmiş filtre kahve.	TRUE	108
+ballı_fincan_süt__sicak__sicakicecek	sicak	sicakicecek	Ballı Fincan Süt	190	Bal ile sıcak süt.	TRUE	109
+pumpkin_latte_yeni__sicak__kahve	sicak	kahve	Pumpkin Latte (Yeni)	230	Bal kabağı özütü, vanilya ve akçaağaç şurubu ile harmanlanmış içinizi ısıtacak sıcak bir kahve.	TRUE	110
+cookie_latte__sicak__kahve	sicak	kahve	Cookie Latte	230	Kurabiye aromalı latte.	TRUE	111
+red_forest__sicak__dunya	sicak	dunya	Red Forest	220	Kış aylarının vazgeçilmez bitki çayı.	TRUE	112
+jasmine__sicak__dunya	sicak	dunya	Jasmine	220	Yumuşak içimli yeşil çay.	TRUE	113
+ihlamur_and_melisa__sicak__dunya	sicak	dunya	Ihlamur & Melisa	220	Kış aylarının vazgeçilmez bitki çayı.	TRUE	114
+yeşil_çay__sicak__dunya	sicak	dunya	Yeşil Çay	220	Yumuşak içimli yeşil çay.	TRUE	115`;
+
 const RAW_ITEMS = [
   // ──────────── KAHVALTI ────────────
   { cat: "kahvalti", title: "Mini Kahvaltı", price: 320, desc: "Göz yumurta, beyaz peynir, mini smoothie bowl, zeytinler, domates, salatalık, patates kızartması, ekşi maya ekmek ve çay.", img: itemImg("mini_kahvalti") },
@@ -370,7 +487,7 @@ const RAW_ITEMS = [
   { cat: "sicak", group: "dunya", title: "Yeşil Çay", price: 190, desc: "Yumuşak içimli yeşil çay.", img: itemImg("yesil_cay") }
 ];
 
-let ITEMS = enrichItems(RAW_ITEMS);
+let ITEMS = applySheetToLocal(enrichItems(RAW_ITEMS), parseMenuTsv(STATIC_MENU_TSV));
 
 // ==== EXPORT ALL ITEMS -> GOOGLE SHEETS (TSV) ====
 function exportItemsToSheetsTSV() {
@@ -585,6 +702,45 @@ function toNum(value, fallback = 0) {
   if (value === null || value === undefined || value === "") return fallback;
   const n = Number(String(value).trim().replace(",", "."));
   return Number.isFinite(n) ? n : fallback;
+}
+
+function parseMenuTsv(tsvString) {
+  const lines = String(tsvString || "")
+    .trim()
+    .split("\n")
+    .filter(Boolean);
+
+  if (!lines.length) return [];
+
+  const headers = lines[0].split("\t");
+
+  return lines.slice(1).map((line) => {
+    const cols = line.split("\t");
+    const row = Object.create(null);
+    headers.forEach((h, idx) => {
+      row[h] = cols[idx] ?? "";
+    });
+
+    const priceVal = normStr(row.price);
+    const parsedPrice = priceVal ? Number(priceVal.replace(",", ".")) : undefined;
+    row.price = Number.isFinite(parsedPrice) ? parsedPrice : undefined;
+
+    const sortVal = normStr(row.sort);
+    const parsedSort = sortVal ? Number(sortVal.replace(",", ".")) : undefined;
+    row.sort = Number.isFinite(parsedSort) ? parsedSort : undefined;
+
+    const activeVal = normStr(row.active).toLowerCase();
+    row.active = activeVal === "" || activeVal === "true" || activeVal === "yes";
+
+    row.title = normStr(row.title);
+    row.desc = normStr(row.desc);
+    row.cat = normStr(row.cat);
+    row.group = normStr(row.group);
+    const computedUid = makeUniqueId({ title: row.title, cat: row.cat, group: row.group });
+    row.uid = computedUid || normStr(row.id);
+
+    return row;
+  });
 }
 
 const runnerState = {
