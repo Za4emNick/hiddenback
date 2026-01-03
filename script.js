@@ -22,24 +22,48 @@ const GROUP_TITLES = {
   }
 };
 
-const DEFAULT_TEXT = {
-  runnerReadyStatus: "Hazır",
-  runnerRunningStatus: "Koşuyor",
-  runnerCrashedStatus: "Çarptı",
-  filterVeg: "Vejetaryen",
-  filterSpicy: "Acılı",
-  filterCheese: "Peynirli",
-  filterDessert: "Tatlı",
-  filtersLabel: "Filtreler",
-  caffeineLabel: "kafein",
+const UI_TEXT_BY_LANG = {
+  tr: {
+    runnerReadyStatus: "Hazır",
+    runnerRunningStatus: "Koşuyor",
+    runnerCrashedStatus: "Çarptı",
+    filterVeg: "Vejetaryen",
+    filterSpicy: "Acılı",
+    filterCheese: "Peynirli",
+    filterDessert: "Tatlı",
+    filtersLabel: "Filtreler",
+    caffeineLabel: "kafein",
+  },
+  en: {
+    runnerReadyStatus: "Ready",
+    runnerRunningStatus: "Running",
+    runnerCrashedStatus: "Crashed",
+    filterVeg: "Vegetarian",
+    filterSpicy: "Spicy",
+    filterCheese: "Cheesy",
+    filterDessert: "Dessert",
+    filtersLabel: "Filters",
+    caffeineLabel: "caffeine",
+  },
+  ru: {
+    runnerReadyStatus: "Готов",
+    runnerRunningStatus: "Бежит",
+    runnerCrashedStatus: "Столкнулся",
+    filterVeg: "Вегетарианское",
+    filterSpicy: "Острое",
+    filterCheese: "С сыром",
+    filterDessert: "Десерт",
+    filtersLabel: "Фильтры",
+    caffeineLabel: "кофеина",
+  },
 };
 
+const DEFAULT_TEXT = UI_TEXT_BY_LANG.tr;
 let uiText = { ...DEFAULT_TEXT };
 
 const SUPPORTED_LANGS = ["tr", "en", "ru"];
 const DEFAULT_LANG = "tr";
 let currentLang = DEFAULT_LANG;
-let translations = {};
 const hiddenLogo = new Image();
 hiddenLogo.src = "logo-x-x.jpg";
 
@@ -90,80 +114,31 @@ function getItemId(item) {
   return item?.uid || makeUniqueId(item);
 }
 
-function refreshUiText() {
-  const incoming = translations.ui || translations.text || {};
-  uiText = { ...DEFAULT_TEXT, ...incoming };
+function refreshUiText(lang) {
+  uiText = { ...DEFAULT_TEXT, ...(UI_TEXT_BY_LANG[lang] || {}) };
   runnerStatusText = uiText.runnerReadyStatus;
-}
-
-function resolveTranslation(key) {
-  if (!key) return "";
-  const nested = key
-    .split(".")
-    .reduce((acc, part) => (acc && typeof acc === "object" && part in acc ? acc[part] : undefined), translations);
-  if (typeof nested === "string") return nested;
-  if (translations.ui && key in translations.ui) return translations.ui[key];
-  if (key in translations) return translations[key];
-  return "";
-}
-
-function applyStaticTranslations() {
-  document.querySelectorAll("[data-i18n]").forEach((el) => {
-    const key = el.dataset.i18n;
-    if (!el.dataset.defaultText) el.dataset.defaultText = el.textContent?.trim() || "";
-    const translated = resolveTranslation(key);
-    el.textContent = translated || el.dataset.defaultText;
-  });
-
-  document.querySelectorAll("[data-i18n-content]").forEach((el) => {
-    const key = el.dataset.i18nContent;
-    if (!el.dataset.defaultContent) el.dataset.defaultContent = el.getAttribute("content") || "";
-    const translated = resolveTranslation(key);
-    el.setAttribute("content", translated || el.dataset.defaultContent);
-  });
-
-  const titleEl = document.querySelector("title[data-i18n]");
-  if (titleEl) document.title = titleEl.textContent;
 }
 
 function translateMenuItem(item) {
   const uid = item.uid;
-  const menuEntry = translations.menu?.[uid] || {};
-  const useMenuTranslation = currentLang !== DEFAULT_LANG; // DEFAULT_LANG = "tr"
+  const localizedTitle = normStr(item?.[`title_${currentLang}`]);
+  const localizedDesc = normStr(item?.[`desc_${currentLang}`]);
+  const fallbackTitle = normStr(item?.title_tr) || normStr(item?.title);
+  const fallbackDesc = normStr(item?.desc_tr) || normStr(item?.desc);
 
   return {
     ...item,
     uid,
     img: item.img || itemImg(item),
-    title: useMenuTranslation ? (menuEntry.title || item.title) : item.title,
-    desc: item.suppressDesc
-      ? "" // если suppressDesc=true, описание скрыто всегда
-      : (useMenuTranslation ? (menuEntry.desc || item.desc) : item.desc),
+    title: localizedTitle || fallbackTitle,
+    desc: item.suppressDesc ? "" : (localizedDesc || fallbackDesc),
+    price: item.price,
   };
 }
 
 function translateGroupTitle(cat, group) {
   if (cat === "lezzetler") return "";
-  return translations.groups?.[cat]?.[group] || (GROUP_TITLES[cat] || {})[group] || group;
-}
-
-async function fetchTranslations(lang) {
-  try {
-    const response = await fetch(`/locales/${lang}.json`, { cache: "no-store" });
-    if (!response.ok) {
-      console.error(`Translation request failed for ${lang}: ${response.status} ${response.statusText}`);
-      return {};
-    }
-    try {
-      return await response.json();
-    } catch (parseError) {
-      console.error("Translation parse failed", parseError);
-      return {};
-    }
-  } catch (error) {
-    console.error("Translation load failed", error);
-    return {};
-  }
+  return (GROUP_TITLES[cat] || {})[group] || group;
 }
 
 function showIntroOverlay() {
@@ -188,16 +163,11 @@ function hideIntroOverlay(instant = false) {
 
 async function applyLanguage(lang) {
   const targetLang = SUPPORTED_LANGS.includes(lang) ? lang : DEFAULT_LANG;
-  const loadedTranslations = await fetchTranslations(targetLang);
 
   currentLang = targetLang;
-  translations = loadedTranslations && Object.keys(loadedTranslations).length
-    ? loadedTranslations
-    : {};
+  refreshUiText(currentLang);
 
   document.documentElement.lang = currentLang;
-  refreshUiText();
-  applyStaticTranslations();
   renderItems();
   loadRunnerBest();
   updateRunnerHUD();
@@ -491,21 +461,38 @@ let ITEMS = applySheetToLocal(enrichItems(RAW_ITEMS), parseMenuTsv(STATIC_MENU_T
 
 // ==== EXPORT ALL ITEMS -> GOOGLE SHEETS (TSV) ====
 function exportItemsToSheetsTSV() {
-  // Заголовки под Google Sheets
-  const headers = ["id", "cat", "group", "title", "price", "desc", "active", "sort"];
+  // Yeni kolon seti (Google Sheet)
+  const headers = [
+    "uid",
+    "cat",
+    "group",
+    "sort",
+    "active",
+    "price",
+    "title_tr",
+    "desc_tr",
+    "title_en",
+    "desc_en",
+    "title_ru",
+    "desc_ru",
+  ];
 
   const rows = ITEMS.map((item, idx) => {
-    const id = item.uid;
+    const uid = item.uid;
     const cat = item.cat || "";
     const group = item.group || "";
-    const title = item.title || "";
-    const price = typeof item.price === "number" ? item.price : "";
-    const desc = item.desc || "";
-    const active = item.active === false ? "FALSE" : "TRUE";
     const sort = item.sort ?? idx + 1;
+    const active = item.active === false ? "FALSE" : "TRUE";
+    const price = typeof item.price === "number" ? item.price : "";
+    const titleTr = item.title_tr || item.title || "";
+    const descTr = item.desc_tr || item.desc || "";
+    const titleEn = item.title_en || "";
+    const descEn = item.desc_en || "";
+    const titleRu = item.title_ru || "";
+    const descRu = item.desc_ru || "";
 
     // TSV: табы между колонками, строки через \n
-    return [id, cat, group, title, price, desc, active, sort]
+    return [uid, cat, group, sort, active, price, titleTr, descTr, titleEn, descEn, titleRu, descRu]
       .map((v) => String(v).replaceAll("\t", " ").replaceAll("\n", " "))
       .join("\t");
   });
@@ -547,34 +534,42 @@ async function fetchSheetItems() {
 
   const map = Object.create(null);
   for (const row of items) {
-    const uid = String(row?.uid ?? row?.id ?? "").trim();
+    const uid = normStr(row?.uid || row?.id);
     if (!uid) continue;
 
-    row.uid = uid; // ✅ фиксируем uid
+    const cat = normStr(row?.cat).toLowerCase();
+    const group = normalizedGroup(cat, row?.group).toLowerCase();
 
-    // active
-    const a = row.active;
-    row.active =
-      a === true ||
-      String(a).toLowerCase() === "true" ||
-      a === 1 ||
-      String(a) === "1" ||
-      a === "" ||
-      a == null;
+    const activeVal = row?.active;
+    const active =
+      activeVal === true ||
+      String(activeVal).toLowerCase() === "true" ||
+      activeVal === 1 ||
+      String(activeVal) === "1";
 
-    // price -> number
-    if (row.price !== "" && row.price != null) {
-      const p = Number(String(row.price).replace(",", "."));
-      if (Number.isFinite(p)) row.price = p;
-    }
+    const priceVal = row?.price;
+    const priceNum = Number(String(priceVal ?? "").replace(",", "."));
+    const price = Number.isFinite(priceNum) ? priceNum : undefined;
 
-    // sort -> number (чтобы сортировка заработала)
-    if (row.sort !== "" && row.sort != null) {
-      const s = Number(String(row.sort).replace(",", "."));
-      if (Number.isFinite(s)) row.sort = s;
-    }
+    const sortVal = row?.sort;
+    const sortNum = Number(String(sortVal ?? "").replace(",", "."));
+    const sort = Number.isFinite(sortNum) ? sortNum : undefined;
 
-    map[uid] = row;
+    map[uid] = {
+      ...row,
+      uid,
+      cat,
+      group,
+      active,
+      price,
+      sort,
+      title_tr: normStr(row?.title_tr),
+      desc_tr: normStr(row?.desc_tr),
+      title_en: normStr(row?.title_en),
+      desc_en: normStr(row?.desc_en),
+      title_ru: normStr(row?.title_ru),
+      desc_ru: normStr(row?.desc_ru),
+    };
   }
 
   return map;
@@ -600,12 +595,17 @@ function applySheetToLocal(localItems, sheetItems) {
 
     return {
       ...item,
-      // 🔥 ТОЛЬКО ЧТО МОЖНО МЕНЯТЬ ИЗ ТАБЛИЦЫ
+      cat: row.cat || item.cat,
+      group: row.group || item.group,
       price: row.price ?? item.price,
-      desc: row.desc ?? item.desc,
-      title: row.title ?? item.title,
       sort: row.sort ?? item.sort,
       active: row.active ?? item.active,
+      title_tr: row.title_tr ?? item.title_tr ?? item.title,
+      desc_tr: row.desc_tr ?? item.desc_tr ?? item.desc,
+      title_en: row.title_en ?? item.title_en,
+      desc_en: row.desc_en ?? item.desc_en,
+      title_ru: row.title_ru ?? item.title_ru,
+      desc_ru: row.desc_ru ?? item.desc_ru,
     };
   });
 
@@ -2039,10 +2039,7 @@ document.querySelectorAll(".intro-lang-btn").forEach((btn) => {
       await applyLanguage(btn.dataset.lang);
     } catch (error) {
       console.warn("Language apply failed, using defaults", error);
-      currentLang = DEFAULT_LANG;
-      translations = {};
-      applyStaticTranslations();
-      renderItems();
+      await applyLanguage(DEFAULT_LANG);
     } finally {
       hideIntroOverlay();
     }
