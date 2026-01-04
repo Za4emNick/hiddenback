@@ -2,8 +2,7 @@
  * Google Apps Script — HiddenBack menu passthrough
  *
  * Sheet columns (case-insensitive):
- * uid, cat, group, sort, active, price,
- * title_tr, desc_tr, title_en, desc_en, title_ru, desc_ru
+ * uid (or id), cat, group, sort, active, price, title, desc
  */
 
 const SHEET_ID = "PASTE_SPREADSHEET_ID_HERE";
@@ -21,7 +20,9 @@ function normalizeRow(row) {
     activeVal === true ||
     String(activeVal).toLowerCase() === "true" ||
     activeVal === 1 ||
-    String(activeVal) === "1";
+    String(activeVal) === "1" ||
+    activeVal === "" ||
+    activeVal == null;
 
   const priceNum = Number(String(row.price ?? "").replace(",", "."));
   const price = Number.isFinite(priceNum) ? priceNum : "";
@@ -38,12 +39,8 @@ function normalizeRow(row) {
     sort,
     active,
     price,
-    title_tr: norm(row.title_tr),
-    desc_tr: norm(row.desc_tr),
-    title_en: norm(row.title_en),
-    desc_en: norm(row.desc_en),
-    title_ru: norm(row.title_ru),
-    desc_ru: norm(row.desc_ru),
+    title: norm(row.title),
+    desc: norm(row.desc),
   };
 }
 
