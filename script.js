@@ -257,14 +257,15 @@ makarna_bowl__bowl__bowl	bowl	bowl	Makarna Bowl	290	Burgu makarna, yoğurt, sala
 acı_tatlı_sos_tavuk_bowl__bowl__bowl	bowl	bowl	Acı Tatlı Sos Tavuk Bowl	290	Arpa şehriye, acı tatlı soslu tavuk göğsü, brokoli, Akdeniz yeşilliği, havuç ve zeytinyağı.	TRUE	24
 fresh_bowl__bowl__bowl	bowl	bowl	Fresh Bowl	260	Kinoa, avokado, çilek, havuç, Akdeniz yeşilliği ve zeytinyağı.	TRUE	25
 tavuklu_sezar_salata__lezzetler	lezzetler		Tavuklu Sezar Salata	280	Izgara tavuk göğsü, taze göbek marul, domates , kruton, sezar sos ve mısır.	TRUE	26
-yeşil_salata__lezzetler	lezzetler		Yeşil Salata	220	Taze göbek marul, lolorosso, havuç, turp, salatalık, domates ve beyaz peynir.	TRUE	27
-çıtır_tavuk__lezzetler	lezzetler		Çıtır Tavuk	320	Panelenmiş jülyen tavuk dilimleri, sweet chili sos, sezar sos ve patates kızartması.	TRUE	28
-burritos_tavuk_dürüm__lezzetler	lezzetler		Burritos Tavuk Dürüm	320	Tortilla ekmeğinde tavuk dilimleri, burritos sos, renkli biberler, mantar, cheddar peyniri, patates kızartması ve Akdeniz yeşilliği.	TRUE	29
-fettucine_alfredo__lezzetler	lezzetler		Fettucine Alfredo	320	Sotelenmiş tavuk dilimleri, fettucine makarna, mantar, renkli biberler, pesto sos, krema ve parmesan peyniri.	TRUE	30
-köri_soslu_tavuk__lezzetler	lezzetler		Köri Soslu Tavuk	320	Köri soslu tavuk, mantar, renkli biberler, basmati pilav ve Akdeniz yeşillikleri.	TRUE	31
-sandviç__lezzetler	lezzetler		Sandviç	260	Ekşi maya ekmekte cheddar, taze kaşar, krem peynir, dana jambon, haşlanmış yumurta ve lolorosso.	TRUE	32
-ekmek_üstü__lezzetler	lezzetler		Ekmek Üstü	280	Ekşi maya ekmek üstü krem peynir, çırpılmış yumurta ve avokado.	TRUE	33
-patates_tava__lezzetler	lezzetler		Patates Tava	180	Klasik kızarmış patates.	TRUE	34
+tavuklu_tost__lezzetler	lezzetler		Tavuklu Tost	310	Ekşi maya ekmek, kremalı tavuk, patates kızartması ve akdeniz yeşillikleri	TRUE	27
+yeşil_salata__lezzetler	lezzetler		Yeşil Salata	220	Taze göbek marul, lolorosso, havuç, turp, salatalık, domates ve beyaz peynir.	TRUE	28
+çıtır_tavuk__lezzetler	lezzetler		Çıtır Tavuk	320	Panelenmiş jülyen tavuk dilimleri, sweet chili sos, sezar sos ve patates kızartması.	TRUE	29
+burritos_tavuk_dürüm__lezzetler	lezzetler		Burritos Tavuk Dürüm	320	Tortilla ekmeğinde tavuk dilimleri, burritos sos, renkli biberler, mantar, cheddar peyniri, patates kızartması ve Akdeniz yeşilliği.	TRUE	30
+fettucine_alfredo__lezzetler	lezzetler		Fettucine Alfredo	320	Sotelenmiş tavuk dilimleri, fettucine makarna, mantar, renkli biberler, pesto sos, krema ve parmesan peyniri.	TRUE	31
+köri_soslu_tavuk__lezzetler	lezzetler		Köri Soslu Tavuk	320	Köri soslu tavuk, mantar, renkli biberler, basmati pilav ve Akdeniz yeşillikleri.	TRUE	32
+sandviç__lezzetler	lezzetler		Sandviç	260	Ekşi maya ekmekte cheddar, taze kaşar, krem peynir, dana jambon, haşlanmış yumurta ve lolorosso.	TRUE	33
+ekmek_üstü__lezzetler	lezzetler		Ekmek Üstü	280	Ekşi maya ekmek üstü krem peynir, çırpılmış yumurta ve avokado.	TRUE	34
+patates_tava__lezzetler	lezzetler		Patates Tava	180	Klasik kızarmış patates.	TRUE	35
 brownie_pasta__tatli	tatli		Brownie Pasta	290	İki dilim brownie arasına pasta kreması ve çilek dilimleri 	TRUE	35
 profiterol__tatli	tatli		Profiterol	260	Profiterol topları, pasta kreması , çikolata, antep fıstığı parçacıkları.	TRUE	36
 magnolia__tatli	tatli		Magnolia	260	Çilek , muz , çikolata , oreo veya karışık seçenekli magnolia.	TRUE	37
@@ -379,6 +380,7 @@ const RAW_ITEMS = [
 
   // ──────────── LEZZETLER ────────────
   { cat: "lezzetler", title: "Tavuklu Sezar Salata", price: 250, desc: "Izgara tavuk göğsü, taze göbek marul, domates, kruton, sezar sos.", img: itemImg("tavuklu_sezar_salata") },
+  { cat: "lezzetler", title: "Tavuklu Tost", price: 310, desc: "Ekşi maya ekmek, kremalı tavuk, patates kızartması ve akdeniz yeşillikleri", img: itemImg("tavuklu_tost") },
   { cat: "lezzetler", title: "Yeşil Salata", price: 190, desc: "Taze göbek marul, lolorosso, havuç, turp, salatalık, domates ve beyaz peynir.", img: itemImg("yesil_salata") },
   { cat: "lezzetler", title: "Çıtır Tavuk", price: 280, desc: "Panelenmiş jülyen tavuk dilimleri, sweet chili sos, sezar sos ve patates kızartması.", img: itemImg("citir_tavuk") },
   { cat: "lezzetler", title: "Burritos Tavuk Dürüm", price: 280, desc: "Tortilla ekmeğinde tavuk dilimleri, burritos sos, renkli biberler, mantar, cheddar peyniri, patates kızartması ve Akdeniz yeşilliği.", img: itemImg("burritos_tavuk_durum") },
